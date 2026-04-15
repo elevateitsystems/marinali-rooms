@@ -40,5 +40,62 @@ export const homePageType = defineType({
       title: 'About Description',
       type: 'text',
     }),
+
+    // Booking Bar Section
+    defineField({
+      name: 'bookingWhereLabel',
+      title: 'Booking: Where Label',
+      type: 'string',
+      initialValue: 'Where',
+    }),
+    defineField({
+      name: 'bookingWhereValue',
+      title: 'Booking: Where Value',
+      type: 'string',
+      initialValue: 'Marinali Rooms',
+    }),
+    defineField({
+      name: 'bookingDatesLabel',
+      title: 'Booking: Dates Label',
+      type: 'string',
+      initialValue: 'Check In - Check Out',
+    }),
+    defineField({
+      name: 'bookingDatesValue',
+      title: 'Booking: Dates Value',
+      type: 'string',
+      initialValue: 'Select Dates',
+    }),
+    defineField({
+      name: 'bookingWhoLabel',
+      title: 'Booking: Who Label',
+      type: 'string',
+      initialValue: 'Guests',
+    }),
+    defineField({
+      name: 'bookingRoomsLabel',
+      title: 'Booking: Rooms Label',
+      type: 'string',
+      initialValue: 'Rooms',
+    }),
+    defineField({
+      name: 'bookingCodeLabel',
+      title: 'Booking: Code Label',
+      type: 'string',
+      initialValue: 'Do you have a code?',
+    }),
+    defineField({
+      name: 'bookingCodeValue',
+      title: 'Booking: Code Value',
+      type: 'string',
+      initialValue: 'Enter Code',
+    }),
+    defineField({
+      name: 'bookingButtonText',
+      title: 'Booking: Button Text',
+      type: 'string',
+      initialValue: 'Book Now',
+    }),
+
   ],
 })
