@@ -1,3 +1,7 @@
+'use client';
+
+import { motion } from 'framer-motion';
+
 export default function IntroSection({
   title,
   description,
@@ -13,7 +17,13 @@ export default function IntroSection({
         textAlign: 'left',
       }}
     >
-      <div className="max-w-[1000px] mr-auto mt-10 lg:mt-20 ">
+      <motion.div 
+        className="max-w-[1000px] mr-auto mt-10 lg:mt-20"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.21, 0.45, 0.32, 0.9] }}
+      >
         <h2
           style={{
             fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
@@ -41,7 +51,7 @@ export default function IntroSection({
         >
           {description || 'Experience unforgettable hospitality at Marinali Rooms, right in the heart of the town center. We are passionate about creating welcoming stays with every comfort at your fingertips.'}
         </p>
-      </div>
+      </motion.div>
 
       <hr
         style={{

@@ -38,6 +38,7 @@ export const metadata: Metadata = {
 };
 
 import { client } from "@/sanity/lib/client";
+import SmoothScrolling from "@/components/common/SmoothScrolling";
 
 export default async function RootLayout({
   children,
@@ -73,7 +74,9 @@ export default async function RootLayout({
       }}
     >
       <body className="min-h-full flex flex-col font-primary">
-        {children}
+        <SmoothScrolling>
+          {children}
+        </SmoothScrolling>
       </body>
     </html>
   );

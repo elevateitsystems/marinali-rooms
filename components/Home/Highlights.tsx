@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 const highlights = [
   {
@@ -21,7 +22,7 @@ const highlights = [
   },
   {
     id: 3,
-    image: '/hotel-1.png', // Large image on the right
+    image: '/hotel-1.png',
     title: 'BEDOUIN NIGHTS AT CASA COOK EL GOUNA',
     description: 'Every Tuesday at sunset, experience an evening of Bedouin heritage with dance, grilled flavours, and soulful rhythms.',
     href: '#',
@@ -31,11 +32,15 @@ const highlights = [
 
 export default function Highlights() {
   return (
-    <section
+    <motion.section
       id="highlights-section"
       className="px-5 mt-10 lg:mt-20"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: [0.21, 0.45, 0.32, 0.9] }}
     >
-      <div>
+      <div className="max-w-screen-2xl mx-auto">
         <h2
           style={{
             fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
@@ -50,7 +55,6 @@ export default function Highlights() {
           HIGHLIGHTS
         </h2>
 
-        {/* Layout Grid */}
         <div
           style={{
             display: 'grid',
@@ -69,7 +73,6 @@ export default function Highlights() {
               }}
               className={item.isLarge ? 'col-span-4 lg:col-span-2' : 'col-span-4 lg:col-span-1'}
             >
-              {/* Image Container */}
               <div
                 style={{
                   position: 'relative',
@@ -90,7 +93,6 @@ export default function Highlights() {
                 />
               </div>
 
-              {/* Text Content */}
               <div style={{ paddingRight: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '12px' }}>
                   <h3
@@ -148,6 +150,6 @@ export default function Highlights() {
           }
         }
       `}</style>
-    </section >
+    </motion.section>
   );
 }

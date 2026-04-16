@@ -1,11 +1,16 @@
 'use client';
 
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function FeaturedRetreat() {
   return (
-    <section
+    <motion.section
       className='mt-10 lg:mt-20'
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: [0.21, 0.45, 0.32, 0.9] }}
       style={{
         position: 'relative',
         width: '100%',
@@ -13,7 +18,6 @@ export default function FeaturedRetreat() {
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center'
-
       }}
     >
       {/* Background Image */}
@@ -25,7 +29,7 @@ export default function FeaturedRetreat() {
         }}
       >
         <Image
-          src="/hotel-4.png" // Using the bedroom hideaway image
+          src="/hotel-4.png"
           alt="Casa Cook Madonna"
           fill
           style={{
@@ -97,13 +101,12 @@ export default function FeaturedRetreat() {
                 cursor: 'pointer',
                 transition: 'all 0.3s ease'
               }}
-
             >
               Discover Casa Cook Madonna
             </button>
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

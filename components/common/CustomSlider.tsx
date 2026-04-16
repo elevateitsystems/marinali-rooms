@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
+import { motion } from 'framer-motion';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -29,7 +30,14 @@ export default function CustomSlider({ title, items, sectionId }: CustomSliderPr
   const [isEnd, setIsEnd] = useState(false);
 
   return (
-    <section className="px-5" id={sectionId}>
+    <motion.section
+      className="px-5"
+      id={sectionId}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: [0.21, 0.45, 0.32, 0.9] }}
+    >
       {/* Header Row: Title + Arrows */}
       <div
         className="mt-10 lg:mt-20 mx-auto"
@@ -265,6 +273,7 @@ export default function CustomSlider({ title, items, sectionId }: CustomSliderPr
                       WebkitLineClamp: 2,
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden',
+                      fontFamily: item.id === 'special' ? 'inherit' : 'var(--font-mono, monospace)'
                     }}
                   >
                     {item.description}
@@ -283,6 +292,6 @@ export default function CustomSlider({ title, items, sectionId }: CustomSliderPr
           display: none !important;
         }
       `}</style>
-    </section>
+    </motion.section>
   );
 }
