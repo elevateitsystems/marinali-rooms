@@ -24,15 +24,15 @@ export default function Hero({
   }, []);
 
   // Smooth scroll transformations
-  const scale = Math.max(1 - scrollY / 500, 0.4);
-  const opacity = Math.max(1 - scrollY / 300, 0);
-  const translateY = scrollY * 0.4;
-  const bgTranslateY = scrollY * 0.15; // Slow parallax for background
+  const scale = Math.max(1 - scrollY / 500, 0.2);
+  const opacity = Math.max(1 - scrollY / 400, 0);
+  const translateY = -scrollY * 0.3; // Negative to move UP as user scrolls down
+  const bgTranslateY = scrollY * 0.2; // Parallax for background
 
   return (
     <section className="-mt-24 relative w-full h-[85vh] flex flex-col items-center justify-center overflow-hidden">
       {/* Background Image Overlay */}
-      <div 
+      <div
         className="absolute inset-0 z-0"
         style={{ transform: `translateY(${bgTranslateY}px)` }}
       >
@@ -46,7 +46,7 @@ export default function Hero({
       </div>
 
       {/* Main Content */}
-      <div 
+      <div
         className="relative z-10 flex flex-col items-center justify-center text-white mt-8 will-change-transform"
         style={{
           transform: `translateY(${translateY}px) scale(${scale})`,

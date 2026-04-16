@@ -91,7 +91,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-      setShowLogo(window.scrollY > 200);
+      setShowLogo(window.scrollY > 250);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -125,13 +125,13 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           : 'bg-transparent py-5 md:py-8'
           } ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
-        <div className="container px-5 mx-auto flex items-center justify-between">
+        <div className="container px-5 mx-auto relative flex items-center justify-between">
           {/* Logo Section */}
           <Link
             href={getPath('/')}
-            className={`flex items-center gap-1 transition-all duration-500 ease-in-out ${showLogo
+            className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-1 transition-all duration-500 ease-in-out ${showLogo
               ? 'opacity-100 translate-y-0'
-              : 'opacity-0 -translate-y-4 pointer-events-none'
+              : 'opacity-0 translate-y-4 pointer-events-none'
               }`}
           >
             <span className={`${yellowtail.className} text-3xl md:text-4xl text-primary drop-shadow-sm`}>
