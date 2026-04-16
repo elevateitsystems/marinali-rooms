@@ -6,11 +6,11 @@ import { Check, ChevronDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-function Select({ ...props }: SelectPrimitive.Root.Props) {
+function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />
 }
 
-function SelectTrigger({ className, children, ...props }: SelectPrimitive.Trigger.Props) {
+function SelectTrigger({ className, children, ...props }: React.ComponentProps<typeof SelectPrimitive.Trigger>) {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
@@ -21,7 +21,7 @@ function SelectTrigger({ className, children, ...props }: SelectPrimitive.Trigge
       {...props}
     >
       {children}
-      <SelectPrimitive.Icon asChild>
+      <SelectPrimitive.Icon>
         <ChevronDown className="h-4 w-4 opacity-50" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
@@ -34,8 +34,8 @@ function SelectContent({
   side = "bottom",
   sideOffset = 4,
   ...props
-}: SelectPrimitive.Popup.Props &
-  Pick<SelectPrimitive.Positioner.Props, "side" | "sideOffset">) {
+}: React.ComponentProps<typeof SelectPrimitive.Popup> &
+  Pick<React.ComponentProps<typeof SelectPrimitive.Positioner>, "side" | "sideOffset">) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner side={side} sideOffset={sideOffset} className="isolate z-50">
@@ -56,7 +56,7 @@ function SelectContent({
   )
 }
 
-function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Props) {
+function SelectItem({ className, children, ...props }: React.ComponentProps<typeof SelectPrimitive.Item>) {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
@@ -76,7 +76,7 @@ function SelectItem({ className, children, ...props }: SelectPrimitive.Item.Prop
   )
 }
 
-function SelectValue({ ...props }: SelectPrimitive.Value.Props) {
+function SelectValue({ ...props }: React.ComponentProps<typeof SelectPrimitive.Value>) {
   return <SelectPrimitive.Value data-slot="select-value" {...props} />
 }
 

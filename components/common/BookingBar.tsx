@@ -141,7 +141,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           {data?.bookingRoomsLabel || (lang === 'it' ? 'Camere' : lang === 'de' ? 'Zimmer' : 'Rooms')}
         </span>
         <div className="relative">
-          <Select value={rooms} onValueChange={setRooms}>
+          <Select value={rooms} onValueChange={(val) => setRooms(val as string)}>
             <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-sm sm:text-base font-semibold tracking-tight uppercase hover:text-primary transition-colors">
               <SelectValue />
             </SelectTrigger>
@@ -162,7 +162,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           {data?.bookingWhoLabel || (lang === 'it' ? 'Ospiti' : lang === 'de' ? 'Gäste' : 'Guests')}
         </span>
         <div className="relative">
-          <Select name="guests" value={guests} onValueChange={setGuests}>
+          <Select name="guests" value={guests} onValueChange={(val) => setGuests(val as string)}>
             <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-sm sm:text-base font-semibold tracking-tight uppercase hover:text-primary transition-colors">
               <SelectValue placeholder="Guests" />
             </SelectTrigger>
