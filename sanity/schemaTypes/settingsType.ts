@@ -13,6 +13,22 @@ export const settingsType = defineType({
       initialValue: '#F8F6F2',
     }),
     defineField({
+      name: 'fontFamily',
+      title: 'Font Family',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Geist (Default)', value: 'var(--font-geist-sans)' },
+          { title: 'Inter (Modern Sans)', value: 'var(--font-inter)' },
+          { title: 'Playfair Display (Elegant Serif)', value: 'var(--font-playfair)' },
+          { title: 'Montserrat (Geometric Sans)', value: 'var(--font-montserrat)' },
+          { title: 'Lora (Classic Serif)', value: 'var(--font-lora)' }
+        ]
+      },
+      initialValue: 'var(--font-geist-sans)',
+      description: 'Select the primary font family for the website.',
+    }),
+    defineField({
       name: 'textColor',
       title: 'Text Color',
       type: 'string',
@@ -34,5 +50,6 @@ export const settingsType = defineType({
       description: 'Hex code for the secondary color (e.g., #4F46E5)',
       initialValue: '#4F46E5', // Default indigo-600
     }),
+
   ],
 })

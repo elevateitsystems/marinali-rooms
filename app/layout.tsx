@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Playfair_Display, Montserrat, Lora } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -9,6 +9,26 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+});
+
+const lora = Lora({
+  variable: "--font-lora",
   subsets: ["latin"],
 });
 
@@ -24,10 +44,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Fetch theme colors directly in the layout
-  // We look for both published and draft versions of the settings
+  // Fetch theme colors and fonts directly in the layout
   const settings = await client.fetch(
-    `*[_type == "settings"] | order(_updatedAt desc)[0]{ primaryColor, secondaryColor, backgroundColor, textColor }`,
+    `*[_type == "settings"] | order(_updatedAt desc)[0]{ primaryColor, secondaryColor, backgroundColor, textColor, fontFamily }`,
     {},
     { next: { revalidate: 0 } }
   );
@@ -38,21 +57,22 @@ export default async function RootLayout({
   const secondaryColor = settings?.secondaryColor || "#4f46e5";
   const backgroundColor = settings?.backgroundColor || "#F8F6F2";
   const textColor = settings?.textColor || "#ffffff";
+  const fontFamily = settings?.fontFamily || "var(--font-geist-sans)";
 
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${playfair.variable} ${montserrat.variable} ${lora.variable} h-full antialiased`}
       style={{
         // @ts-ignore
         "--primary-color": primaryColor,
         "--secondary-color": secondaryColor,
         "--background": backgroundColor,
         "--text-color": textColor,
-
+        "--font-primary": fontFamily,
       }}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col font-primary">
         {children}
       </body>
     </html>

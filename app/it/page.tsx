@@ -1,12 +1,24 @@
 import { client } from "@/sanity/lib/client";
-import Link from "next/link";
-import BookingBar from "@/components/BookingBar";
+import Hero from "@/components/Home/Hero";
+
+import IntroSection from "@/components/Home/IntroSection";
+import ImageSlider from "@/components/Home/HotelSlider";
+import ReviewSlider from "@/components/Home/ReviewSlider";
+import OfferSlider from "@/components/Home/OfferSlider";
+import Highlights from "@/components/Home/Highlights";
+import FeaturedRetreat from "@/components/Home/FeaturedRetreat";
+
+
+
+
 
 export default async function ItalianHomePage() {
   const data = await client.fetch(
     `*[_type == "homePage" && language == "it"][0]{ 
       title, 
       welcomeText,
+      aboutTitle,
+      aboutDescription,
       bookingWhereLabel,
       bookingWhereValue,
       bookingDatesLabel,
@@ -22,10 +34,27 @@ export default async function ItalianHomePage() {
   );
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 text-center max-w-3xl mx-auto pb-32">
-      <h1 className="text-5xl font-bold mb-6 tracking-tight">{data?.title || 'Italian Home Page'}</h1>
-      <p className="text-xl leading-relaxed">{data?.welcomeText || 'Add Italian Home Page content in Sanity.'}</p>
-      <BookingBar data={data} lang="it" />
-    </div>
+    <>
+      <Hero title="Marinali" subtitle="CAMERE" />
+      <div className="container mx-auto">
+        <IntroSection
+          title={data?.aboutTitle || data?.title}
+          description={data?.aboutDescription || data?.welcomeText}
+        />
+        <ImageSlider />
+      </div>
+      <ReviewSlider />
+      <div className="container mx-auto">
+        <Highlights />
+      </div>
+      <FeaturedRetreat />
+      <div className="container mx-auto">
+        <OfferSlider />
+      </div>
+
+
+
+    </>
+
   );
 }
