@@ -1,6 +1,7 @@
 'use client';
 
 import CustomSlider, { SliderItem } from '../common/CustomSlider';
+import EditableText from '../common/EditableText';
 
 const offers: SliderItem[] = [
   {
@@ -29,8 +30,14 @@ const offers: SliderItem[] = [
   },
 ];
 
-export default function OfferSlider() {
-  return <div className='mb-10'>
-    <CustomSlider title="OFFERS" items={offers} sectionId="offer-slider" />
-  </div>;
+export default function OfferSlider({ lang, data }: { lang: string; data?: any }) {
+  return (
+    <div className='mb-10'>
+      <CustomSlider 
+        title={<EditableText lang={lang} page="home" path="offersTitle" initialValue={data?.offersTitle || "OFFERS"} />} 
+        items={offers} 
+        sectionId="offer-slider" 
+      />
+    </div>
+  );
 }

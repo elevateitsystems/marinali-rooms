@@ -2,7 +2,9 @@
 
 import CustomSlider, { SliderItem } from '../common/CustomSlider';
 
-const hotels: SliderItem[] = [
+import EditableText from '../common/EditableText';
+
+const defaultHotels: SliderItem[] = [
   {
     id: 1,
     image: '/hotel-1.png',
@@ -37,6 +39,12 @@ const hotels: SliderItem[] = [
   },
 ];
 
-export default function HotelSlider() {
-  return <CustomSlider title="HOTELS" items={hotels} sectionId="hotel-slider" />;
+export default function HotelSlider({ lang, data }: { lang: string; data?: any }) {
+  return (
+    <CustomSlider 
+      title={<EditableText lang={lang} page="home" path="hotelsTitle" initialValue={data?.hotelsTitle || "HOTELS"} />} 
+      items={defaultHotels} 
+      sectionId="hotel-slider" 
+    />
+  );
 }

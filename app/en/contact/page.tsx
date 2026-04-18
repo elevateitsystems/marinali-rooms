@@ -1,10 +1,8 @@
-import { client } from "@/sanity/lib/client";
+import { getContent } from "@/lib/content";
 import Link from "next/link";
 
 export default async function EnglishContactPage() {
-  const data = await client.fetch(
-    `*[_type == "contactPage" && language == "en"][0]{ contactTitle, email }`
-  );
+  const { contact: data } = getContent("en");
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center p-8">

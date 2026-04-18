@@ -30,7 +30,9 @@ const highlights = [
   },
 ];
 
-export default function Highlights() {
+import EditableText from '../common/EditableText';
+
+export default function Highlights({ lang, data }: { lang: string; data?: any }) {
   return (
     <motion.section
       id="highlights-section"
@@ -52,7 +54,7 @@ export default function Highlights() {
             textTransform: 'uppercase'
           }}
         >
-          HIGHLIGHTS
+          <EditableText lang={lang} page="home" path="highlightsTitle" initialValue={data?.highlightsTitle || "HIGHLIGHTS"} />
         </h2>
 
         <div

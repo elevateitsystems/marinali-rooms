@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import EditableText from '../common/EditableText';
 
-export default function FeaturedRetreat() {
+export default function FeaturedRetreat({ lang, data }: { lang: string; data?: any }) {
   return (
     <motion.section
       className='mt-10 lg:mt-20'
@@ -69,8 +70,13 @@ export default function FeaturedRetreat() {
               margin: 0
             }}
           >
-            Introducing <br />
-            Casa Cook Madonna
+            <EditableText 
+              lang={lang} 
+              page="home" 
+              path="featuredTitle" 
+              initialValue={data?.featuredTitle || "Introducing Casa Cook Madonna"} 
+              multiline
+            />
           </h2>
 
           <p
@@ -83,11 +89,13 @@ export default function FeaturedRetreat() {
               margin: 0
             }}
           >
-            Nestled in the picturesque village of Madonna di Campiglio, at the foot of Italy&apos;s
-            majestic Dolomites, Casa Cook Madonna is our first mountain retreat, and
-            our newest hideaway. Opening in summer, this alpine escape fuses Casa
-            Cook&apos;s signature style with the untamed beauty of the peaks. Book
-            directly on our website and enjoy 10% off your stay.
+            <EditableText 
+              lang={lang} 
+              page="home" 
+              path="featuredDescription" 
+              initialValue={data?.featuredDescription || "Nestled in the picturesque village of Madonna di Campiglio..."} 
+              multiline
+            />
           </p>
 
           <div className='bg-primary px-8 w-fit py-3 text-center' style={{ marginTop: '10px' }}>

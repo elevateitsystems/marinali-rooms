@@ -1,9 +1,16 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { ReactLenis } from 'lenis/react';
+import { usePathname } from 'next/navigation';
 
 export default function SmoothScrolling({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/admin')) {
+    return <>{children}</>;
+  }
+
   return (
     <ReactLenis root options={{ 
       lerp: 0.1, 

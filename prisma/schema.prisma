@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model PageContent {
+  id        String   @id @default(cuid())
+  page      String   // e.g., "home"
+  lang      String   // e.g., "bn"
+  sections  Json     // Holds hero, features, footer
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@unique([page, lang])
+}
+
+model SiteSettings {
+  id              String   @id @default("default")
+  primaryColor    String   @default("#123149")
+  secondaryColor  String   @default("#F2DE97")
+  backgroundColor String   @default("#F8F6F2")
+  textColor       String   @default("#111111")
+  fontFamily      String   @default("var(--font-playfair)")
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+}

@@ -10,6 +10,8 @@ import { motion } from 'framer-motion';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
+import { ReactNode } from 'react';
+
 export interface SliderItem {
   id: number | string;
   image: string;
@@ -19,7 +21,7 @@ export interface SliderItem {
 }
 
 interface CustomSliderProps {
-  title: string;
+  title: string | ReactNode;
   items: SliderItem[];
   sectionId: string;
 }

@@ -54,17 +54,18 @@ export default function Hero({
           transformOrigin: "center center"
         }}
       >
-        <h1
+        {/* <h1
           className={`${yellowtail.className} text-7xl md:text-9xl tracking-wide drop-shadow-md`}
         >
           {title}
-        </h1>
+        </h1> */}
+        <Image src="/logo.png" alt="Logo" width={200} height={200} />
         <div className="flex items-center gap-6 mt-1 md:-mt-4">
-          <div className="w-16 h-[1px] bg-white opacity-80"></div>
-          <span className="text-xs md:text-sm uppercase tracking-[0.4em] font-medium opacity-100">
+          {/* <div className="w-16 h-[1px] bg-white opacity-80"></div> */}
+          {/* <span className="text-xs md:text-sm uppercase tracking-[0.4em] font-medium opacity-100">
             {subtitle}
-          </span>
-          <div className="w-16 h-[1px] bg-white opacity-80"></div>
+          </span> */}
+          {/* <div className="w-16 h-[1px] bg-white opacity-80"></div> */}
         </div>
       </div>
     </section>

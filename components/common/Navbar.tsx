@@ -121,7 +121,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
     <>
       <header
         className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${scrolled
-          ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-4'
+          ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-7'
           : 'bg-transparent py-5 md:py-8'
           } ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
@@ -135,7 +135,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
               }`}
           >
             <span className={`${yellowtail.className} text-3xl md:text-4xl text-primary drop-shadow-sm`}>
-              Marinali
+              <Image src="/logo.png" alt="Logo" width={100} height={100} />
             </span>
           </Link>
 

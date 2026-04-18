@@ -1,10 +1,8 @@
-import { client } from "@/sanity/lib/client";
+import { getContent } from "@/lib/content";
 import Link from "next/link";
 
 export default async function GermanAboutPage() {
-  const data = await client.fetch(
-    `*[_type == "aboutPage" && language == "de"][0]{ aboutTitle, description }`
-  );
+  const { about: data } = getContent("de");
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center p-8">
@@ -12,7 +10,7 @@ export default async function GermanAboutPage() {
         <Link href="/de" className="opacity-70 hover:opacity-100 transition-opacity">Zurück zur Startseite</Link>
       </nav>
       <h1 className="text-4xl font-bold mb-4">{data?.aboutTitle || 'Über Uns (About DE)'}</h1>
-      <p className="text-lg opacity-80">{data?.description || 'Add German About Page content in Sanity.'}</p>
+      <p className="text-lg opacity-80">{data?.description || 'Add German About Page content.'}</p>
     </div>
   );
 }

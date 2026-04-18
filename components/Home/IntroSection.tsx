@@ -2,12 +2,14 @@
 
 import { motion } from 'framer-motion';
 
+import { ReactNode } from 'react';
+
 export default function IntroSection({
   title,
   description,
 }: {
-  title?: string;
-  description?: string;
+  title?: string | ReactNode;
+  description?: string | ReactNode;
 }) {
   return (
     <section
