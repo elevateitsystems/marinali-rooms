@@ -46,12 +46,30 @@
         }
       },
       "about": {
-        "aboutTitle": "About Us",
-        "description": "Marinali Rooms is located in a historic 1460 Palazzo in Bassano del Grappa, Italy."
+        "heroTitle": "About Us",
+        "heroSubtitle": "EXPERIENCE THE ART OF ITALIAN HOSPITALITY",
+        "storyTitle": "BE YOURSELF WHILE FEELING YOU BELONG TO SOMETHING",
+        "storyDescription": "Marinali Rooms is a collection of individually designed rooms and suites for the modern traveler. Born from the desire to create a space where luxury meets authenticity, we offer a unique experience in the heart of Bassano del Grappa. Our palazzo, dating back to 1460, has been meticulously restored to preserve its historic soul while providing every modern comfort.",
+        "storyDetails": "Each corner of Marinali Rooms tells a story of heritage and craftsmanship. From the hand-restored frescoes to the carefully curated Italian design pieces, we invite you to immerse yourself in an atmosphere of timeless elegance. Our philosophy is simple: to make every guest feel at home while experiencing the extraordinary history of our city.",
+        "conceptTitle": "PALAZZO MARINALI, SINCE 1460",
+        "conceptDescription": "Our palace represents more than just a place to stay; it is a living monument to Venetian architecture. Located on the historic Contrà dei Marinali, the building has witnessed centuries of history, from the height of the Republic of Venice to the present day. Today, it stands as a testament to the enduring beauty of Italian craftsmanship and the warmth of Mediterranean hospitality.",
+        "hospitalityTitle": "INSPIRING TRADITIONS",
+        "hospitalityDescription": "We believe that hospitality is an art form. Our team is dedicated to providing personal, attentive service that anticipates your needs without being intrusive. Whether it's a recommendations for a local artisan workshop or a private wine tasting in our cellar, we are here to ensure your journey in Bassano is truly unforgettable.",
+        "ctaTitle": "WANT TO SEE MORE?",
+        "ctaDescription": "Explore our curated collection of rooms and suites, each designed to provide a serene sanctuary after a day of discovery."
       },
       "contact": {
-        "contactTitle": "Contact Us",
-        "email": "info@marinalirooms.it"
+        "heroTitle": "Contact Us",
+        "infoTitle": "WHERE TO FIND US",
+        "address": "Via Marinali, 10, 36061 Bassano del Grappa VI, Italy",
+        "phone": "+39 0424 123456",
+        "email": "info@marinalirooms.it",
+        "formTitle": "SEND US A MESSAGE",
+        "nameLabel": "Full Name",
+        "emailLabel": "Email Address",
+        "messageLabel": "Your Message",
+        "submitButton": "Send Inquiry",
+        "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2778.675046274438!2d11.7335!3d45.7667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4778d65565555555%3A0x5555555555555555!2sVia%20Marinali%2C%2036061%20Bassano%20del%20Grappa%20VI!5e0!3m2!1sen!2sit!4v1713535000000!5m2!1sen!2sit"
       }
     },
     "it": {
@@ -93,12 +111,30 @@
         }
       },
       "about": {
-        "aboutTitle": "Chi Siamo",
-        "description": "Marinali Rooms si trova in un Palazzo storico del 1460 a Bassano del Grappa, Italia."
+        "heroTitle": "Chi Siamo",
+        "heroSubtitle": "SCOPRITE L'ARTE DELL'OSPITALITÀ ITALIANA",
+        "storyTitle": "SII TE STESSO SENTENDOTI PARTE DI QUALCOSA",
+        "storyDescription": "Marinali Rooms è una collezione di camere e suite dal design individuale per il viaggiatore moderno. Nata dal desiderio di creare uno spazio dove il lusso incontra l'autenticità, offriamo un'esperienza unica nel cuore di Bassano del Grappa. Il nostro palazzo, risalente al 1460, è stato meticolosamente restaurato per preservare la sua anima storica offrendo ogni comfort moderno.",
+        "storyDetails": "Ogni angolo di Marinali Rooms racconta una storia di eredità e artigianalità. Dagli affreschi restaurati a mano ai pezzi di design italiano accuratamente selezionati, vi invitiamo a immergervi in un'atmosfera di intramontabile eleganza. La nostra filosofia è semplice: far sentire ogni ospite a casa propria vivendo la storia straordinaria della nostra città.",
+        "conceptTitle": "PALAZZO MARINALI, DAL 1460",
+        "conceptDescription": "Il nostro palazzo rappresenta molto più di un semplice luogo dove soggiornare; è un monumento vivente all'architettura veneziana. Situato nella storica Contrà dei Marinali, l'edificio ha testimoniato secoli di storia, dall'apice della Repubblica di Venezia ai giorni nostri. Oggi, si erge come testimonianza della bellezza duratura dell'artigianato italiano e del calore dell'ospitalità mediterranea.",
+        "hospitalityTitle": "TRADIZIONI CHE ISPIRANO",
+        "hospitalityDescription": "Crediamo che l'ospitalità sia una forma d'arte. Il nostro team è dedicato a fornire un servizio personale e attento che anticipa le vostre esigenze senza essere invadente. Che si tratti di consigli per una bottega artigiana locale o di una degustazione di vini privata nella nostra cantina, siamo qui per garantire che il vostro viaggio a Bassano sia davvero indimenticabile.",
+        "ctaTitle": "VUOI VEDERE ALTRO?",
+        "ctaDescription": "Esplora la nostra collezione curata di camere e suite, ognuna progettata per offrire un santuario sereno dopo una giornata di scoperte."
       },
       "contact": {
         "contactTitle": "Contattaci",
-        "email": "info@marinalirooms.it"
+        "infoTitle": "DOVE TROVARCI",
+        "address": "Via Marinali, 10, 36061 Bassano del Grappa VI, Italia",
+        "phone": "+39 0424 123456",
+        "email": "info@marinalirooms.it",
+        "formTitle": "INVIACI UN MESSAGGIO",
+        "nameLabel": "Nome Completo",
+        "emailLabel": "Indirizzo Email",
+        "messageLabel": "Il tuo Messaggio",
+        "submitButton": "Invia Richiesta",
+        "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2778.675046274438!2d11.7335!3d45.7667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4778d65565555555%3A0x5555555555555555!2sVia%20Marinali%2C%2036061%20Bassano%20del%20Grappa%20VI!5e0!3m2!1sen!2sit!4v1713535000000!5m2!1sen!2sit"
       }
     },
     "de": {
@@ -140,12 +176,30 @@
         }
       },
       "about": {
-        "aboutTitle": "Über uns",
-        "description": "Marinali Rooms befindet sich in einem historischen Palazzo aus dem Jahr 1460 in Bassano del Grappa, Italien."
+        "heroTitle": "Über Uns",
+        "heroSubtitle": "ERLEBEN SIE DIR KUNST ITALIENISCHER GASTFREUNDSCHAFT",
+        "storyTitle": "SEIN SIE SIE SELBST UND FÜHLEN SIE SICH ZUGEHÖRIG",
+        "storyDescription": "Marinali Rooms ist eine Kollektion individuell gestalteter Zimmer und Suiten für den modernen Reisenden. Geboren aus dem Wunsch, einen Raum zu schaffen, in dem Luxus auf Authentizität trifft, bieten wir ein einzigartiges Erlebnis im Herzen von Bassano del Grappa. Unser Palazzo aus dem Jahr 1460 wurde sorgfältig restauriert, um seine historische Seele zu bewahren und gleichzeitig jeden modernen Komfort zu bieten.",
+        "storyDetails": "Jede Ecke von Marinali Rooms erzählt eine Geschichte von Erbe und Handwerkskunst. Von den handrestaurierten Fresken bis hin zu den sorgfältig kuratierten italienischen Designstücken laden wir Sie ein, in eine Atmosphäre zeitloser Eleganz einzutauchen. Unsere Philosophie ist einfach: Jedem Gast das Gefühl zu geben, zu Hause zu sein, während er die außergewöhnliche Geschichte unserer Stadt erlebt.",
+        "conceptTitle": "PALAZZO MARINALI, SEIT 1460",
+        "conceptDescription": "Unser Palast ist mehr als nur ein Ort zum Übernachten; er ist ein lebendiges Denkmal venezianischer Architektur. Das Gebäude in der historischen Contrà dei Marinali hat Jahrhunderte der Geschichte miterlebt, von der Blütezeit der Republik Venedig bis heute. Heute steht es als Zeugnis für die beständige Schönheit italienischer Handwerkskunst und die Wärme mediterraner Gastfreundschaft.",
+        "hospitalityTitle": "INSPIRIERENDE TRADITIONEN",
+        "hospitalityDescription": "Wir glauben, dass Gastfreundschaft eine Kunstform ist. Unser Team ist bestrebt, einen persönlichen, aufmerksamen Service zu bieten, der Ihre Bedürfnisse vorwegnimmt, ohne aufdringlich zu sein. Ob es sich um Empfehlungen für eine lokale Handwerkswerkstatt oder eine private Weinprobe in unserem Keller handelt, wir sind hier, um sicherzustellen, dass Ihre Reise in Bassano unvergesslich wird.",
+        "ctaTitle": "MÖCHTEN SIE MEHR SEHEN?",
+        "ctaDescription": "Entdecken Sie unsere kuratierte Kollektion von Zimmern und Suiten, die jeweils als ruhiger Rückzugsort nach einem Tag voller Entdeckungen konzipiert wurden."
       },
       "contact": {
-        "contactTitle": "Kontaktieren Sie uns",
-        "email": "info@marinalirooms.it"
+        "contactTitle": "Kontakt",
+        "infoTitle": "WO SIE UNS FINDEN",
+        "address": "Via Marinali, 10, 36061 Bassano del Grappa VI, Italien",
+        "phone": "+39 0424 123456",
+        "email": "info@marinalirooms.it",
+        "formTitle": "SENDEN SIE UNS EINE NACHRICHT",
+        "nameLabel": "Vollständiger Name",
+        "emailLabel": "E-Mail-Adresse",
+        "messageLabel": "Ihre Nachricht",
+        "submitButton": "Anfrage senden",
+        "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2778.675046274438!2d11.7335!3d45.7667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4778d65565555555%3A0x5555555555555555!2sVia%20Marinali%2C%2036061%20Bassano%20del%20Grappa%20VI!5e0!3m2!1sen!2sit!4v1713535000000!5m2!1sen!2sit"
       }
     }
   }

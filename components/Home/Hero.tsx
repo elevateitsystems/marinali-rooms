@@ -47,7 +47,7 @@ export default function Hero({
         style={{ transform: `translateY(${bgTranslateY}px)` }}
       >
         <Image
-          src={settings?.heroImage || "/hero-banner.png"}
+          src={settings?.heroImage || "/assets/Stanza%201%20-%20Foto-1.jpg"}
           alt="Hero Banner"
           fill
           className="object-cover object-center brightness-[0.7]"
@@ -66,12 +66,12 @@ export default function Hero({
       >
         {settings?.logo ? (
           <div className="relative h-24 md:h-32 w-56 md:w-64 mb-6">
-            <Image 
-              src={settings.logo} 
-              alt="Logo" 
-              fill 
-              className="object-contain" 
-              priority 
+            <Image
+              src={settings.logo}
+              alt="Logo"
+              fill
+              className="object-contain"
+              priority
             />
           </div>
         ) : (

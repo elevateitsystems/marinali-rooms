@@ -7,35 +7,35 @@ import EditableText from '../common/EditableText';
 const defaultRooms: SliderItem[] = [
   {
     id: 1,
-    image: '/hotel-1.png',
+    image: '/assets/Stanza%201%20-%20Foto-1.jpg',
     name: 'MARINALI POOLSIDE',
-    location: 'Greece',
+    location: 'Bassano del Grappa',
     description:
-      'Nestled along the Mediterranean coast with crystal-clear waters and warm golden sunsets, Marinali Poolside offers an unforgettable…',
+      'Experience the height of luxury in our poolside suites, where historic architecture meets modern relaxation.',
   },
   {
     id: 2,
-    image: '/hotel-2.png',
+    image: '/assets/Stanza%202%20-%20Foto-1.jpg',
     name: 'MARINALI TERRACE',
-    location: 'Greece',
+    location: 'Bassano del Grappa',
     description:
-      'Perched on sun-drenched cliffs with panoramic sea views, our elegant terrace dining invites you to savor Mediterranean…',
+      'Our terrace rooms offer breathtaking views of the Venetian pre-Alps and the historic city center.',
   },
   {
     id: 3,
-    image: '/hotel-3.png',
+    image: '/assets/Stanza%203%20-%20Foto-1.jpg',
     name: 'MARINALI CLIFFSIDE',
-    location: 'Greece',
+    location: 'Bassano del Grappa',
     description:
-      'Tucked between the mountains and the sea on the iconic Greek coastline, Marinali Cliffside is a sanctuary…',
+      'Immerse yourself in history with rooms that overlook the Brenta river and the iconic Ponte Vecchio.',
   },
   {
     id: 4,
-    image: '/hotel-4.png',
+    image: '/assets/Stanza%201%20-%20Foto-4.jpg',
     name: 'MARINALI SUITE',
-    location: 'Greece',
+    location: 'Bassano del Grappa',
     description:
-      'A serene retreat blending minimalist luxury with breathtaking coastal views, each suite is thoughtfully designed for…',
+      'The pinnacle of our palazzo, the Marinali Suite features hand-restored frescoes and bespoke Italian furniture.',
   },
 ];
 

@@ -1,16 +1,8 @@
 import { getContent } from "@/lib/content";
-import Link from "next/link";
+import AboutContent from "@/components/About/AboutContent";
 
 export default async function GermanAboutPage() {
   const { about: data } = getContent("de");
 
-  return (
-    <div className="flex flex-col min-h-screen items-center justify-center p-8">
-      <nav className="mb-8 flex gap-4">
-        <Link href="/de" className="opacity-70 hover:opacity-100 transition-opacity">Zurück zur Startseite</Link>
-      </nav>
-      <h1 className="text-4xl font-bold mb-4">{data?.aboutTitle || 'Über Uns (About DE)'}</h1>
-      <p className="text-lg opacity-80">{data?.description || 'Add German About Page content.'}</p>
-    </div>
-  );
+  return <AboutContent lang="de" initialData={data} />;
 }

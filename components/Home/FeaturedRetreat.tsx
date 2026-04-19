@@ -40,7 +40,7 @@ export default function FeaturedRetreat({ lang, data }: { lang: string; data?: a
         }}
       >
         <Image
-          src={settings?.retreatImage || "/hotel-4.png"}
+          src={settings?.retreatImage || "/assets/Stanza%202%20-%20Foto-14.jpg"}
           alt="Featured Retreat"
           fill
           style={{

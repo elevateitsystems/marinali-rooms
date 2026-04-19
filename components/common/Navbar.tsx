@@ -27,23 +27,17 @@ const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 // Dictionary for 3 languages
 const navData = {
   en: {
-    home: 'OUR HOTELS',
-    offers: 'OFFERS',
-    blog: 'JOURNALS - BLOG',
+    home: 'Home',
     about: 'ABOUT',
     contact: 'CONTACT US'
   },
   it: {
-    home: 'I NOSTRI HOTEL',
-    offers: 'OFFERTE',
-    blog: 'DIARI - BLOG',
+    home: 'Home',
     about: 'CHI SIAMO',
     contact: 'CONTATTACI'
   },
   de: {
-    home: 'UNSERE HOTELS',
-    offers: 'ANGEBOTE',
-    blog: 'JOURNALE - BLOG',
+    home: 'Home',
     about: 'ÜBER UNS',
     contact: 'KONTAKT'
   }
@@ -146,12 +140,12 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           >
             {settings?.logo ? (
               <div className="relative h-12 md:h-16 w-32 md:w-40">
-                <Image 
-                  src={settings.logo} 
-                  alt="Marinali Logo" 
-                  fill 
+                <Image
+                  src={settings.logo}
+                  alt="Marinali Logo"
+                  fill
                   className="object-contain"
-                  priority 
+                  priority
                 />
               </div>
             ) : (
@@ -185,8 +179,6 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           <nav className="flex flex-col gap-6 md:gap-10 mt-10 md:mt-0">
             {[
               { name: t.home, path: '/' },
-              { name: t.offers, path: '/offers' },
-              { name: t.blog, path: '/blog' },
               { name: t.about, path: '/about' },
               { name: t.contact, path: '/contact' },
             ].map((item, idx) => (
@@ -240,7 +232,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
         {/* Right Pane (Image & Close Button) */}
         <div className="hidden md:block relative h-full">
           <Image
-            src="/hero-banner.png"
+            src="/assets/Stanza%201%20-%20Foto-7.jpg"
             alt="Menu Aesthetic"
             fill
             className="object-cover"
