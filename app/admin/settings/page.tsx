@@ -568,7 +568,7 @@ export default function SettingsPage() {
                     <div key={idx} className="flex items-center gap-3">
                       <Select
                         value={social.icon}
-                        onValueChange={(val) => updateSocialLink(idx, "icon", val)}
+                        onValueChange={(val) => updateSocialLink(idx, "icon", val as any)}
                       >
                         <SelectTrigger className="w-[160px]">
                           <SelectValue placeholder="Select icon" />

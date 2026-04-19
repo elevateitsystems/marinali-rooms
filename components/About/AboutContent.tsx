@@ -280,12 +280,12 @@ export default function AboutContent({ lang, initialData }: AboutContentProps) {
             initialValue={data?.ctaDescription}
             className="text-xl mb-10 block italic font-light"
           />
-          <Link
+          {/* <Link
             href={`/${lang}/rooms`}
             className="inline-block px-10 py-5 bg-white text-black text-[10px] tracking-[0.3em] font-bold uppercase hover:bg-black hover:text-white transition-all duration-300"
           >
             {lang === 'en' ? 'EXPLORE ROOMS' : lang === 'it' ? 'ESPLORA CAMERE' : 'ZIMMER ENTDECKEN'}
-          </Link>
+          </Link> */}
         </div>
       </section>
     </div>

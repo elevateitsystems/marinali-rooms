@@ -60,7 +60,7 @@ export class RoomService {
         const cached = await redis.get(cacheKey);
         if (cached) {
           console.log(`[RoomService] Cache hit for ${cacheKey}`);
-          return typeof cached === 'string' ? JSON.parse(cached) : cached;
+          return (typeof cached === 'string' ? JSON.parse(cached) : cached) as FlattenedRoom[];
         }
       } catch (error) {
         console.error("[RoomService] Redis error:", error);

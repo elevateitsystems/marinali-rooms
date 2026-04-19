@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { X } from 'lucide-react';
+import { useLenis } from 'lenis/react';
 import { BookingModal } from './BookingModal';
 
 interface BookingBarProps {
@@ -64,15 +65,17 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookingUrl, setBookingUrl] = useState("");
 
-  // Lock body scroll when drawer is open
+  const lenis = useLenis();
+
+  // Prevent background scrolling when drawer is open
   useEffect(() => {
+    if (!lenis) return;
     if (drawerOpen) {
-      document.body.style.overflow = 'hidden';
+      lenis.stop();
     } else {
-      document.body.style.overflow = 'unset';
+      lenis.start();
     }
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [drawerOpen]);
+  }, [drawerOpen, lenis]);
 
   // Handle sticky behavior with footer
   useEffect(() => {

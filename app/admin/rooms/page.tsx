@@ -55,7 +55,8 @@ export default function RoomsListPage() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["rooms"] });
       const field = Object.keys(variables).find(k => k !== 'id');
-      toast.success(`${field === 'isOffer' ? 'Offer' : 'Highlight' || 'Status'} updated`);
+      const label = field === 'isOffer' ? 'Offer' : field === 'isHighlight' ? 'Highlight' : 'Status';
+      toast.success(`${label} updated`);
     },
     onError: () => toast.error("Failed to update status"),
   });
