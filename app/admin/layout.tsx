@@ -16,13 +16,13 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-[oklch(0.98_0_0)] flex flex-col md:flex-row font-sans text-gray-900 overflow-x-hidden">
-      
+
       {/* Mobile Top Bar */}
       <div className="md:hidden flex items-center justify-between bg-white border-b px-4 py-4 z-20 sticky top-0">
         <h1 className={`${yellowtail.className} text-2xl font-bold text-gray-900`}>
           Marinali Admin
         </h1>
-        <button 
+        <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className="p-2 -mr-2 text-gray-600 focus:outline-none"
         >
@@ -36,8 +36,8 @@ export default function AdminLayout({
 
       {/* Sidebar Overlay (Mobile) */}
       {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/20 z-30 md:hidden" 
+        <div
+          className="fixed inset-0 bg-black/20 z-30 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
@@ -56,9 +56,16 @@ export default function AdminLayout({
           <Link
             href="/admin/settings"
             onClick={() => setIsSidebarOpen(false)}
-            className="px-4 py-3 rounded-md bg-gray-100 font-medium hover:bg-gray-200 transition-colors"
+            className="px-4 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors"
           >
             Site Settings
+          </Link>
+          <Link
+            href="/admin/rooms"
+            onClick={() => setIsSidebarOpen(false)}
+            className="px-4 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors"
+          >
+            Rooms
           </Link>
           <Link
             href="/en"
@@ -71,10 +78,8 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 md:p-12 overflow-y-auto w-full relative z-10">
-        <div className=" mx-auto">
-          {children}
-        </div>
+      <main className="flex-1 h-[100dvh] overflow-hidden w-full relative z-10">
+        {children}
       </main>
       <Toaster />
     </div>

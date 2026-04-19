@@ -25,7 +25,24 @@
           "roomsValue": "1 Room",
           "codeLabel": "Promo Code",
           "codeValue": "Optional",
-          "buttonText": "Book Now"
+          "buttonText": "Book Now",
+          "reviews": [
+            {
+              "quote": "“TRULY AMAZING STAY THAT EXCEEDED OUR HIGH EXPECTATIONS. BEST STAFF EVER! SO FRIENDLY, FUNNY, PROFESSIONAL AND CARING. THE HOTEL ITSELF IS A PIECE OF ART IN DESIGN, CONCEPT AND LAYOUT. TO TOP IT ALL OFF THE BREAKFAST, LUNCH AND DINNER AT THE BEACHHOUSE EVERYDAY WAS SUCH A HIGH LEVEL!”",
+              "attribution": "Casa Cook Samos – Alexander, September 2023",
+              "source": "Tripadvisor"
+            },
+            {
+              "quote": "“AN UNFORGETTABLE EXPERIENCE. THE ATTENTION TO DETAIL AND THE SERENE ATMOSPHERE MADE OUR STAY PERFECT. THE ARCHITECTURE BLENDS SEAMLESSLY WITH THE NATURAL BEAUTY OF THE ISLAND. CANNOT WAIT TO RETURN NEXT SEASON.”",
+              "attribution": "Marinali Rooms – Elena, June 2024",
+              "source": "Google Reviews"
+            },
+            {
+              "quote": "“THE PERFECT BALANCE OF LUXURY AND RELAXATION. EVERY ASPECT OF THE STAY WAS THOUGHTFULLY CURATED. FROM THE BREAKFAST VIEW TO THE COMFORT OF THE BED, EVERYTHING WAS FIVE STARS.”",
+              "attribution": "Casa Cook Rhodes – Marco, August 2023",
+              "source": "Booking.com"
+            }
+          ]
         }
       },
       "about": {
@@ -55,7 +72,24 @@
           "roomsValue": "1 Camera",
           "codeLabel": "Codice Promo",
           "codeValue": "Opzionale",
-          "buttonText": "Prenota Ora"
+          "buttonText": "Prenota Ora",
+          "reviews": [
+            {
+              "quote": "“SOGGIORNO DAVVERO INCREDIBILE CHE HA SUPERATO LE NOSTRE ALTE ASPETTATIVE. IL MIGLIOR STAFF DI SEMPRE! COSÌ AMICHEVOLI, DIVERTENTI, PROFESSIONALI E PREMUROSI. L'HOTEL STESSO È UN'OPERA D'ARTE.”",
+              "attribution": "Casa Cook Samos – Alexander, Settembre 2023",
+              "source": "Tripadvisor"
+            },
+            {
+              "quote": "“UN'ESPERIENZA INDIMENTICABILE. L'ATTENZIONE AI DETTAGLI E L'ATMOSFERA SERENA HANNO RESO IL NOSTRO SOGGIORNO PERFETTO. L'ARCHITETTURA SI FONDE PERFETTAMENTE CON LA BELLEZZA NATURALE DELL'ISOLA.”",
+              "attribution": "Marinali Rooms – Elena, Giugno 2024",
+              "source": "Google Reviews"
+            },
+            {
+              "quote": "“IL PERFETTO EQUILIBRIO TRA LUSSO E RELAX. OGNI ASPETTO DEL SOGGIORNO È STATO CURATO CON ATTENZIONE. DALLA VISTA DELLA COLAZIONE AL COMFORT DEL LETTO, TUTTO ERA A CINQUE STELLE.”",
+              "attribution": "Casa Cook Rhodes – Marco, Agosto 2023",
+              "source": "Booking.com"
+            }
+          ]
         }
       },
       "about": {
@@ -85,7 +119,24 @@
           "roomsValue": "1 Zimmer",
           "codeLabel": "Gutscheincode",
           "codeValue": "Optional",
-          "buttonText": "Jetzt buchen"
+          "buttonText": "Jetzt buchen",
+          "reviews": [
+            {
+              "quote": "“WIRKLICH UNGLAUBLICHER AUFENTHALT, DER UNSERE HOHEN ERWARTUNGEN ÜBERTROFFEN HAT. DAS BESTE PERSONAL ALLER ZEITEN! SO FREUNDLICH, LUSTIG, PROFESSIONELL UND FÜRSORGLICH. DAS HOTEL SELBST IST EIN KUNSTWERK.”",
+              "attribution": "Casa Cook Samos – Alexander, September 2023",
+              "source": "Tripadvisor"
+            },
+            {
+              "quote": "“EIN UNVERGESSLICHES ERLEBNIS. DIE LIEBE ZUM DETAIL UND DIE RUHIGE ATMOSPHÄRE MACHTEN UNSEREN AUFENTHALT PERFEKT. DIE ARCHITEKTUR FÜGT SICH NAHTLOS IN DIE NATÜRLICHE SCHÖNHEIT DER INSEL EIN.”",
+              "attribution": "Marinali Rooms – Elena, Juni 2024",
+              "source": "Google Reviews"
+            },
+            {
+              "quote": "“DIE PERFEKTE BALANCE ZWISCHEN LUXUS UND ENTSPANNUNG. JEDER ASPEKT DES AUFENTHALTS WAR DURCHDACHT KURATIERT. VOM FRÜHSTÜCKSBLICK BIS ZUM KOMFORT DES BETTES WAR ALLES FÜNF STERNE.”",
+              "attribution": "Casa Cook Rhodes – Marco, August 2023",
+              "source": "Booking.com"
+            }
+          ]
         }
       },
       "about": {

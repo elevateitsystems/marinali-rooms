@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { X } from 'lucide-react';
+import { BookingModal } from './BookingModal';
 
 interface BookingBarProps {
   lang?: 'en' | 'it' | 'de';
@@ -56,8 +57,12 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
   const [guests, setGuests] = useState("2");
   const [rooms, setRooms] = useState("1");
+  const [coupon, setCoupon] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isAtFooter, setIsAtFooter] = useState(false);
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookingUrl, setBookingUrl] = useState("");
 
   // Lock body scroll when drawer is open
   useEffect(() => {
@@ -97,21 +102,34 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     return format(d, "yyyy-MM-dd");
   };
 
+  const handleBookingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Construct the URL manually
+    const baseUrl = "https://marinalirooms.kross.travel/book/step1";
+    const params = new URLSearchParams({
+      lang: lang,
+      from: formatDateForKross(date?.from),
+      to: formatDateForKross(date?.to),
+      rooms: rooms,
+      guests: guests,
+      coupon: coupon
+    });
+    
+    const finalUrl = `${baseUrl}?${params.toString()}`;
+    setBookingUrl(finalUrl);
+    setIsModalOpen(true);
+    setDrawerOpen(false); // Close mobile drawer if open
+  };
+
   const mobileButtonText = lang === 'it' ? 'Prenota il tuo soggiorno' : lang === 'de' ? 'Buchen Sie Ihren Aufenthalt' : 'Book Your Stay';
 
   // --- Shared form content (used in both desktop bar and mobile drawer) ---
   const bookingFormContent = (
     <form
-      action="https://marinalirooms.kross.travel/book/step1"
-      method="GET"
-      target="_blank"
+      onSubmit={handleBookingSubmit}
       className="flex flex-col lg:flex-row items-stretch lg:items-center w-full"
     >
-      <input type="hidden" name="lang" value={lang} />
-      <input type="hidden" name="from" value={formatDateForKross(date?.from)} />
-      <input type="hidden" name="to" value={formatDateForKross(date?.to)} />
-      <input type="hidden" name="rooms" value={rooms} />
-
       {/* Dates */}
       <Popover>
         <PopoverTrigger className="flex-[2] flex flex-row items-stretch">
@@ -197,6 +215,8 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         <input
           name="coupon"
           type="text"
+          value={coupon}
+          onChange={(e) => setCoupon(e.target.value)}
           placeholder={data?.bookingCodeValue || data?.codeValue || (lang === 'it' ? 'Inserisci' : 'Enter')}
           className="bg-transparent border-none p-0 focus:ring-0 text-sm sm:text-base font-semibold tracking-tight uppercase placeholder:text-current/30 w-full"
         />
@@ -244,8 +264,6 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         </button>
       </div>
 
-
-
       {/* ========== MOBILE DRAWER: Slides up from bottom ========== */}
       {/* Backdrop */}
       <div
@@ -282,6 +300,12 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           {bookingFormContent}
         </div>
       </div>
+
+      <BookingModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        bookingUrl={bookingUrl} 
+      />
     </>
   );
 };

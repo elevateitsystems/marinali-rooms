@@ -2,20 +2,137 @@
 
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { FileUploader } from "@/components/common/FileUploader";
+import { ImageIcon, Plus, Trash2, GripVertical, X } from "lucide-react";
+import { SettingsSkeleton } from "./_components/SettingsSkeleton";
+import { SettingsPreview } from "./_components/SettingsPreview";
+import { ThemeSettings, FooterConfig } from "./_components/types";
 
-interface ThemeSettings {
-  primaryColor: string;
-  secondaryColor: string;
-  backgroundColor: string;
-  textColor: string;
-  fontFamily: string;
-}
+const DEFAULT_FOOTER_CONFIG: Record<string, FooterConfig> = {
+  en: {
+    columns: [
+      {
+        title: "Locations",
+        links: [
+          { label: "MARINALI EL GOUNA", url: "#" },
+          { label: "MARINALI MADONNA", url: "#" },
+          { label: "MARINALI NORTH COAST", url: "#" },
+          { label: "MARINALI RHODES", url: "#" },
+          { label: "MARINALI SAMOS", url: "#" },
+        ],
+      },
+      {
+        title: "Quick Links",
+        links: [
+          { label: "ABOUT US", url: "#" },
+          { label: "MANAGE MY BOOKING", url: "#" },
+          { label: "COMPANY INFORMATION", url: "#" },
+          { label: "CONTACT US", url: "#" },
+          { label: "CAREER", url: "#" },
+        ],
+      },
+    ],
+    socialLinks: [
+      { icon: "instagram", url: "https://instagram.com" },
+      { icon: "facebook", url: "https://facebook.com" },
+      { icon: "linkedin", url: "https://linkedin.com" },
+      { icon: "youtube", url: "https://youtube.com" },
+    ],
+    copyright: "© 2026 Marinali Rooms, All rights reserved",
+    bottomLinks: [
+      { label: "Privacy Policy", url: "#" },
+      { label: "Cookie Policy", url: "#" },
+      { label: "User Generated Content", url: "#" },
+    ],
+  },
+  it: {
+    columns: [
+      {
+        title: "Sedi",
+        links: [
+          { label: "MARINALI EL GOUNA", url: "#" },
+          { label: "MARINALI MADONNA", url: "#" },
+          { label: "MARINALI NORTH COAST", url: "#" },
+          { label: "MARINALI RHODES", url: "#" },
+          { label: "MARINALI SAMOS", url: "#" },
+        ],
+      },
+      {
+        title: "Link Rapidi",
+        links: [
+          { label: "CHI SIAMO", url: "#" },
+          { label: "GESTISCI PRENOTAZIONE", url: "#" },
+          { label: "INFORMAZIONI AZIENDALI", url: "#" },
+          { label: "CONTATTACI", url: "#" },
+          { label: "CARRIERA", url: "#" },
+        ],
+      },
+    ],
+    socialLinks: [
+      { icon: "instagram", url: "https://instagram.com" },
+      { icon: "facebook", url: "https://facebook.com" },
+      { icon: "linkedin", url: "https://linkedin.com" },
+      { icon: "youtube", url: "https://youtube.com" },
+    ],
+    copyright: "© 2026 Marinali Rooms, Tutti i diritti riservati",
+    bottomLinks: [
+      { label: "Privacy Policy", url: "#" },
+      { label: "Cookie Policy", url: "#" },
+      { label: "Contenuti degli utenti", url: "#" },
+    ],
+  },
+  de: {
+    columns: [
+      {
+        title: "Standorte",
+        links: [
+          { label: "MARINALI EL GOUNA", url: "#" },
+          { label: "MARINALI MADONNA", url: "#" },
+          { label: "MARINALI NORTH COAST", url: "#" },
+          { label: "MARINALI RHODES", url: "#" },
+          { label: "MARINALI SAMOS", url: "#" },
+        ],
+      },
+      {
+        title: "Quick-Links",
+        links: [
+          { label: "ÜBER UNS", url: "#" },
+          { label: "BUCHUNG VERWALTEN", url: "#" },
+          { label: "UNTERNEHMENSINFORMATIONEN", url: "#" },
+          { label: "KONTAKT", url: "#" },
+          { label: "KARRIERE", url: "#" },
+        ],
+      },
+    ],
+    socialLinks: [
+      { icon: "instagram", url: "https://instagram.com" },
+      { icon: "facebook", url: "https://facebook.com" },
+      { icon: "linkedin", url: "https://linkedin.com" },
+      { icon: "youtube", url: "https://youtube.com" },
+    ],
+    copyright: "© 2026 Marinali Rooms, Alle Rechte vorbehalten",
+    bottomLinks: [
+      { label: "Datenschutz", url: "#" },
+      { label: "Cookie-Richtlinie", url: "#" },
+      { label: "Nutzerinhalte", url: "#" },
+    ],
+  },
+};
+
+const SOCIAL_ICON_OPTIONS = [
+  { value: "instagram", label: "Instagram" },
+  { value: "facebook", label: "Facebook" },
+  { value: "linkedin", label: "LinkedIn" },
+  { value: "youtube", label: "YouTube" },
+  { value: "twitter", label: "Twitter / X" },
+  { value: "tiktok", label: "TikTok" },
+];
 
 export default function SettingsPage() {
   const queryClient = useQueryClient();
@@ -35,11 +152,24 @@ export default function SettingsPage() {
     backgroundColor: "#F8F6F2",
     textColor: "#111111",
     fontFamily: "var(--font-playfair)",
+    logo: null,
+    logoKey: null,
+    heroImage: null,
+    heroImageKey: null,
+    retreatImage: null,
+    retreatImageKey: null,
+    footerConfig: DEFAULT_FOOTER_CONFIG,
   });
+  const [showPreviewDrawer, setShowPreviewDrawer] = useState(false);
+  const [activeTab, setActiveTab] = useState<"colors" | "images" | "footer">("colors");
+  const [activeFooterLang, setActiveFooterLang] = useState<"en" | "it" | "de">("en");
 
   useEffect(() => {
     if (currentSettings) {
-      setFormData(currentSettings);
+      setFormData({
+        ...currentSettings,
+        footerConfig: currentSettings.footerConfig || DEFAULT_FOOTER_CONFIG,
+      });
     }
   }, [currentSettings]);
 
@@ -55,8 +185,7 @@ export default function SettingsPage() {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['settings'], data);
-      toast.success("Settings saved successfully!",);
-      // Force reload to apply injected SSR CSS variables globally properly
+      toast.success("Settings saved successfully!");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
@@ -75,246 +204,457 @@ export default function SettingsPage() {
     setFormData(prev => ({ ...prev, [key]: val }));
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex animate-pulse flex-col gap-6">
-        <div className="h-8 w-64 bg-gray-200 rounded-md mb-8"></div>
-        <div className="h-96 w-full bg-gray-200 rounded-xl"></div>
-      </div>
-    );
-  }
+  // Footer config helpers
+  const footerConfigs = formData.footerConfig || DEFAULT_FOOTER_CONFIG;
+  const fc = footerConfigs[activeFooterLang] || DEFAULT_FOOTER_CONFIG[activeFooterLang];
+
+  const updateFooterConfig = (updates: Partial<FooterConfig>) => {
+    setFormData(prev => {
+      const currentConfigs = prev.footerConfig || DEFAULT_FOOTER_CONFIG;
+      const currentLangConfig = currentConfigs[activeFooterLang] || DEFAULT_FOOTER_CONFIG[activeFooterLang];
+
+      return {
+        ...prev,
+        footerConfig: {
+          ...currentConfigs,
+          [activeFooterLang]: { ...currentLangConfig, ...updates }
+        },
+      };
+    });
+  };
+
+  const addColumn = () => {
+    updateFooterConfig({ columns: [...fc.columns, { title: "New Column", links: [] }] });
+  };
+
+  const removeColumn = (colIdx: number) => {
+    updateFooterConfig({ columns: fc.columns.filter((_, i) => i !== colIdx) });
+  };
+
+  const updateColumnTitle = (colIdx: number, title: string) => {
+    const cols = [...fc.columns];
+    cols[colIdx] = { ...cols[colIdx], title };
+    updateFooterConfig({ columns: cols });
+  };
+
+  const addLinkToColumn = (colIdx: number) => {
+    const cols = [...fc.columns];
+    cols[colIdx] = { ...cols[colIdx], links: [...cols[colIdx].links, { label: "New Link", url: "#" }] };
+    updateFooterConfig({ columns: cols });
+  };
+
+  const removeLinkFromColumn = (colIdx: number, linkIdx: number) => {
+    const cols = [...fc.columns];
+    cols[colIdx] = { ...cols[colIdx], links: cols[colIdx].links.filter((_, i) => i !== linkIdx) };
+    updateFooterConfig({ columns: cols });
+  };
+
+  const updateLinkInColumn = (colIdx: number, linkIdx: number, field: "label" | "url", value: string) => {
+    const cols = [...fc.columns];
+    const links = [...cols[colIdx].links];
+    links[linkIdx] = { ...links[linkIdx], [field]: value };
+    cols[colIdx] = { ...cols[colIdx], links };
+    updateFooterConfig({ columns: cols });
+  };
+
+  const addSocialLink = () => {
+    updateFooterConfig({ socialLinks: [...fc.socialLinks, { icon: "instagram", url: "" }] });
+  };
+
+  const removeSocialLink = (idx: number) => {
+    updateFooterConfig({ socialLinks: fc.socialLinks.filter((_, i) => i !== idx) });
+  };
+
+  const updateSocialLink = (idx: number, field: "icon" | "url", value: string) => {
+    const socials = [...fc.socialLinks];
+    socials[idx] = { ...socials[idx], [field]: value };
+    updateFooterConfig({ socialLinks: socials });
+  };
+
+  const addBottomLink = () => {
+    updateFooterConfig({ bottomLinks: [...fc.bottomLinks, { label: "New Link", url: "#" }] });
+  };
+
+  const removeBottomLink = (idx: number) => {
+    updateFooterConfig({ bottomLinks: fc.bottomLinks.filter((_, i) => i !== idx) });
+  };
+
+  const updateBottomLink = (idx: number, field: "label" | "url", value: string) => {
+    const links = [...fc.bottomLinks];
+    links[idx] = { ...links[idx], [field]: value };
+    updateFooterConfig({ bottomLinks: links });
+  };
+
+  if (isLoading) return <SettingsSkeleton />;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-10">
+    <div className="flex h-full overflow-hidden bg-[oklch(0.98_0_0)]">
       {/* Left Column: Form & Actions */}
-      <div className="flex-1">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold tracking-tight">Theme Settings</h2>
-          <p className="text-gray-500 mt-2">Manage the global colors and typography of your website. Changes apply immediately upon save.</p>
+      <div className="flex-1 h-full p-6 overflow-y-auto  scrollbar-hide">
+        <div className="sticky -top-6 z-20 bg-[oklch(0.98_0_0)] py-6 mb-2 border-b border-gray-200/50 backdrop-blur-sm -mt-4">
+          <div className="flex flex-col gap-6">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight">Site Settings</h2>
+              <p className="text-gray-500 mt-2">Manage colors, branding, and footer content across all languages.</p>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex bg-gray-100/80 p-1 rounded-xl w-fit">
+                {[
+                  { id: "colors", label: "Colors & Fonts" },
+                  { id: "images", label: "Logo & Images" },
+                  { id: "footer", label: "Footer" }
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${activeTab === tab.id
+                      ? "bg-white text-black shadow-sm"
+                      : "text-gray-500 hover:text-gray-800"
+                      }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="h-8 w-[1px] bg-gray-200 hidden xl:block" />
+
+              <Button
+                onClick={() => handleSubmit({ preventDefault: () => { } } as any)}
+                disabled={mutation.isPending}
+                className="bg-primary text-white shadow-lg px-8 py-6 rounded-xl flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {mutation.isPending ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save Changes"
+                )}
+              </Button>
+            </div>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <Card className="shadow-none border-gray-200">
-            <CardHeader>
-              <CardTitle>Colors & Fonts</CardTitle>
-              <CardDescription>Adjust the primary aesthetics. Choose colors carefully to ensure good contrast.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Primary Color */}
-                <div className="space-y-3">
-                  <Label htmlFor="primaryColor">Primary Color</Label>
-                  <div className="flex gap-4 items-center">
-                    <Input
-                      type="color"
-                      id="primaryColor-picker"
-                      className="w-14 h-14 p-1 cursor-pointer min-w-[56px]"
-                      value={formData.primaryColor || "#000000"}
-                      onChange={(e) => handleColorChange("primaryColor", e.target.value)}
-                    />
-                    <Input
-                      type="text"
-                      className="font-mono uppercase flex-1"
-                      value={formData.primaryColor || ""}
-                      onChange={(e) => handleColorChange("primaryColor", e.target.value)}
-                      placeholder="#FFFFFF"
-                    />
+        <form onSubmit={handleSubmit} className="pt-6">
+          {activeTab === "images" && (
+            <Card className="shadow-none border-gray-200 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <CardHeader>
+                <CardTitle>Branding & Assets</CardTitle>
+                <CardDescription>Upload your website logo and manage hero banners.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                  <FileUploader
+                    label="Site Logo"
+                    value={formData.logo || ""}
+                    imageKey={formData.logoKey}
+                    onChange={(url, key) => setFormData(prev => ({ ...prev, logo: url, logoKey: key }))}
+
+                  />
+                  <FileUploader
+                    label="Hero Banner"
+                    value={formData.heroImage || ""}
+                    imageKey={formData.heroImageKey}
+                    onChange={(url, key) => setFormData(prev => ({ ...prev, heroImage: url, heroImageKey: key }))}
+
+                  />
+                  <FileUploader
+                    label="Retreat Banner"
+                    value={formData.retreatImage || ""}
+                    imageKey={formData.retreatImageKey}
+                    onChange={(url, key) => setFormData(prev => ({ ...prev, retreatImage: url, retreatImageKey: key }))}
+
+                  />
+                </div>
+
+                <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 flex gap-4">
+                  <div className="bg-blue-600/10 p-2.5 rounded-full h-fit mt-0.5">
+                    <ImageIcon className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-blue-900 leading-tight">Asset Guidelines</h4>
+                    <p className="text-xs text-blue-700/80 leading-relaxed mt-1.5 max-w-xl">
+                      For high-resolution displays, we recommend images at least 1920px wide for banners.
+                      Transparent PNGs are best for logos. Changes apply site-wide after saving.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeTab === "colors" && (
+            <Card className="shadow-none border-gray-200 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <CardHeader>
+                <CardTitle>Colors & Typography</CardTitle>
+                <CardDescription>Adjust the global aesthetics. Choose colors that ensure high contrast for accessibility.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-10">
+                {/* Color Scheme */}
+                <div className="space-y-6">
+                  <Label className="text-base font-bold text-gray-900 border-l-4 border-blue-500 pl-3">Color Palette</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                    {[
+                      { key: "primaryColor", label: "Primary Color", desc: "Used for buttons, navbar, and major accents." },
+                      { key: "secondaryColor", label: "Secondary Color", desc: "Used for highlights and subtle details." },
+                      { key: "backgroundColor", label: "Background", desc: "The main background color of your site." },
+                      { key: "textColor", label: "Text Color", desc: "Primary color for all readability." },
+                    ].map((item) => (
+                      <div key={item.key} className="space-y-4 group">
+                        <div className="flex justify-between items-center bg-gray-50 p-4 rounded-xl transition-all group-hover:bg-white border border-transparent group-hover:border-gray-200 group-hover:shadow-sm">
+                          <div className="space-y-1">
+                            <Label htmlFor={item.key} className="text-sm font-semibold text-gray-800">{item.label}</Label>
+                            <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="text-xs font-mono text-gray-400 uppercase">{formData[item.key as keyof ThemeSettings] as string}</span>
+                            <div className="relative overflow-hidden w-10 h-10 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-all cursor-pointer ring-1 ring-gray-100">
+                              <Input
+                                type="color"
+                                id={item.key}
+                                value={formData[item.key as keyof ThemeSettings] as string}
+                                onChange={(e) => handleColorChange(item.key as keyof ThemeSettings, e.target.value)}
+                                className="absolute -top-2 -left-2 w-[200%] h-[200%] scale-150 cursor-pointer p-0 opacity-0"
+                              />
+                              <div
+                                className="w-full h-full pointer-events-none"
+                                style={{ backgroundColor: formData[item.key as keyof ThemeSettings] as string }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* Secondary Color */}
-                <div className="space-y-3">
-                  <Label htmlFor="secondaryColor">Secondary Color</Label>
-                  <div className="flex gap-4 items-center">
-                    <Input
-                      type="color"
-                      id="secondaryColor-picker"
-                      className="w-14 h-14 p-1 cursor-pointer min-w-[56px]"
-                      value={formData.secondaryColor || "#000000"}
-                      onChange={(e) => handleColorChange("secondaryColor", e.target.value)}
-                    />
-                    <Input
-                      type="text"
-                      className="font-mono uppercase flex-1"
-                      value={formData.secondaryColor || ""}
-                      onChange={(e) => handleColorChange("secondaryColor", e.target.value)}
-                      placeholder="#FFFFFF"
-                    />
+                {/* Typography */}
+                <div className="border-t pt-8 space-y-3">
+                  <Label htmlFor="fontFamily">Font Family</Label>
+                  <Select
+                    value={formData.fontFamily}
+                    onValueChange={(val) => handleColorChange("fontFamily", val as string)}
+                  >
+                    <SelectTrigger className="w-full md:w-[300px]">
+                      <SelectValue placeholder="Select a font" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="var(--font-geist-sans)">Geist Sans</SelectItem>
+                      <SelectItem value="var(--font-playfair)">Playfair Display</SelectItem>
+                      <SelectItem value="var(--font-montserrat)">Montserrat</SelectItem>
+                      <SelectItem value="var(--font-lora)">Lora</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-gray-500">This font class is applied globally to headings and body text.</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeTab === "footer" && (
+            <Card className="shadow-none border-gray-200 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <CardHeader>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <CardTitle>Footer Configuration</CardTitle>
+                    <CardDescription>Manage your site's bottom navigation, social links, and legal text.</CardDescription>
+                  </div>
+
+                  <div className="flex bg-gray-100 p-1 rounded-lg w-fit">
+                    {[
+                      { id: "en", label: "EN" },
+                      { id: "it", label: "IT" },
+                      { id: "de", label: "DE" }
+                    ].map((lang) => (
+                      <button
+                        key={lang.id}
+                        type="button"
+                        onClick={() => setActiveFooterLang(lang.id as any)}
+                        className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${activeFooterLang === lang.id
+                          ? "bg-white text-black shadow-sm"
+                          : "text-gray-500 hover:text-gray-800"
+                          }`}
+                      >
+                        {lang.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
-
-                {/* Background Color */}
-                <div className="space-y-3">
-                  <Label htmlFor="backgroundColor">Background Color</Label>
-                  <div className="flex gap-4 items-center">
-                    <Input
-                      type="color"
-                      id="backgroundColor-picker"
-                      className="w-14 h-14 p-1 cursor-pointer min-w-[56px]"
-                      value={formData.backgroundColor || "#000000"}
-                      onChange={(e) => handleColorChange("backgroundColor", e.target.value)}
-                    />
-                    <Input
-                      type="text"
-                      className="font-mono uppercase flex-1"
-                      value={formData.backgroundColor || ""}
-                      onChange={(e) => handleColorChange("backgroundColor", e.target.value)}
-                      placeholder="#FFFFFF"
-                    />
+              </CardHeader>
+              <CardContent className="space-y-8">
+                {/* Link Columns */}
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-semibold">Link Columns</Label>
+                    <Button type="button" variant="outline" size="sm" onClick={addColumn}>
+                      <Plus size={14} className="mr-1" /> Add Column
+                    </Button>
                   </div>
+
+                  {fc.columns.map((col, colIdx) => (
+                    <div key={colIdx} className="border border-gray-200 rounded-lg p-4 space-y-4 bg-gray-50/50">
+                      <div className="flex items-center gap-3">
+                        <GripVertical size={16} className="text-gray-400 flex-shrink-0" />
+                        <Input
+                          value={col.title}
+                          onChange={(e) => updateColumnTitle(colIdx, e.target.value)}
+                          placeholder="Column Title"
+                          className="flex-1 font-semibold"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                          onClick={() => removeColumn(colIdx)}
+                        >
+                          <Trash2 size={14} />
+                        </Button>
+                      </div>
+
+                      <div className="space-y-2 ml-7">
+                        {col.links.map((link, linkIdx) => (
+                          <div key={linkIdx} className="flex items-center gap-2">
+                            <Input
+                              value={link.label}
+                              onChange={(e) => updateLinkInColumn(colIdx, linkIdx, "label", e.target.value)}
+                              placeholder="Label"
+                              className="flex-1 text-sm"
+                            />
+                            <Input
+                              value={link.url}
+                              onChange={(e) => updateLinkInColumn(colIdx, linkIdx, "url", e.target.value)}
+                              placeholder="URL"
+                              className="flex-1 text-sm font-mono"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="text-red-400 hover:text-red-600 flex-shrink-0"
+                              onClick={() => removeLinkFromColumn(colIdx, linkIdx)}
+                            >
+                              <X size={14} />
+                            </Button>
+                          </div>
+                        ))}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="text-blue-600 hover:text-blue-800"
+                          onClick={() => addLinkToColumn(colIdx)}
+                        >
+                          <Plus size={14} className="mr-1" /> Add Link
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Text Color */}
-                <div className="space-y-3">
-                  <Label htmlFor="textColor">Text Color</Label>
-                  <div className="flex gap-4 items-center">
-                    <Input
-                      type="color"
-                      id="textColor-picker"
-                      className="w-14 h-14 p-1 cursor-pointer min-w-[56px]"
-                      value={formData.textColor || "#000000"}
-                      onChange={(e) => handleColorChange("textColor", e.target.value)}
-                    />
-                    <Input
-                      type="text"
-                      className="font-mono uppercase flex-1"
-                      value={formData.textColor || ""}
-                      onChange={(e) => handleColorChange("textColor", e.target.value)}
-                      placeholder="#FFFFFF"
-                    />
+                {/* Social Links */}
+                <div className="border-t pt-8 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-semibold">Social Icons</Label>
+                    <Button type="button" variant="outline" size="sm" onClick={addSocialLink}>
+                      <Plus size={14} className="mr-1" /> Add Icon
+                    </Button>
                   </div>
+                  {fc.socialLinks.map((social, idx) => (
+                    <div key={idx} className="flex items-center gap-3">
+                      <Select
+                        value={social.icon}
+                        onValueChange={(val) => updateSocialLink(idx, "icon", val)}
+                      >
+                        <SelectTrigger className="w-[160px]">
+                          <SelectValue placeholder="Select icon" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {SOCIAL_ICON_OPTIONS.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        value={social.url}
+                        onChange={(e) => updateSocialLink(idx, "url", e.target.value)}
+                        placeholder="URL"
+                        className="flex-1 font-mono text-sm"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-400 hover:text-red-600 flex-shrink-0"
+                        onClick={() => removeSocialLink(idx)}
+                      >
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
+                  ))}
                 </div>
 
-              </div>
+                {/* Bottom Links */}
+                <div className="border-t pt-8 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-semibold">Legal & Privacy Links</Label>
+                    <Button type="button" variant="outline" size="sm" onClick={addBottomLink}>
+                      <Plus size={14} className="mr-1" /> Add Link
+                    </Button>
+                  </div>
+                  {fc.bottomLinks.map((link, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <Input
+                        value={link.label}
+                        onChange={(e) => updateBottomLink(idx, "label", e.target.value)}
+                        placeholder="Label"
+                        className="flex-1 text-sm"
+                      />
+                      <Input
+                        value={link.url}
+                        onChange={(e) => updateBottomLink(idx, "url", e.target.value)}
+                        placeholder="URL"
+                        className="flex-1 text-sm font-mono"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-400 hover:text-red-600 flex-shrink-0"
+                        onClick={() => removeBottomLink(idx)}
+                      >
+                        <X size={14} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
 
-              {/* Typography */}
-              <div className="border-t pt-8 space-y-3">
-                <Label htmlFor="fontFamily">Font Family</Label>
-                <Select
-                  value={formData.fontFamily}
-                  onValueChange={(val) => handleColorChange("fontFamily", val as string)}
-                >
-                  <SelectTrigger className="w-full md:w-[300px]">
-                    <SelectValue placeholder="Select a font" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="var(--font-geist-sans)">Geist Sans</SelectItem>
-                    <SelectItem value="var(--font-playfair)">Playfair Display</SelectItem>
-                    <SelectItem value="var(--font-montserrat)">Montserrat</SelectItem>
-                    <SelectItem value="var(--font-lora)">Lora</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-sm text-gray-500">This font class is applied globally to headings and body text.</p>
-              </div>
-            </CardContent>
-
-            <CardFooter className="border-t flex justify-end bg-gray-50 rounded-b-xl border-gray-200 px-6 py-4">
-              <Button type="submit" disabled={mutation.isPending}>
-                {mutation.isPending ? "Saving..." : "Save Changes"}
-              </Button>
-            </CardFooter>
-          </Card>
+                {/* Copyright */}
+                <div className="border-t pt-8 space-y-3">
+                  <Label>Copyright Text</Label>
+                  <Input
+                    value={fc.copyright}
+                    onChange={(e) => updateFooterConfig({ copyright: e.target.value })}
+                    placeholder="© 2026 Marinali Rooms"
+                    className="max-w-md"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </form>
       </div>
 
-      {/* Right Column: Live Preview Pane */}
-      <div className="w-full lg:w-[400px] xl:w-[450px] flex-shrink-0 lg:mt-24">
-        <div className="sticky top-8 flex flex-col min-h-[560px] max-h-[calc(100vh-4rem)] border border-gray-200 rounded-xl overflow-hidden shadow-2xl bg-white">
-          {/* Browser Header Bar (Faux Chrome) */}
-          <div className="bg-gray-100 flex items-center px-4 py-3 gap-2 border-b">
-            <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-red-400"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-              <div className="w-3 h-3 rounded-full bg-green-400"></div>
-            </div>
-            <div className="mx-auto text-xs font-mono text-gray-400 bg-white px-8 py-1 rounded-md text-center shadow-sm">
-              Live Preview
-            </div>
-            <div className="w-12"></div> {/* Spacer for flex balance */}
-          </div>
-
-          {/* Simulated Website Frame */}
-          <div
-            className="flex-1 flex flex-col overflow-y-auto transition-colors duration-500 relative"
-            style={{
-              backgroundColor: formData.backgroundColor,
-              color: formData.textColor,
-              fontFamily: formData.fontFamily
-            }}
-          >
-            {/* Navbar */}
-            <div className="flex items-center justify-between px-5 py-1 border-b border-current/10">
-              <div className="font-bold text-xl drop-shadow-sm" style={{ color: formData.primaryColor }}>
-                Marinali
-              </div>
-              <div className="flex gap-5 text-[10px] uppercase font-bold tracking-widest opacity-80">
-                <span>Rooms</span>
-                <span>Offers</span>
-                <span>Contact</span>
-              </div>
-            </div>
-
-            {/* Banner / Hero */}
-            <div className="relative flex flex-col items-center justify-center text-center px-6 py-3 border-b border-current/5" style={{ backgroundColor: 'rgba(0,0,0,0.03)' }}>
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--background)]/20"></div>
-              <h1 className="text-2xl font-bold mb-2 tracking-tight z-10">Welcome Home</h1>
-              <p className="text-[10px] opacity-70 mb-4 max-w-[250px] leading-relaxed z-10">
-                Experience luxury and tranquility wrapped in our newly tailored aesthetics.
-              </p>
-              <button
-                type="button"
-                className="px-4 py-2 shadow-xl tracking-widest uppercase text-[10px] font-bold z-10 transition-transform hover:scale-105"
-                style={{ backgroundColor: formData.primaryColor, color: '#fff' }}
-              >
-                Book Your Stay
-              </button>
-            </div>
-
-            {/* Main Content Area */}
-            <div className="px-5 py-3 flex-1">
-              <h2 className="text-sm font-bold mb-3 flex items-center gap-3">
-                <span className="w-4 h-[1px] block" style={{ backgroundColor: formData.primaryColor }}></span>
-                Our Services
-              </h2>
-              <p className="text-[10px] leading-relaxed opacity-80 mb-5">
-                This environment simulates your exact configurations. Try tweaking the settings on the left to see how different hues stack up against the background and font-family choices.
-              </p>
-
-              <div className="flex gap-4">
-                <div className="flex-1 rounded-sm border border-current/10 p-3 flex flex-col gap-3 shadow-sm bg-white/5">
-                  <div className="w-8 h-8 rounded-full shadow-md" style={{ backgroundColor: formData.secondaryColor }}></div>
-                  <div className="h-2 w-full bg-current/20 rounded"></div>
-                  <div className="h-2 w-2/3 bg-current/20 rounded"></div>
-                </div>
-                <div className="flex-1 rounded-sm border border-current/10 p-4 flex flex-col gap-3 shadow-sm bg-white/5">
-                  <div className="w-8 h-8 rounded-full shadow-md" style={{ backgroundColor: formData.primaryColor }}></div>
-                  <div className="h-2 w-full bg-current/20 rounded"></div>
-                  <div className="h-2 w-2/3 bg-current/20 rounded"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="mt-2 px-3 py-3 border-t border-white/10" style={{ backgroundColor: formData.primaryColor, color: '#fff' }}>
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-md font-bold tracking-wide">Marinali</span>
-                <div className="flex gap-2">
-                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center p-1"></div>
-                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center p-1"></div>
-                </div>
-              </div>
-              <div className="h-[1px] w-full bg-white/20 mb-4"></div>
-              <div className="flex justify-between text-[9px] opacity-70 tracking-widest uppercase font-mono">
-                <span>© Copyright 2026</span>
-                <div className="flex gap-3">
-                  <span>Privacy</span>
-                  <span>Terms</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SettingsPreview
+        formData={formData}
+        fc={fc}
+        showPreviewDrawer={showPreviewDrawer}
+        setShowPreviewDrawer={setShowPreviewDrawer}
+      />
     </div>
   );
 }

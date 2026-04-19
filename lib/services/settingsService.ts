@@ -2,12 +2,41 @@ import prisma from "@/lib/prisma";
 import redis from "@/lib/redis";
 import { getDefaultSettings } from "@/lib/content";
 
+export interface FooterLink {
+  label: string;
+  url: string;
+}
+
+export interface FooterColumn {
+  title: string;
+  links: FooterLink[];
+}
+
+export interface FooterSocialLink {
+  icon: string;
+  url: string;
+}
+
+export interface FooterConfig {
+  columns: FooterColumn[];
+  socialLinks: FooterSocialLink[];
+  copyright: string;
+  bottomLinks: FooterLink[];
+}
+
 export interface ThemeSettings {
   primaryColor: string;
   secondaryColor: string;
   backgroundColor: string;
   textColor: string;
   fontFamily: string;
+  logo?: string | null;
+  logoKey?: string | null;
+  heroImage?: string | null;
+  heroImageKey?: string | null;
+  retreatImage?: string | null;
+  retreatImageKey?: string | null;
+  footerConfig?: Record<string, FooterConfig> | null;
 }
 
 export class SettingsService {
@@ -46,6 +75,13 @@ export class SettingsService {
           backgroundColor: dbSettings.backgroundColor,
           textColor: dbSettings.textColor,
           fontFamily: dbSettings.fontFamily,
+          logo: dbSettings.logo,
+          logoKey: dbSettings.logoKey,
+          heroImage: dbSettings.heroImage,
+          heroImageKey: dbSettings.heroImageKey,
+          retreatImage: dbSettings.retreatImage,
+          retreatImageKey: dbSettings.retreatImageKey,
+          footerConfig: dbSettings.footerConfig as Record<string, FooterConfig> | null,
         };
 
         // Cache in Redis
@@ -74,13 +110,41 @@ export class SettingsService {
    */
   static async updateSettings(data: Partial<ThemeSettings>): Promise<ThemeSettings> {
     const defaults = getDefaultSettings();
+    const current = await this.getSettings();
 
-    const merged = {
-      primaryColor: data.primaryColor ?? defaults.primaryColor,
-      secondaryColor: data.secondaryColor ?? defaults.secondaryColor,
-      backgroundColor: data.backgroundColor ?? defaults.backgroundColor,
-      textColor: data.textColor ?? defaults.textColor,
-      fontFamily: data.fontFamily ?? defaults.fontFamily,
+    // Handle old image cleanup if logoKey is changing
+    const imageFieldsToCleanup = [
+      { key: 'logoKey' as const, currentKey: current.logoKey },
+      { key: 'heroImageKey' as const, currentKey: current.heroImageKey },
+      { key: 'retreatImageKey' as const, currentKey: current.retreatImageKey },
+    ];
+
+    for (const field of imageFieldsToCleanup) {
+      if (data[field.key] !== undefined && field.currentKey && field.currentKey !== data[field.key]) {
+        try {
+          const { UTApi } = await import("uploadthing/server");
+          const utapi = new UTApi();
+          await utapi.deleteFiles(field.currentKey);
+          console.log(`[SettingsService] Old ${field.key} deleted:`, field.currentKey);
+        } catch (error) {
+          console.error(`[SettingsService] Failed to delete old ${field.key}:`, error);
+        }
+      }
+    }
+
+    const merged: Record<string, unknown> = {
+      primaryColor: data.primaryColor ?? current.primaryColor ?? defaults.primaryColor,
+      secondaryColor: data.secondaryColor ?? current.secondaryColor ?? defaults.secondaryColor,
+      backgroundColor: data.backgroundColor ?? current.backgroundColor ?? defaults.backgroundColor,
+      textColor: data.textColor ?? current.textColor ?? defaults.textColor,
+      fontFamily: data.fontFamily ?? current.fontFamily ?? defaults.fontFamily,
+      logo: data.logo !== undefined ? data.logo : current.logo,
+      logoKey: data.logoKey !== undefined ? data.logoKey : current.logoKey,
+      heroImage: data.heroImage !== undefined ? data.heroImage : current.heroImage,
+      heroImageKey: data.heroImageKey !== undefined ? data.heroImageKey : current.heroImageKey,
+      retreatImage: data.retreatImage !== undefined ? data.retreatImage : current.retreatImage,
+      retreatImageKey: data.retreatImageKey !== undefined ? data.retreatImageKey : current.retreatImageKey,
+      footerConfig: data.footerConfig !== undefined ? data.footerConfig : current.footerConfig,
     };
 
     const updated = await prisma.siteSettings.upsert({
@@ -98,6 +162,13 @@ export class SettingsService {
       backgroundColor: updated.backgroundColor,
       textColor: updated.textColor,
       fontFamily: updated.fontFamily,
+      logo: updated.logo,
+      logoKey: updated.logoKey,
+      heroImage: updated.heroImage,
+      heroImageKey: updated.heroImageKey,
+      retreatImage: updated.retreatImage,
+      retreatImageKey: updated.retreatImageKey,
+      footerConfig: updated.footerConfig as Record<string, FooterConfig> | null,
     };
 
     // Invalidate Redis cache

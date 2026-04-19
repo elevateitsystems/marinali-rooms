@@ -28,18 +28,23 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     // Validate that at least one valid field is provided
-    const validFields = ["primaryColor", "secondaryColor", "backgroundColor", "textColor", "fontFamily"];
-    const updates: Record<string, string> = {};
+    const stringFields = ["primaryColor", "secondaryColor", "backgroundColor", "textColor", "fontFamily", "logo", "logoKey", "heroImage", "heroImageKey", "retreatImage", "retreatImageKey"];
+    const updates: Record<string, unknown> = {};
 
-    for (const field of validFields) {
+    for (const field of stringFields) {
       if (body[field] && typeof body[field] === "string") {
         updates[field] = body[field];
       }
     }
 
+    // Handle footerConfig as a JSON object
+    if (body.footerConfig !== undefined) {
+      updates.footerConfig = body.footerConfig;
+    }
+
     if (Object.keys(updates).length === 0) {
       return NextResponse.json(
-        { error: "No valid fields provided. Valid fields: " + validFields.join(", ") },
+        { error: "No valid fields provided." },
         { status: 400 }
       );
     }

@@ -3,7 +3,7 @@ import EditableText from "@/components/common/EditableText";
 import Hero from "@/components/Home/Hero";
 
 import IntroSection from "@/components/Home/IntroSection";
-import ImageSlider from "@/components/Home/HotelSlider";
+import ImageSlider from "@/components/Home/RoomSlider";
 import ReviewSlider from "@/components/Home/ReviewSlider";
 import OfferSlider from "@/components/Home/OfferSlider";
 import Highlights from "@/components/Home/Highlights";
@@ -33,7 +33,7 @@ export default async function ItalianHomePage() {
         />
         <ImageSlider lang="it" data={data} />
       </div>
-      <ReviewSlider />
+      <ReviewSlider lang="it" data={data} />
       <div className="container mx-auto">
         <Highlights lang="it" data={data} />
       </div>

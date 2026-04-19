@@ -5,8 +5,9 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import { Yellowtail } from "next/font/google";
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
 
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
@@ -88,6 +89,15 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
   const t = navData[lang];
   const pathname = usePathname();
 
+  const { data: settings } = useQuery({
+    queryKey: ['settings'],
+    queryFn: async () => {
+      const res = await fetch('/api/settings');
+      if (!res.ok) throw new Error('Failed to fetch settings');
+      return res.json();
+    }
+  });
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -134,9 +144,21 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
               : 'opacity-0 translate-y-4 pointer-events-none'
               }`}
           >
-            <span className={`${yellowtail.className} text-3xl md:text-4xl text-primary drop-shadow-sm`}>
-              <Image src="/logo.png" alt="Logo" width={100} height={100} />
-            </span>
+            {settings?.logo ? (
+              <div className="relative h-12 md:h-16 w-32 md:w-40">
+                <Image 
+                  src={settings.logo} 
+                  alt="Marinali Logo" 
+                  fill 
+                  className="object-contain"
+                  priority 
+                />
+              </div>
+            ) : (
+              <span className={`${yellowtail.className} text-3xl md:text-4xl text-primary drop-shadow-sm whitespace-nowrap`}>
+                Marinali
+              </span>
+            )}
           </Link>
 
           {/* Right Section: Only Burger Menu (+ Flags on Desktop) */}

@@ -20,10 +20,11 @@ export default function EditableText({
   page,
   path,
   initialValue,
-  as: Component = "span",
+  as,
   className = "",
   multiline = false
 }: EditableTextProps) {
+  const Component = as || (multiline ? "div" : "span");
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(initialValue);
   const queryClient = useQueryClient();
@@ -86,11 +87,12 @@ export default function EditableText({
 
   if (isEditing) {
     return (
-      <div className={`relative inline-block w-full max-w-full z-50 ${className}`}>
+      <div className={cn("relative z-50 w-full min-w-[250px] bg-white rounded-lg shadow-2xl border-2 border-blue-500 overflow-hidden", className)}>
         {multiline ? (
           <textarea
             ref={inputRef}
-            className="w-full font-sans text-base bg-white/90 backdrop-blur-md text-black p-3 border-2 border-blue-500 rounded-lg shadow-2xl outline-none min-h-[120px] resize-y"
+            className="w-full font-sans text-base bg-transparent text-black p-3 outline-none min-h-[120px] resize-y block"
+            style={{ lineHeight: '1.5' }}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -98,28 +100,28 @@ export default function EditableText({
         ) : (
           <input
             ref={inputRef}
-            className="w-full font-sans text-base bg-white/90 backdrop-blur-md text-black px-3 py-2 border-2 border-blue-500 rounded-lg shadow-2xl outline-none"
+            className="w-full font-sans text-base bg-transparent text-black px-3 py-3 outline-none block"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
           />
         )}
-        <div className="absolute right-2 bottom-[-45px] flex gap-2 bg-white shadow-xl rounded-md p-1 border">
+        <div className="flex items-center justify-end gap-1 px-2 py-1 bg-gray-50 border-t border-gray-100">
           <button
             onClick={handleSave}
             disabled={mutation.isPending}
-            className="text-green-600 p-1.5 hover:bg-green-50 rounded"
-            title="Save"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-green-700 hover:bg-green-100 rounded-md transition-colors"
           >
-            <Check size={18} strokeWidth={3} />
+            <Check size={14} strokeWidth={3} />
+            {mutation.isPending ? "Saving..." : "Save"}
           </button>
           <button
             onClick={handleCancel}
             disabled={mutation.isPending}
-            className="text-red-500 p-1.5 hover:bg-red-50 rounded"
-            title="Cancel"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-100 rounded-md transition-colors"
           >
-            <X size={18} strokeWidth={3} />
+            <X size={14} strokeWidth={3} />
+            Cancel
           </button>
         </div>
       </div>
@@ -127,11 +129,14 @@ export default function EditableText({
   }
 
   return (
-    <Component className={`relative group w-fit ${className}`}>
-      {value}
+    <Component className={cn("relative group inline-flex items-center gap-2 max-w-full", className)}>
+      <span className="inline-block break-words">{value}</span>
       <button
-        onClick={() => setIsEditing(true)}
-        className="absolute -right-10 top-0 opacity-0 group-hover:opacity-100 transition-all duration-200 text-primary p-2 z-20 cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsEditing(true);
+        }}
+        className="inline-flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 bg-white text-primary p-1.5 rounded-full shrink-0 cursor-pointer"
         aria-label="Edit text"
         title="Inline Edit"
       >
@@ -139,4 +144,9 @@ export default function EditableText({
       </button>
     </Component>
   );
+}
+
+// Simple helper for class merging if not using a library, but assuming 'cn' is available or just using template literal
+function cn(...classes: (string | undefined | boolean)[]) {
+  return classes.filter(Boolean).join(" ");
 }

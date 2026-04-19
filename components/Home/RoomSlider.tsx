@@ -1,10 +1,10 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import CustomSlider, { SliderItem } from '../common/CustomSlider';
-
 import EditableText from '../common/EditableText';
 
-const defaultHotels: SliderItem[] = [
+const defaultRooms: SliderItem[] = [
   {
     id: 1,
     image: '/hotel-1.png',
@@ -39,12 +39,22 @@ const defaultHotels: SliderItem[] = [
   },
 ];
 
-export default function HotelSlider({ lang, data }: { lang: string; data?: any }) {
+export default function RoomSlider({ lang, data }: { lang: string; data?: any }) {
+  const { data: rooms = defaultRooms } = useQuery<SliderItem[]>({
+    queryKey: ['rooms', lang],
+    queryFn: async () => {
+      const response = await fetch(`/api/rooms?lang=${lang}`);
+      if (!response.ok) throw new Error('Failed to fetch rooms');
+      const dbRooms = await response.json();
+      return dbRooms && dbRooms.length > 0 ? dbRooms : defaultRooms;
+    },
+  });
+
   return (
     <CustomSlider 
-      title={<EditableText lang={lang} page="home" path="hotelsTitle" initialValue={data?.hotelsTitle || "HOTELS"} />} 
-      items={defaultHotels} 
-      sectionId="hotel-slider" 
+      title={<EditableText lang={lang} page="home" path="roomsTitle" initialValue={data?.roomsTitle || "ROOMS"} />} 
+      items={rooms} 
+      sectionId="room-slider" 
     />
   );
 }

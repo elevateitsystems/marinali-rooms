@@ -3,8 +3,18 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import EditableText from '../common/EditableText';
+import { useQuery } from '@tanstack/react-query';
 
 export default function FeaturedRetreat({ lang, data }: { lang: string; data?: any }) {
+  const { data: settings } = useQuery({
+    queryKey: ['settings'],
+    queryFn: async () => {
+      const res = await fetch('/api/settings');
+      if (!res.ok) throw new Error('Failed to fetch settings');
+      return res.json();
+    }
+  });
+
   return (
     <motion.section
       className='mt-10 lg:mt-20'
@@ -30,8 +40,8 @@ export default function FeaturedRetreat({ lang, data }: { lang: string; data?: a
         }}
       >
         <Image
-          src="/hotel-4.png"
-          alt="Casa Cook Madonna"
+          src={settings?.retreatImage || "/hotel-4.png"}
+          alt="Featured Retreat"
           fill
           style={{
             objectFit: 'cover',
@@ -70,11 +80,11 @@ export default function FeaturedRetreat({ lang, data }: { lang: string; data?: a
               margin: 0
             }}
           >
-            <EditableText 
-              lang={lang} 
-              page="home" 
-              path="featuredTitle" 
-              initialValue={data?.featuredTitle || "Introducing Casa Cook Madonna"} 
+            <EditableText
+              lang={lang}
+              page="home"
+              path="featuredTitle"
+              initialValue={data?.featuredTitle || "Introducing Casa Cook Madonna"}
               multiline
             />
           </h2>
@@ -89,16 +99,16 @@ export default function FeaturedRetreat({ lang, data }: { lang: string; data?: a
               margin: 0
             }}
           >
-            <EditableText 
-              lang={lang} 
-              page="home" 
-              path="featuredDescription" 
-              initialValue={data?.featuredDescription || "Nestled in the picturesque village of Madonna di Campiglio..."} 
+            <EditableText
+              lang={lang}
+              page="home"
+              path="featuredDescription"
+              initialValue={data?.featuredDescription || "Nestled in the picturesque village of Madonna di Campiglio..."}
               multiline
             />
           </p>
 
-          <div className='bg-primary px-8 w-fit py-3 text-center' style={{ marginTop: '10px' }}>
+          <div className='bg-primary pl-8 pr-1 w-fit py-3 text-center' style={{ marginTop: '10px' }}>
             <button
               style={{
                 border: 'none',
@@ -110,7 +120,12 @@ export default function FeaturedRetreat({ lang, data }: { lang: string; data?: a
                 transition: 'all 0.3s ease'
               }}
             >
-              Discover Casa Cook Madonna
+              <EditableText
+                lang={lang}
+                page="home"
+                path="featuredButtonText"
+                initialValue={data?.featuredButtonText || "Discover Casa Cook Madonna"}
+              />
             </button>
           </div>
         </div>

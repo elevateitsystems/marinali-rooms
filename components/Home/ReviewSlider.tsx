@@ -1,36 +1,42 @@
-'use client';
+"use client";
 
 import { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
+import EditableText from "@/components/common/EditableText";
 
 import 'swiper/css';
 
-const reviews = [
-  {
-    id: 1,
-    quote: "“TRULY AMAZING STAY THAT EXCEEDED OUR HIGH EXPECTATIONS. BEST STAFF EVER! SO FRIENDLY, FUNNY, PROFESSIONAL AND CARING. THE HOTEL ITSELF IS A PIECE OF ART IN DESIGN, CONCEPT AND LAYOUT. TO TOP IT ALL OFF THE BREAKFAST, LUNCH AND DINNER AT THE BEACHHOUSE EVERYDAY WAS SUCH A HIGH LEVEL!”",
-    attribution: "Casa Cook Samos – Alexander, September 2023",
-    source: "Tripadvisor"
-  },
-  {
-    id: 2,
-    quote: "“AN UNFORGETTABLE EXPERIENCE. THE ATTENTION TO DETAIL AND THE SERENE ATMOSPHERE MADE OUR STAY PERFECT. THE ARCHITECTURE BLENDS SEAMLESSLY WITH THE NATURAL BEAUTY OF THE ISLAND. CANNOT WAIT TO RETURN NEXT SEASON.”",
-    attribution: "Marinali Rooms – Elena, June 2024",
-    source: "Google Reviews"
-  },
-  {
-    id: 3,
-    quote: "“THE PERFECT BALANCE OF LUXURY AND RELAXATION. EVERY ASPECT OF THE STAY WAS THOUGHTFULLY CURATED. FROM THE BREAKFAST VIEW TO THE COMFORT OF THE BED, EVERYTHING WAS FIVE STARS.”",
-    attribution: "Casa Cook Rhodes – Marco, August 2023",
-    source: "Booking.com"
-  }
-];
+interface ReviewSliderProps {
+  lang: string;
+  data: any;
+}
 
-export default function ReviewSlider() {
+export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
   const swiperRef = useRef<SwiperType | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const reviews = data?.reviews || [
+    {
+      id: 1,
+      quote: "“TRULY AMAZING STAY THAT EXCEEDED OUR HIGH EXPECTATIONS. BEST STAFF EVER! SO FRIENDLY, FUNNY, PROFESSIONAL AND CARING. THE HOTEL ITSELF IS A PIECE OF ART IN DESIGN, CONCEPT AND LAYOUT. TO TOP IT ALL OFF THE BREAKFAST, LUNCH AND DINNER AT THE BEACHHOUSE EVERYDAY WAS SUCH A HIGH LEVEL!”",
+      attribution: "Casa Cook Samos – Alexander, September 2023",
+      source: "Tripadvisor"
+    },
+    {
+      id: 2,
+      quote: "“AN UNFORGETTABLE EXPERIENCE. THE ATTENTION TO DETAIL AND THE SERENE ATMOSPHERE MADE OUR STAY PERFECT. THE ARCHITECTURE BLENDS SEAMLESSLY WITH THE NATURAL BEAUTY OF THE ISLAND. CANNOT WAIT TO RETURN NEXT SEASON.”",
+      attribution: "Marinali Rooms – Elena, June 2024",
+      source: "Google Reviews"
+    },
+    {
+      id: 3,
+      quote: "“THE PERFECT BALANCE OF LUXURY AND RELAXATION. EVERY ASPECT OF THE STAY WAS THOUGHTFULLY CURATED. FROM THE BREAKFAST VIEW TO THE COMFORT OF THE BED, EVERYTHING WAS FIVE STARS.”",
+      attribution: "Casa Cook Rhodes – Marco, August 2023",
+      source: "Booking.com"
+    }
+  ];
 
   return (
     <section
@@ -55,23 +61,32 @@ export default function ReviewSlider() {
           speed={800}
           style={{ width: '100%' }}
         >
-          {reviews.map((review) => (
-            <SwiperSlide key={review.id}>
+          {reviews.map((review: any, index: number) => (
+            <SwiperSlide key={index}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <p
+                <div
                   style={{
                     fontSize: 'clamp(1.1rem, 2.5vw, 1.8rem)',
                     fontWeight: 700,
                     lineHeight: 1.4,
                     letterSpacing: '0.05em',
                     marginBottom: 'clamp(2rem, 5vw, 3rem)',
-                    maxWidth: '900px'
+                    maxWidth: '900px',
+                    width: '100%',
+                    margin: '0 auto'
                   }}
                 >
-                  {review.quote}
-                </p>
+                  <EditableText
+                    lang={lang}
+                    page="home"
+                    path={`reviews.${index}.quote`}
+                    initialValue={review.quote}
+                    multiline
+                    className="text-center justify-center items-center w-full max-w-[800px] mx-auto"
+                  />
+                </div>
 
-                <p
+                <div
                   style={{
                     fontSize: 'clamp(0.75rem, 1.2vw, 0.9rem)',
                     fontWeight: 400,
@@ -81,11 +96,15 @@ export default function ReviewSlider() {
                     marginBottom: '10px'
                   }}
                 >
-                  {review.attribution}
-                </p>
+                  <EditableText
+                    lang={lang}
+                    page="home"
+                    path={`reviews.${index}.attribution`}
+                    initialValue={review.attribution}
+                  />
+                </div>
 
-                <a
-                  href="#"
+                <div
                   style={{
                     fontSize: 'clamp(0.75rem, 1.2vw, 0.9rem)',
                     color: '#fff',
@@ -94,8 +113,13 @@ export default function ReviewSlider() {
                     letterSpacing: '0.1em'
                   }}
                 >
-                  {review.source}
-                </a>
+                  <EditableText
+                    lang={lang}
+                    page="home"
+                    path={`reviews.${index}.source`}
+                    initialValue={review.source}
+                  />
+                </div>
               </div>
             </SwiperSlide>
           ))}

@@ -2,7 +2,7 @@ import { ContentService } from "@/lib/services/contentService";
 import EditableText from "@/components/common/EditableText";
 import Hero from "@/components/Home/Hero";
 import IntroSection from "@/components/Home/IntroSection";
-import ImageSlider from "@/components/Home/HotelSlider";
+import ImageSlider from "@/components/Home/RoomSlider";
 import ReviewSlider from "@/components/Home/ReviewSlider";
 import OfferSlider from "@/components/Home/OfferSlider";
 import Highlights from "@/components/Home/Highlights";
@@ -18,21 +18,21 @@ export default async function GermanHomePage() {
       <div className="container mx-auto">
         <IntroSection
           title={
-            <EditableText 
-              lang="de" page="home" path="aboutTitle" 
-              initialValue={data?.aboutTitle || data?.title || "Willkommen"} 
+            <EditableText
+              lang="de" page="home" path="aboutTitle"
+              initialValue={data?.aboutTitle || data?.title || "Willkommen"}
             />
           }
           description={
-            <EditableText 
+            <EditableText
               lang="de" page="home" path="aboutDescription" multiline
-              initialValue={data?.aboutDescription || data?.welcomeText || "Erleben Sie unvergessliche Gastfreundschaft..."} 
+              initialValue={data?.aboutDescription || data?.welcomeText || "Erleben Sie unvergessliche Gastfreundschaft..."}
             />
           }
         />
         <ImageSlider lang="de" data={data} />
       </div>
-      <ReviewSlider />
+      <ReviewSlider lang="de" data={data} />
       <div className="container mx-auto">
         <Highlights lang="de" data={data} />
       </div>
