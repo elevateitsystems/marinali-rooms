@@ -93,7 +93,7 @@ export default function Footer({ lang }: { lang: 'en' | 'it' | 'de' }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div className="flex flex-col items-start">
               {settings?.logo ? (
-                <div className="relative h-16 w-32 mb-2">
+                <div className="relative h-40 w-40 rounded-full bg-background mb-2">
                   <Image
                     src={settings.logo}
                     alt="Marinali Logo"

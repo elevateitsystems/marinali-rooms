@@ -57,7 +57,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${playfair.variable} ${montserrat.variable} ${lora.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${playfair.variable} ${montserrat.variable} ${lora.variable} antialiased`}
       style={{
         // @ts-ignore
         "--primary-color": primaryColor,
@@ -67,7 +67,7 @@ export default async function RootLayout({
         "--font-primary": fontFamily,
       }}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-screen flex flex-col">
         <Providers>
           <SmoothScrolling>
             {children}
