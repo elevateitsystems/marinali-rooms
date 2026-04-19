@@ -1,7 +1,8 @@
-
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@prisma/client";
+import * as Prisma from "@prisma/client";
 import pg from "pg";
+
+const { PrismaClient } = Prisma;
 
 const prismaClientSingleton = () => {
   const connectionString = process.env.DATABASE_URL;
