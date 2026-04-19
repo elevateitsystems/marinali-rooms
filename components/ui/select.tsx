@@ -33,25 +33,34 @@ function SelectContent({
   children,
   side = "bottom",
   sideOffset = 4,
+  usePortal = true,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Popup> &
-  Pick<React.ComponentProps<typeof SelectPrimitive.Positioner>, "side" | "sideOffset">) {
+  Pick<React.ComponentProps<typeof SelectPrimitive.Positioner>, "side" | "sideOffset"> & {
+    usePortal?: boolean
+  }) {
+  const content = (
+    <SelectPrimitive.Positioner side={side} sideOffset={sideOffset} className="z-[100]">
+      <SelectPrimitive.Popup
+        data-slot="select-content"
+        className={cn(
+          "relative z-[100] flex max-h-96 min-w-[8rem] origin-(--transform-origin) flex-col overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md outline-none duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          className
+        )}
+        {...props}
+      >
+        <SelectPrimitive.List className="p-1">
+          {children}
+        </SelectPrimitive.List>
+      </SelectPrimitive.Popup>
+    </SelectPrimitive.Positioner>
+  )
+
+  if (!usePortal) return content
+
   return (
     <SelectPrimitive.Portal>
-      <SelectPrimitive.Positioner side={side} sideOffset={sideOffset} className="isolate z-50">
-        <SelectPrimitive.Popup
-          data-slot="select-content"
-          className={cn(
-            "relative z-50 flex max-h-96 min-w-[8rem] origin-(--transform-origin) flex-col overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md outline-none duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
-            className
-          )}
-          {...props}
-        >
-          <SelectPrimitive.List className="p-1">
-            {children}
-          </SelectPrimitive.List>
-        </SelectPrimitive.Popup>
-      </SelectPrimitive.Positioner>
+      {content}
     </SelectPrimitive.Portal>
   )
 }

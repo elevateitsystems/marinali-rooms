@@ -5,8 +5,10 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import { Yellowtail } from "next/font/google";
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
+import { useLenis } from 'lenis/react';
 
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
@@ -26,23 +28,17 @@ const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 // Dictionary for 3 languages
 const navData = {
   en: {
-    home: 'OUR HOTELS',
-    offers: 'OFFERS',
-    blog: 'JOURNALS - BLOG',
+    home: 'Home',
     about: 'ABOUT',
     contact: 'CONTACT US'
   },
   it: {
-    home: 'I NOSTRI HOTEL',
-    offers: 'OFFERTE',
-    blog: 'DIARI - BLOG',
+    home: 'Home',
     about: 'CHI SIAMO',
     contact: 'CONTATTACI'
   },
   de: {
-    home: 'UNSERE HOTELS',
-    offers: 'ANGEBOTE',
-    blog: 'JOURNALE - BLOG',
+    home: 'Home',
     about: 'ÜBER UNS',
     contact: 'KONTAKT'
   }
@@ -88,6 +84,15 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
   const t = navData[lang];
   const pathname = usePathname();
 
+  const { data: settings } = useQuery({
+    queryKey: ['settings'],
+    queryFn: async () => {
+      const res = await fetch('/api/settings');
+      if (!res.ok) throw new Error('Failed to fetch settings');
+      return res.json();
+    }
+  });
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -97,14 +102,17 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const lenis = useLenis();
+
   // Prevent background scrolling when menu is open
   useEffect(() => {
+    if (!lenis) return;
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      lenis.stop();
     } else {
-      document.body.style.overflow = 'unset';
+      lenis.start();
     }
-  }, [isMenuOpen]);
+  }, [isMenuOpen, lenis]);
 
   const getPath = (route: string) => {
     if (route === '/') return `/${lang}`;
@@ -121,7 +129,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
     <>
       <header
         className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${scrolled
-          ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-4'
+          ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-7'
           : 'bg-transparent py-5 md:py-8'
           } ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
@@ -134,9 +142,21 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
               : 'opacity-0 translate-y-4 pointer-events-none'
               }`}
           >
-            <span className={`${yellowtail.className} text-3xl md:text-4xl text-primary drop-shadow-sm`}>
-              Marinali
-            </span>
+            {settings?.logo ? (
+              <div className="relative h-12 md:h-16 w-32 md:w-40">
+                <Image
+                  src={settings.logo}
+                  alt="Marinali Logo"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            ) : (
+              <span className={`${yellowtail.className} text-3xl md:text-4xl text-primary drop-shadow-sm whitespace-nowrap`}>
+                Marinali
+              </span>
+            )}
           </Link>
 
           {/* Right Section: Only Burger Menu (+ Flags on Desktop) */}
@@ -163,8 +183,6 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           <nav className="flex flex-col gap-6 md:gap-10 mt-10 md:mt-0">
             {[
               { name: t.home, path: '/' },
-              { name: t.offers, path: '/offers' },
-              { name: t.blog, path: '/blog' },
               { name: t.about, path: '/about' },
               { name: t.contact, path: '/contact' },
             ].map((item, idx) => (
@@ -218,7 +236,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
         {/* Right Pane (Image & Close Button) */}
         <div className="hidden md:block relative h-full">
           <Image
-            src="/hero-banner.png"
+            src="/assets/Stanza%201%20-%20Foto-7.jpg"
             alt="Menu Aesthetic"
             fill
             className="object-cover"

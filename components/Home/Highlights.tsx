@@ -1,46 +1,50 @@
-'use client';
+"use client";
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import EditableText from '../common/EditableText';
+import { useQuery } from '@tanstack/react-query';
+import { Skeleton } from '../ui/skeleton';
 
-const highlights = [
-  {
-    id: 1,
-    image: '/hotel-3.png',
-    title: 'A PERFECT WEEK IN SAMOS',
-    description: 'Quiet swims, coastal paths, local flavours and unhurried evenings, we have the ideal week long itinerary…',
-    href: '#',
-    isLarge: false,
-  },
-  {
-    id: 2,
-    image: '/hotel-4.png',
-    title: 'MADONNA THROUGH THE EYES OF OUR GUESTS',
-    description: 'Meet Roberta Mazzone, an Italian photographer with an architectural eye and a nomadic spirit.',
-    href: '#',
-    isLarge: false,
-  },
-  {
-    id: 3,
-    image: '/hotel-1.png',
-    title: 'BEDOUIN NIGHTS AT CASA COOK EL GOUNA',
-    description: 'Every Tuesday at sunset, experience an evening of Bedouin heritage with dance, grilled flavours, and soulful rhythms.',
-    href: '#',
-    isLarge: true,
-  },
-];
+interface HighlightRoom {
+  id: string;
+  image: string;
+  name: string;
+  description: string;
+  isLargeHighlight: boolean;
+}
 
-export default function Highlights() {
+export default function Highlights({ lang, data }: { lang: string; data?: any }) {
+  const { data: rooms = [], isLoading } = useQuery<HighlightRoom[]>({
+    queryKey: ["rooms", "highlights", lang],
+    queryFn: async () => {
+      const response = await fetch(`/api/rooms?lang=${lang}&isHighlight=true`);
+      if (!response.ok) throw new Error("Failed to fetch highlights");
+      return response.json();
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-5 py-10">
+        <Skeleton className="h-[400px] w-full rounded-xl" />
+      </div>
+    );
+  }
+
+  // Hide section if no highlights are selected
+  if (rooms.length === 0) return null;
+
   return (
     <motion.section
       id="highlights-section"
-      className="px-5 mt-10 lg:mt-20"
+      className="px-5"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: [0.21, 0.45, 0.32, 0.9] }}
     >
-      <div className="max-w-screen-2xl mx-auto">
+      <div className="max-w-screen-2xl mx-auto mt-10 lg:mt-20">
         <h2
           style={{
             fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
@@ -52,7 +56,7 @@ export default function Highlights() {
             textTransform: 'uppercase'
           }}
         >
-          HIGHLIGHTS
+          <EditableText lang={lang} page="home" path="highlightsTitle" initialValue={data?.highlightsTitle || "HIGHLIGHTS"} />
         </h2>
 
         <div
@@ -63,30 +67,30 @@ export default function Highlights() {
           }}
           className="highlights-grid"
         >
-          {highlights.map((item) => (
+          {rooms.map((item) => (
             <div
               key={item.id}
               style={{
-                gridColumn: item.isLarge ? 'span 2' : 'span 1',
+                gridColumn: item.isLargeHighlight ? 'span 2' : 'span 1',
                 display: 'flex',
                 flexDirection: 'column'
               }}
-              className={item.isLarge ? 'col-span-4 lg:col-span-2' : 'col-span-4 lg:col-span-1'}
+              className={item.isLargeHighlight ? 'col-span-4 lg:col-span-2' : 'col-span-4 lg:col-span-1'}
             >
               <div
                 style={{
                   position: 'relative',
                   width: '100%',
-                  aspectRatio: item.isLarge ? '1 / 1' : '4 / 5',
+                  aspectRatio: item.isLargeHighlight ? '1 / 1' : '4 / 5',
                   overflow: 'hidden',
                   marginBottom: '20px'
                 }}
               >
                 <Image
                   src={item.image}
-                  alt={item.title}
+                  alt={item.name}
                   fill
-                  sizes={item.isLarge ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 1024px) 100vw, 25vw"}
+                  sizes={item.isLargeHighlight ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 1024px) 100vw, 25vw"}
                   style={{
                     objectFit: 'cover',
                   }}
@@ -105,7 +109,7 @@ export default function Highlights() {
                       textTransform: 'uppercase'
                     }}
                   >
-                    {item.title}
+                    {item.name}
                   </h3>
                   <svg
                     width="16"

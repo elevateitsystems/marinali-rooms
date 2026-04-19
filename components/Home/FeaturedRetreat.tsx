@@ -2,8 +2,19 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import EditableText from '../common/EditableText';
+import { useQuery } from '@tanstack/react-query';
 
-export default function FeaturedRetreat() {
+export default function FeaturedRetreat({ lang, data }: { lang: string; data?: any }) {
+  const { data: settings } = useQuery({
+    queryKey: ['settings'],
+    queryFn: async () => {
+      const res = await fetch('/api/settings');
+      if (!res.ok) throw new Error('Failed to fetch settings');
+      return res.json();
+    }
+  });
+
   return (
     <motion.section
       className='mt-10 lg:mt-20'
@@ -29,8 +40,8 @@ export default function FeaturedRetreat() {
         }}
       >
         <Image
-          src="/hotel-4.png"
-          alt="Casa Cook Madonna"
+          src={settings?.retreatImage || "/assets/Stanza%202%20-%20Foto-14.jpg"}
+          alt="Featured Retreat"
           fill
           style={{
             objectFit: 'cover',
@@ -69,8 +80,13 @@ export default function FeaturedRetreat() {
               margin: 0
             }}
           >
-            Introducing <br />
-            Casa Cook Madonna
+            <EditableText
+              lang={lang}
+              page="home"
+              path="featuredTitle"
+              initialValue={data?.featuredTitle || "Introducing Casa Cook Madonna"}
+              multiline
+            />
           </h2>
 
           <p
@@ -83,14 +99,16 @@ export default function FeaturedRetreat() {
               margin: 0
             }}
           >
-            Nestled in the picturesque village of Madonna di Campiglio, at the foot of Italy&apos;s
-            majestic Dolomites, Casa Cook Madonna is our first mountain retreat, and
-            our newest hideaway. Opening in summer, this alpine escape fuses Casa
-            Cook&apos;s signature style with the untamed beauty of the peaks. Book
-            directly on our website and enjoy 10% off your stay.
+            <EditableText
+              lang={lang}
+              page="home"
+              path="featuredDescription"
+              initialValue={data?.featuredDescription || "Nestled in the picturesque village of Madonna di Campiglio..."}
+              multiline
+            />
           </p>
 
-          <div className='bg-primary px-8 w-fit py-3 text-center' style={{ marginTop: '10px' }}>
+          <div className='bg-primary pl-8 pr-1 w-fit py-3 text-center' style={{ marginTop: '10px' }}>
             <button
               style={{
                 border: 'none',
@@ -102,7 +120,12 @@ export default function FeaturedRetreat() {
                 transition: 'all 0.3s ease'
               }}
             >
-              Discover Casa Cook Madonna
+              <EditableText
+                lang={lang}
+                page="home"
+                path="featuredButtonText"
+                initialValue={data?.featuredButtonText || "Discover Casa Cook Madonna"}
+              />
             </button>
           </div>
         </div>

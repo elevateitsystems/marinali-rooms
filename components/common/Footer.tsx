@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { Yellowtail } from "next/font/google";
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
@@ -42,11 +44,35 @@ const footerData = {
 export default function Footer({ lang }: { lang: 'en' | 'it' | 'de' }) {
   const t = footerData[lang];
 
+  const { data: settings } = useQuery({
+    queryKey: ['settings'],
+    queryFn: async () => {
+      const res = await fetch('/api/settings');
+      if (!res.ok) throw new Error('Failed to fetch settings');
+      return res.json();
+    }
+  });
+
+  const footerConfigs = settings?.footerConfig as Record<string, any> | undefined;
+  const fc = footerConfigs?.[lang];
+
+  // Helper to render social icon by name
+  const renderSocialIcon = (iconName: string, className: string) => {
+    switch (iconName.toLowerCase()) {
+      case 'instagram': return <InstagramIcon className={className} />;
+      case 'facebook': return <FacebookIcon className={className} />;
+      case 'linkedin': return <LinkedinIcon className={className} />;
+      case 'youtube': return <YoutubeIcon className={className} />;
+      default: return null;
+    }
+  };
+
   return (
     <footer
       id="main-footer"
       className="bg-primary"
       style={{
+        backgroundColor: settings?.primaryColor || undefined,
         color: '#fff',
         padding: 'clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem) 2rem',
         marginTop: 'auto'
@@ -66,50 +92,90 @@ export default function Footer({ lang }: { lang: 'en' | 'it' | 'de' }) {
           {/* Logo Column */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div className="flex flex-col items-start">
-              <span className={`${yellowtail.className} text-4xl leading-none`}>
-                Marinali
-              </span>
-              <div className="flex items-center gap-3 w-full mt-1">
-                <div className="h-[1px] bg-white/60 flex-1"></div>
-                <span className="text-[10px] tracking-[0.4em] font-medium opacity-80">ROOMS</span>
-                <div className="h-[1px] bg-white/60 flex-1"></div>
-              </div>
+              {settings?.logo ? (
+                <div className="relative h-40 w-40 rounded-full bg-background mb-2">
+                  <Image
+                    src={settings.logo}
+                    alt="Marinali Logo"
+                    fill
+                    className="object-contain object-left"
+                  />
+                </div>
+              ) : (
+                <>
+                  <span className={`${yellowtail.className} text-4xl leading-none `}>
+                    Marinali
+                  </span>
+                  <div className="flex items-center gap-3 w-full mt-3">
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
-          {/* Locations Column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {t.locations.map((loc, i) => (
-              <Link
-                key={i}
-                href="#"
-                className="text-[11px] tracking-[0.1em] font-bold hover:opacity-70 transition-opacity uppercase"
-              >
-                {loc}
-              </Link>
-            ))}
-          </div>
+          {/* Dynamic Columns or Fallback */}
+          {fc?.columns && fc.columns.length > 0 ? (
+            fc.columns.map((col: any, i: number) => (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <h4 className="text-[14px] font-bold mb-2 uppercase tracking-widest opacity-60">{col.title}</h4>
+                {col.links.map((link: any, j: number) => (
+                  <Link
+                    key={j}
+                    href={link.url || '#'}
+                    className="text-[11px] tracking-[0.1em] font-bold hover:opacity-70 transition-opacity uppercase"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            ))
+          ) : (
+            <>
+              {/* Fallback Locations Column */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {t.locations.map((loc, i) => (
+                  <Link
+                    key={i}
+                    href="#"
+                    className="text-[11px] tracking-[0.1em] font-bold hover:opacity-70 transition-opacity uppercase"
+                  >
+                    {loc}
+                  </Link>
+                ))}
+              </div>
 
-          {/* Links Column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {t.links.map((link, i) => (
-              <Link
-                key={i}
-                href="#"
-                className="text-[11px] tracking-[0.1em] font-bold hover:opacity-70 transition-opacity uppercase"
-              >
-                {link}
-              </Link>
-            ))}
-          </div>
+              {/* Fallback Links Column */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {t.links.map((link, i) => (
+                  <Link
+                    key={i}
+                    href="#"
+                    className="text-[11px] tracking-[0.1em] font-bold hover:opacity-70 transition-opacity uppercase"
+                  >
+                    {link}
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
 
           {/* Socials Column */}
           <div className="flex flex-col gap-5 lg:items-end">
             <div className="flex gap-6 lg:flex-col lg:gap-4 lg:items-center">
-              <InstagramIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
-              <FacebookIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
-              <LinkedinIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
-              <YoutubeIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
+              {fc?.socialLinks && fc.socialLinks.length > 0 ? (
+                fc.socialLinks.map((social: any, i: number) => (
+                  <Link key={i} href={social.url || '#'}>
+                    {renderSocialIcon(social.icon, "w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity")}
+                  </Link>
+                ))
+              ) : (
+                <>
+                  <InstagramIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
+                  <FacebookIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
+                  <LinkedinIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
+                  <YoutubeIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -118,11 +184,19 @@ export default function Footer({ lang }: { lang: 'en' | 'it' | 'de' }) {
         <div style={{ marginTop: '80px' }}>
           {/* Legal Links */}
           <div className="flex flex-col md:flex-row justify-between gap-6 mb-8 text-[12px] opacity-90 tracking-wide font-mono">
-            {t.bottom.map((item, i) => (
-              <Link key={i} href="#" className="hover:underline">
-                {item}
-              </Link>
-            ))}
+            {fc?.bottomLinks && fc.bottomLinks.length > 0 ? (
+              fc.bottomLinks.map((link: any, i: number) => (
+                <Link key={i} href={link.url || '#'} className="hover:underline">
+                  {link.label}
+                </Link>
+              ))
+            ) : (
+              t.bottom.map((item, i) => (
+                <Link key={i} href="#" className="hover:underline">
+                  {item}
+                </Link>
+              ))
+            )}
           </div>
 
           {/* Separator Line */}
@@ -138,7 +212,7 @@ export default function Footer({ lang }: { lang: 'en' | 'it' | 'de' }) {
               fontFamily: 'monospace'
             }}
           >
-            {t.copyright}
+            {fc?.copyright || t.copyright}
           </div>
         </div>
       </div>

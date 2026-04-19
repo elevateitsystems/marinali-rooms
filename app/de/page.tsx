@@ -1,60 +1,45 @@
-import { client } from "@/sanity/lib/client";
+import { ContentService } from "@/lib/services/contentService";
+import EditableText from "@/components/common/EditableText";
 import Hero from "@/components/Home/Hero";
-
 import IntroSection from "@/components/Home/IntroSection";
-import ImageSlider from "@/components/Home/HotelSlider";
+import ImageSlider from "@/components/Home/RoomSlider";
 import ReviewSlider from "@/components/Home/ReviewSlider";
 import OfferSlider from "@/components/Home/OfferSlider";
 import Highlights from "@/components/Home/Highlights";
 import FeaturedRetreat from "@/components/Home/FeaturedRetreat";
 
-
-
-
-
 export default async function GermanHomePage() {
-  const data = await client.fetch(
-    `*[_type == "homePage" && language == "de"][0]{ 
-      title, 
-      welcomeText,
-      aboutTitle,
-      aboutDescription,
-      bookingWhereLabel,
-      bookingWhereValue,
-      bookingDatesLabel,
-      bookingDatesValue,
-      bookingWhoLabel,
-      bookingWhoValue,
-      bookingRoomsLabel,
-      bookingRoomsValue,
-      bookingCodeLabel,
-      bookingCodeValue,
-      bookingButtonText
-    }`
-  );
+  const content = await ContentService.getContent("home", "de");
+  const data = (content?.sections as any) || {};
 
   return (
     <>
       <Hero title="Marinali" subtitle="ZIMMER" />
       <div className="container mx-auto">
         <IntroSection
-          title={data?.aboutTitle || data?.title}
-          description={data?.aboutDescription || data?.welcomeText}
+          title={
+            <EditableText
+              lang="de" page="home" path="aboutTitle"
+              initialValue={data?.aboutTitle || data?.title || "Willkommen"}
+            />
+          }
+          description={
+            <EditableText
+              lang="de" page="home" path="aboutDescription" multiline
+              initialValue={data?.aboutDescription || data?.welcomeText || "Erleben Sie unvergessliche Gastfreundschaft..."}
+            />
+          }
         />
-        <ImageSlider />
+        <ImageSlider lang="de" data={data} />
       </div>
-      <ReviewSlider />
+      <ReviewSlider lang="de" data={data} />
       <div className="container mx-auto">
-        <Highlights />
+        <Highlights lang="de" data={data} />
       </div>
-      <FeaturedRetreat />
+      <FeaturedRetreat lang="de" data={data} />
       <div className="container mx-auto">
-        <OfferSlider />
+        <OfferSlider lang="de" data={data} />
       </div>
-
-
-
     </>
-
   );
 }

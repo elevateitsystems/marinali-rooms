@@ -18,6 +18,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { X } from 'lucide-react';
+import { useLenis } from 'lenis/react';
+import { BookingModal } from './BookingModal';
 
 interface BookingBarProps {
   lang?: 'en' | 'it' | 'de';
@@ -33,6 +35,18 @@ interface BookingBarProps {
     bookingCodeLabel?: string;
     bookingCodeValue?: string;
     bookingButtonText?: string;
+    // Map with shorter names from content.json
+    whereLabel?: string;
+    whereValue?: string;
+    datesLabel?: string;
+    datesValue?: string;
+    whoLabel?: string;
+    whoValue?: string;
+    roomsLabel?: string;
+    roomsValue?: string;
+    codeLabel?: string;
+    codeValue?: string;
+    buttonText?: string;
   };
 }
 
@@ -44,18 +58,24 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
   const [guests, setGuests] = useState("2");
   const [rooms, setRooms] = useState("1");
+  const [coupon, setCoupon] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isAtFooter, setIsAtFooter] = useState(false);
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookingUrl, setBookingUrl] = useState("");
 
-  // Lock body scroll when drawer is open
+  const lenis = useLenis();
+
+  // Prevent background scrolling when drawer is open
   useEffect(() => {
+    if (!lenis) return;
     if (drawerOpen) {
-      document.body.style.overflow = 'hidden';
+      lenis.stop();
     } else {
-      document.body.style.overflow = 'unset';
+      lenis.start();
     }
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [drawerOpen]);
+  }, [drawerOpen, lenis]);
 
   // Handle sticky behavior with footer
   useEffect(() => {
@@ -85,21 +105,34 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     return format(d, "yyyy-MM-dd");
   };
 
+  const handleBookingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Construct the URL manually
+    const baseUrl = "https://marinalirooms.kross.travel/book/step1";
+    const params = new URLSearchParams({
+      lang: lang,
+      from: formatDateForKross(date?.from),
+      to: formatDateForKross(date?.to),
+      rooms: rooms,
+      guests: guests,
+      coupon: coupon
+    });
+    
+    const finalUrl = `${baseUrl}?${params.toString()}`;
+    setBookingUrl(finalUrl);
+    setIsModalOpen(true);
+    setDrawerOpen(false); // Close mobile drawer if open
+  };
+
   const mobileButtonText = lang === 'it' ? 'Prenota il tuo soggiorno' : lang === 'de' ? 'Buchen Sie Ihren Aufenthalt' : 'Book Your Stay';
 
   // --- Shared form content (used in both desktop bar and mobile drawer) ---
   const bookingFormContent = (
     <form
-      action="https://marinalirooms.kross.travel/book/step1"
-      method="GET"
-      target="_blank"
+      onSubmit={handleBookingSubmit}
       className="flex flex-col lg:flex-row items-stretch lg:items-center w-full"
     >
-      <input type="hidden" name="lang" value={lang} />
-      <input type="hidden" name="from" value={formatDateForKross(date?.from)} />
-      <input type="hidden" name="to" value={formatDateForKross(date?.to)} />
-      <input type="hidden" name="rooms" value={rooms} />
-
       {/* Dates */}
       <Popover>
         <PopoverTrigger className="flex-[2] flex flex-row items-stretch">
@@ -138,7 +171,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       {/* Rooms */}
       <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center gap-1 group transition-colors">
         <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
-          {data?.bookingRoomsLabel || (lang === 'it' ? 'Camere' : lang === 'de' ? 'Zimmer' : 'Rooms')}
+          {data?.bookingRoomsLabel || data?.roomsLabel || (lang === 'it' ? 'Camere' : lang === 'de' ? 'Zimmer' : 'Rooms')}
         </span>
         <div className="relative">
           <Select value={rooms} onValueChange={(val) => setRooms(val as string)}>
@@ -159,7 +192,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       {/* Guests */}
       <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center gap-1 group transition-colors">
         <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
-          {data?.bookingWhoLabel || (lang === 'it' ? 'Ospiti' : lang === 'de' ? 'Gäste' : 'Guests')}
+          {data?.bookingWhoLabel || data?.whoLabel || (lang === 'it' ? 'Ospiti' : lang === 'de' ? 'Gäste' : 'Guests')}
         </span>
         <div className="relative">
           <Select name="guests" value={guests} onValueChange={(val) => setGuests(val as string)}>
@@ -180,12 +213,14 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       {/* Code */}
       <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors">
         <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
-          {data?.bookingCodeLabel || (lang === 'it' ? 'Codice' : lang === 'de' ? 'Code' : 'Code')}
+          {data?.bookingCodeLabel || data?.codeLabel || (lang === 'it' ? 'Codice' : lang === 'de' ? 'Code' : 'Code')}
         </span>
         <input
           name="coupon"
           type="text"
-          placeholder={data?.bookingCodeValue || (lang === 'it' ? 'Inserisci' : 'Enter')}
+          value={coupon}
+          onChange={(e) => setCoupon(e.target.value)}
+          placeholder={data?.bookingCodeValue || data?.codeValue || (lang === 'it' ? 'Inserisci' : 'Enter')}
           className="bg-transparent border-none p-0 focus:ring-0 text-sm sm:text-base font-semibold tracking-tight uppercase placeholder:text-current/30 w-full"
         />
       </div>
@@ -196,7 +231,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           type="submit"
           className="w-full lg:w-auto px-10 py-5 bg-primary hover:bg-primary/90 text-white font-bold tracking-[0.2em] text-xs transition-all active:scale-95 shadow-xl uppercase cursor-pointer"
         >
-          {data?.bookingButtonText || (lang === 'it' ? 'Prenota Ora' : lang === 'de' ? 'Jetzt Buchen' : 'Book Now')}
+          {data?.bookingButtonText || data?.buttonText || (lang === 'it' ? 'Prenota Ora' : lang === 'de' ? 'Jetzt Buchen' : 'Book Now')}
         </button>
       </div>
     </form>
@@ -231,8 +266,6 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           {mobileButtonText}
         </button>
       </div>
-
-
 
       {/* ========== MOBILE DRAWER: Slides up from bottom ========== */}
       {/* Backdrop */}
@@ -270,6 +303,12 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           {bookingFormContent}
         </div>
       </div>
+
+      <BookingModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        bookingUrl={bookingUrl} 
+      />
     </>
   );
 };

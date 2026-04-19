@@ -1,26 +1,11 @@
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import BookingBar from "@/components/common/BookingBar";
-import { client } from "@/sanity/lib/client";
+import { getContent } from "@/lib/content";
 
 export default async function ItalianLayout({ children }: { children: React.ReactNode }) {
-  const data = await client.fetch(
-    `*[_type == "homePage" && language == "it"][0]{ 
-      bookingWhereLabel,
-      bookingWhereValue,
-      bookingDatesLabel,
-      bookingDatesValue,
-      bookingWhoLabel,
-      bookingWhoValue,
-      bookingRoomsLabel,
-      bookingRoomsValue,
-      bookingCodeLabel,
-      bookingCodeValue,
-      bookingButtonText
-    }`,
-    {},
-    { next: { revalidate: 0 } }
-  );
+  const { home } = getContent("it");
+  const data = home.booking;
 
   return (
     <>
