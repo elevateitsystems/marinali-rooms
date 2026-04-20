@@ -129,11 +129,26 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
     <>
       <header
         className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${scrolled
-          ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-7'
+          ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-4'
           : 'bg-transparent py-5 md:py-8'
           } ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <div className="container px-5 mx-auto relative flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {(['en', 'it', 'de'] as const).map((l) => (
+              <Link
+                key={l}
+                href={switchLangUrl(l)}
+                title={l.toUpperCase()}
+                className={`transition-all duration-300 transform ${lang === l
+                  ? 'scale-110 opacity-100 saturate-100'
+                  : 'scale-90 opacity-50 saturate-50 hover:opacity-100 hover:saturate-100 hover:scale-100'
+                  }`}
+              >
+                {flags[l]}
+              </Link>
+            ))}
+          </div>
           {/* Logo Section */}
           <Link
             href={getPath('/')}
@@ -142,21 +157,27 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
               : 'opacity-0 translate-y-4 pointer-events-none'
               }`}
           >
-            {settings?.logo ? (
-              <div className="relative h-12 md:h-16 w-32 md:w-40">
-                <Image
-                  src={settings.logo}
-                  alt="Marinali Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-            ) : (
-              <span className={`${yellowtail.className} text-3xl md:text-4xl text-primary drop-shadow-sm whitespace-nowrap`}>
+
+            <div
+              className="relative z-10 flex flex-col items-center justify-center text-black will-change-transform mt-2"
+              style={{
+                transformOrigin: "center center"
+              }}
+            >
+              <h1
+                className={`${yellowtail.className} text-3xl md:text-4xl tracking-wide mb-1`}
+              >
                 Marinali
-              </span>
-            )}
+              </h1>
+              <div className="flex items-center gap-3 mt-0 md:-mt-1">
+                <div className="w-8 h-[1px] bg-black opacity-80"></div>
+                <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] font-medium opacity-100">
+                  Rooms
+                </span>
+                <div className="w-8 h-[1px] bg-black opacity-80"></div>
+              </div>
+            </div>
+
           </Link>
 
           {/* Right Section: Only Burger Menu (+ Flags on Desktop) */}
@@ -199,13 +220,6 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
 
           {/* Bottom Controls (Socials & Language) */}
           <div className="absolute bottom-10 left-10 md:left-24 flex flex-col gap-6">
-            <div className="flex items-center gap-5">
-              <InstagramIcon className="w-5 h-5 opacity-80 hover:opacity-100 cursor-pointer transition-opacity" />
-              <FacebookIcon className="w-5 h-5 opacity-80 hover:opacity-100 cursor-pointer transition-opacity" />
-              <LinkedinIcon className="w-5 h-5 opacity-80 hover:opacity-100 cursor-pointer transition-opacity" />
-              <YoutubeIcon className="w-5 h-5 opacity-80 hover:opacity-100 cursor-pointer transition-opacity" />
-            </div>
-
             {/* Language Switcher inside Menu */}
             <div className="flex items-center gap-4 mt-2">
               <Globe className="w-5 h-5 opacity-60" />

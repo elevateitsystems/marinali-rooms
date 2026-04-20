@@ -9,6 +9,7 @@ import { Yellowtail } from "next/font/google";
 
 const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 import { useEffect, useState } from 'react';
+import Hero from '../Home/Hero';
 interface AboutContentProps {
   lang: 'en' | 'it' | 'de';
   initialData: any;
@@ -69,44 +70,7 @@ export default function AboutContent({ lang, initialData }: AboutContentProps) {
         </div>
 
         {/* Main Content */}
-        <div
-          className="relative z-10 flex flex-col items-center justify-center text-white mt-8 will-change-transform"
-          style={{
-            transform: `translateY(${translateY}px) scale(${scale})`,
-            opacity,
-            transformOrigin: "center center"
-          }}
-        >
-          {settings?.logo && (
-            <div className="relative h-20 md:h-24 w-48 md:w-56 mb-4">
-              <Image
-                src={settings.logo}
-                alt="Logo"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          )}
-          <EditableText
-            page="about"
-            path="heroTitle"
-            lang={lang}
-            initialValue={data?.heroTitle}
-            className={`${yellowtail.className} text-7xl md:text-9xl tracking-wide drop-shadow-md mb-4`}
-          />
-          <div className="flex items-center gap-6 mt-1 md:-mt-4">
-            <div className="w-16 h-[1px] bg-white opacity-80"></div>
-            <EditableText
-              page="about"
-              path="heroSubtitle"
-              lang={lang}
-              initialValue={data?.heroSubtitle}
-              className="text-xs md:text-sm uppercase tracking-[0.4em] font-medium opacity-100"
-            />
-            <div className="w-16 h-[1px] bg-white opacity-80"></div>
-          </div>
-        </div>
+        <Hero imgUrl="/assets/Stanza%203%20-%20Foto-15.jpg" title="Marinali" subtitle="ABOUT US" />
       </section>
 
       {/* Breadcrumb Bar */}

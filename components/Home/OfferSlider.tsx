@@ -47,6 +47,8 @@ export default function OfferSlider({ lang, data }: { lang: string; data?: any }
         }
         items={offers}
         sectionId="offer-slider"
+        showBookNow={true}
+        lang={lang}
       />
     </div>
   );

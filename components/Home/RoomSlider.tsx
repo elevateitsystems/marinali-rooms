@@ -55,6 +55,8 @@ export default function RoomSlider({ lang, data }: { lang: string; data?: any })
       title={<EditableText lang={lang} page="home" path="roomsTitle" initialValue={data?.roomsTitle || "ROOMS"} />} 
       items={rooms} 
       sectionId="room-slider" 
+      showBookNow={true}
+      lang={lang}
     />
   );
 }

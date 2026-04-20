@@ -108,7 +108,7 @@ export default function FeaturedRetreat({ lang, data }: { lang: string; data?: a
             />
           </p>
 
-          <div className='bg-primary pl-8 pr-1 w-fit py-3 text-center' style={{ marginTop: '10px' }}>
+          <div className='bg-primary px-8 w-fit py-3 text-center' style={{ marginTop: '10px' }}>
             <button
               style={{
                 border: 'none',

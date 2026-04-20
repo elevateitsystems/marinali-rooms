@@ -10,9 +10,11 @@ const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 export default function Hero({
   title = "Marinali",
   subtitle = "ROOMS",
+  imgUrl = "/assets/Stanza%203%20-%20Foto-13.jpg",
 }: {
   title?: string;
   subtitle?: string;
+  imgUrl?: string;
 }) {
   const [scrollY, setScrollY] = useState(0);
 
@@ -47,7 +49,7 @@ export default function Hero({
         style={{ transform: `translateY(${bgTranslateY}px)` }}
       >
         <Image
-          src={settings?.heroImage || "/assets/Stanza%201%20-%20Foto-1.jpg"}
+          src={imgUrl}
           alt="Hero Banner"
           fill
           className="object-cover object-center brightness-[0.7]"
@@ -64,29 +66,18 @@ export default function Hero({
           transformOrigin: "center center"
         }}
       >
-        {settings?.logo ? (
-          <div className="relative h-24 md:h-32 w-56 md:w-64 mb-6">
-            <Image
-              src={settings.logo}
-              alt="Logo"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-        ) : (
-          <h1
-            className={`${yellowtail.className} text-7xl md:text-9xl tracking-wide drop-shadow-md mb-4`}
-          >
-            {title}
-          </h1>
-        )}
+
+        <h1
+          className={`${yellowtail.className} text-7xl md:text-9xl tracking-wide drop-shadow-md mb-4`}
+        >
+          {title}
+        </h1>
         <div className="flex items-center gap-6 mt-1 md:-mt-4">
-          {/* <div className="w-16 h-[1px] bg-white opacity-80"></div> */}
-          {/* <span className="text-xs md:text-sm uppercase tracking-[0.4em] font-medium opacity-100">
+          <div className="w-16 h-[1px] bg-white opacity-80"></div>
+          <span className="text-xs md:text-sm uppercase tracking-[0.4em] font-medium opacity-100">
             {subtitle}
-          </span> */}
-          {/* <div className="w-16 h-[1px] bg-white opacity-80"></div> */}
+          </span>
+          <div className="w-16 h-[1px] bg-white opacity-80"></div>
         </div>
       </div>
     </section>

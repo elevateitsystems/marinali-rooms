@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import EditableText from '../common/EditableText';
 import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '../ui/skeleton';
+import { BookingModal } from '../common/BookingModal';
+import { useState } from 'react';
 
 interface HighlightRoom {
   id: string;
@@ -15,6 +17,9 @@ interface HighlightRoom {
 }
 
 export default function Highlights({ lang, data }: { lang: string; data?: any }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookingUrl, setBookingUrl] = useState("");
+
   const { data: rooms = [], isLoading } = useQuery<HighlightRoom[]>({
     queryKey: ["rooms", "highlights", lang],
     queryFn: async () => {
@@ -139,6 +144,30 @@ export default function Highlights({ lang, data }: { lang: string; data?: any })
                 >
                   {item.description}
                 </p>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setBookingUrl(`https://marinalirooms.kross.travel/book/step1?lang=${lang}`);
+                    setIsModalOpen(true);
+                  }}
+                  style={{
+                    padding: '12px 24px',
+                    marginTop: '20px',
+                    backgroundColor: '#123149',
+                    color: 'white',
+                    border: 'none',
+                    textTransform: 'uppercase',
+                    fontSize: '10px',
+                    fontWeight: 'bold',
+                    letterSpacing: '0.2em',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s',
+                    width: 'fit-content'
+                  }}
+                >
+                  {lang === 'it' ? 'PRENOTA ORA' : lang === 'de' ? 'JETZT BUCHEN' : 'BOOK NOW'}
+                </button>
               </div>
             </div>
           ))}
@@ -154,6 +183,12 @@ export default function Highlights({ lang, data }: { lang: string; data?: any })
           }
         }
       `}</style>
+
+      <BookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        bookingUrl={bookingUrl}
+      />
     </motion.section>
   );
 }

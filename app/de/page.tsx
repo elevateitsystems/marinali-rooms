@@ -14,7 +14,7 @@ export default async function GermanHomePage() {
 
   return (
     <>
-      <Hero title="Marinali" subtitle="ZIMMER" />
+      <Hero title="Marinali" subtitle="ROOMS" />
       <div className="container mx-auto">
         <IntroSection
           title={
