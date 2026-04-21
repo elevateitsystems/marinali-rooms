@@ -52,6 +52,7 @@ export default function Hero({
           src={imgUrl}
           alt="Hero Banner"
           fill
+          sizes="100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
         />
