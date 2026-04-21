@@ -54,7 +54,7 @@ export default function IntroSection({
           }}
         >
           {description || 'Experience unforgettable hospitality at Marinali Rooms, right in the heart of the town center. We are passionate about creating welcoming stays with every comfort at your fingertips.'}
-        </p>≈
+        </p>
       </motion.div>
 
       <hr
