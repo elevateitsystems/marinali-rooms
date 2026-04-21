@@ -15,19 +15,19 @@ export default async function ItalianHomePage() {
 
   return (
     <>
-      <Hero title="Marinali" subtitle="CAMERE" />
+      <Hero title="Marinali" subtitle="ROOMS" />
       <div className="container mx-auto">
         <IntroSection
           title={
-            <EditableText 
-              lang="it" page="home" path="aboutTitle" 
-              initialValue={data?.aboutTitle || data?.title || "Benvenuto"} 
+            <EditableText
+              lang="it" page="home" path="aboutTitle"
+              initialValue={data?.aboutTitle || data?.title || "Benvenuto"}
             />
           }
           description={
-            <EditableText 
+            <EditableText
               lang="it" page="home" path="aboutDescription" multiline
-              initialValue={data?.aboutDescription || data?.welcomeText || "Vivi un'ospitalità indimenticabile..."} 
+              initialValue={data?.aboutDescription || data?.welcomeText || "Vivi un'ospitalità indimenticabile..."}
             />
           }
         />

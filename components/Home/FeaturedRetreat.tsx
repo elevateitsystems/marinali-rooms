@@ -43,6 +43,7 @@ export default function FeaturedRetreat({ lang, data }: { lang: string; data?: a
           src={settings?.retreatImage || "/assets/Stanza%202%20-%20Foto-14.jpg"}
           alt="Featured Retreat"
           fill
+          sizes="100vw"
           style={{
             objectFit: 'cover',
             filter: 'brightness(0.6)'
@@ -108,7 +109,7 @@ export default function FeaturedRetreat({ lang, data }: { lang: string; data?: a
             />
           </p>
 
-          <div className='bg-primary pl-8 pr-1 w-fit py-3 text-center' style={{ marginTop: '10px' }}>
+          <div className='bg-primary px-8 w-fit py-3 text-center' style={{ marginTop: '10px' }}>
             <button
               style={{
                 border: 'none',

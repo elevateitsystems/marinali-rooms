@@ -60,7 +60,6 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
   const [rooms, setRooms] = useState("1");
   const [coupon, setCoupon] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [isAtFooter, setIsAtFooter] = useState(false);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookingUrl, setBookingUrl] = useState("");
@@ -77,28 +76,6 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     }
   }, [drawerOpen, lenis]);
 
-  // Handle sticky behavior with footer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsAtFooter(entry.isIntersecting);
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0,
-      }
-    );
-
-    const footer = document.querySelector('#main-footer');
-    if (footer) {
-      observer.observe(footer);
-    }
-
-    return () => {
-      if (footer) observer.unobserve(footer);
-    };
-  }, []);
 
   const formatDateForKross = (d?: Date) => {
     if (!d) return "";
@@ -141,7 +118,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
             <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
               {lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Arrival'}
             </span>
-            <span className="text-sm sm:text-base font-semibold tracking-tight uppercase">
+            <span className="text-base font-semibold tracking-tight uppercase">
               {date?.from ? format(date.from, "LLL dd, yyyy") : 'Select Date'}
             </span>
           </div>
@@ -150,7 +127,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
             <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
               {lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Departure'}
             </span>
-            <span className="text-sm sm:text-base font-semibold tracking-tight uppercase">
+            <span className="text-base font-semibold tracking-tight uppercase">
               {date?.to ? format(date.to, "LLL dd, yyyy") : 'Select Date'}
             </span>
           </div>
@@ -175,7 +152,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         </span>
         <div className="relative">
           <Select value={rooms} onValueChange={(val) => setRooms(val as string)}>
-            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-sm sm:text-base font-semibold tracking-tight uppercase hover:text-primary transition-colors">
+            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-base font-semibold tracking-tight uppercase hover:text-primary transition-colors">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -196,7 +173,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         </span>
         <div className="relative">
           <Select name="guests" value={guests} onValueChange={(val) => setGuests(val as string)}>
-            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-sm sm:text-base font-semibold tracking-tight uppercase hover:text-primary transition-colors">
+            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-base font-semibold tracking-tight uppercase hover:text-primary transition-colors">
               <SelectValue placeholder="Guests" />
             </SelectTrigger>
             <SelectContent>
@@ -221,7 +198,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           value={coupon}
           onChange={(e) => setCoupon(e.target.value)}
           placeholder={data?.bookingCodeValue || data?.codeValue || (lang === 'it' ? 'Inserisci' : 'Enter')}
-          className="bg-transparent border-none p-0 focus:ring-0 text-sm sm:text-base font-semibold tracking-tight uppercase placeholder:text-current/30 w-full"
+          className="bg-transparent border-none p-0 focus:ring-0 text-base font-semibold tracking-tight uppercase placeholder:text-current/30 w-full"
         />
       </div>
 
@@ -241,10 +218,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     <>
       {/* ========== DESKTOP: Full booking bar (hidden on mobile) ========== */}
       <div 
-        className={cn(
-          "hidden lg:block z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] transition-transform duration-300",
-          isAtFooter ? "relative" : "fixed bottom-0 left-0 right-0"
-        )}
+        className="hidden lg:block z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] sticky bottom-0 left-0 right-0"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {bookingFormContent}
@@ -253,10 +227,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
       {/* ========== MOBILE: Sticky button (visible on mobile only) ========== */}
       <div 
-        className={cn(
-          "lg:hidden z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 transition-transform duration-300",
-          isAtFooter ? "relative" : "fixed bottom-0 left-0 right-0"
-        )}
+        className="lg:hidden z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 sticky bottom-0 left-0 right-0"
       >
         <button
           type="button"

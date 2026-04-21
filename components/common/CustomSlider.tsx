@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import { motion } from 'framer-motion';
+import { BookingModal } from './BookingModal';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -24,12 +25,16 @@ interface CustomSliderProps {
   title: string | ReactNode;
   items: SliderItem[];
   sectionId: string;
+  showBookNow?: boolean;
+  lang?: string;
 }
 
-export default function CustomSlider({ title, items, sectionId }: CustomSliderProps) {
+export default function CustomSlider({ title, items, sectionId, showBookNow, lang = 'en' }: CustomSliderProps) {
   const swiperRef = useRef<SwiperType | null>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookingUrl, setBookingUrl] = useState("");
 
   return (
     <motion.section
@@ -275,11 +280,38 @@ export default function CustomSlider({ title, items, sectionId }: CustomSliderPr
                       WebkitLineClamp: 2,
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden',
-                      fontFamily: item.id === 'special' ? 'inherit' : 'var(--font-mono, monospace)'
+                      fontFamily: item.id === 'special' ? 'inherit' : 'var(--font-mono, monospace)',
+                      marginBottom: showBookNow ? '16px' : '0'
                     }}
                   >
                     {item.description}
                   </p>
+
+                  {/* Optional Book Now Button */}
+                  {showBookNow && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setBookingUrl(`https://marinalirooms.kross.travel/book/step1?lang=${lang}`);
+                        setIsModalOpen(true);
+                      }}
+                      style={{
+                        padding: '12px 24px',
+                        backgroundColor: '#123149',
+                        color: 'white',
+                        border: 'none',
+                        textTransform: 'uppercase',
+                        fontSize: '10px',
+                        fontWeight: 'bold',
+                        letterSpacing: '0.2em',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s'
+                      }}
+
+                    >
+                      {lang === 'it' ? 'PRENOTA ORA' : lang === 'de' ? 'JETZT BUCHEN' : 'BOOK NOW'}
+                    </button>
+                  )}
                 </div>
               </div>
             </SwiperSlide>
@@ -294,6 +326,12 @@ export default function CustomSlider({ title, items, sectionId }: CustomSliderPr
           display: none !important;
         }
       `}</style>
+      
+      <BookingModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        bookingUrl={bookingUrl} 
+      />
     </motion.section>
   );
 }

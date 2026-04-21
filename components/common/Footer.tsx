@@ -1,221 +1,194 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { Yellowtail } from "next/font/google";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-
-const InstagramIcon = ({ className }: { className?: string }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-);
-const FacebookIcon = ({ className }: { className?: string }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-);
-const LinkedinIcon = ({ className }: { className?: string }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-);
-const YoutubeIcon = ({ className }: { className?: string }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-);
 
 const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 
-const footerData = {
+const staticContent = {
   en: {
-    locations: ['MARINALI EL GOUNA', 'MARINALI MADONNA', 'MARINALI NORTH COAST', 'MARINALI RHODES', 'MARINALI SAMOS'],
-    links: ['ABOUT US', 'MANAGE MY BOOKING', 'COMPANY INFORMATION', 'CONTACT US', 'CAREER', 'SITEMAP', 'EXPLORE OUR OTHER BRAND'],
-    bottom: ['Privacy Policy', 'Cookie Policy', 'User Generated Content'],
-    copyright: '© Marinali Rooms, All rights reserved'
+    infoTitle: "GET IN TOUCH",
+    address: "Piazza dell Unita', 1\n40128 Bologna, Italy",
+    phone: "+39 123 456 7890",
+    email: "info@marinalirooms.com",
+    formTitle: "SEND US A MESSAGE",
+    nameLabel: "NAME",
+    emailLabel: "EMAIL",
+    messageLabel: "MESSAGE",
+    submitButton: "SEND INQUIRY",
+    successMsg: "Thank you for your message. We will get back to you shortly.",
+    follow: "Follow our journey",
+    privacy: "Privacy Policy",
+    cookie: "Cookie Policy",
+    rights: "All rights reserved",
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11311.238128362706!2d10.428581023773539!3d44.86608935447101!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47801be6ca7f363b%3A0xc3f83737ec38a2e!2sMarinali%20Rooms!5e0!3m2!1sen!2sit!4v1709669524458!5m2!1sen!2sit",
   },
   it: {
-    locations: ['MARINALI EL GOUNA', 'MARINALI MADONNA', 'MARINALI NORTH COAST', 'MARINALI RHODES', 'MARINALI SAMOS'],
-    links: ['CHI SIAMO', 'GESTISCI PRENOTAZIONE', 'INFORMAZIONI AZIENDALI', 'CONTATTACI', 'CARRIERA', 'MAPPA DEL SITO', 'ESPLORA ALTRI BRAND'],
-    bottom: ['Privacy Policy', 'Cookie Policy', 'Contenuti Generati dagli Utenti'],
-    copyright: '© Marinali Rooms, Tutti i diritti riservati'
+    infoTitle: "CONTATTACI",
+    address: "Piazza dell Unita', 1\n40128 Bologna, Italia",
+    phone: "+39 123 456 7890",
+    email: "info@marinalirooms.com",
+    formTitle: "INVIACI UN MESSAGGIO",
+    nameLabel: "NOME",
+    emailLabel: "EMAIL",
+    messageLabel: "MESSAGGIO",
+    submitButton: "INVIA RICHIESTA",
+    successMsg: "Grazie per il tuo messaggio. Ti risponderemo a breve.",
+    follow: "Segui il nostro viaggio",
+    privacy: "Privacy Policy",
+    cookie: "Cookie Policy",
+    rights: "Tutti i diritti riservati",
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11311.238128362706!2d10.428581023773539!3d44.86608935447101!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47801be6ca7f363b%3A0xc3f83737ec38a2e!2sMarinali%20Rooms!5e0!3m2!1sen!2sit!4v1709669524458!5m2!1sen!2sit",
   },
   de: {
-    locations: ['MARINALI EL GOUNA', 'MARINALI MADONNA', 'MARINALI NORTH COAST', 'MARINALI RHODES', 'MARINALI SAMOS'],
-    links: ['ÜBER UNS', 'BUCHUNG VERWALTEN', 'UNTERNEHMENSINFORMATIONEN', 'KONTAKT', 'KARRIERE', 'SITEMAP', 'ENTDECKEN SIE UNSERE MARKE'],
-    bottom: ['Datenschutzerklärung', 'Cookie-Richtlinie', 'Nutzergenerierte Inhalte'],
-    copyright: '© Marinali Rooms, Alle Rechte vorbehalten'
+    infoTitle: "KONTAKTIEREN SIE UNS",
+    address: "Piazza dell Unita', 1\n40128 Bologna, Italien",
+    phone: "+39 123 456 7890",
+    email: "info@marinalirooms.com",
+    formTitle: "SENDEN SIE UNS EINE NACHRICHT",
+    nameLabel: "NAME",
+    emailLabel: "E-MAIL",
+    messageLabel: "NACHRICHT",
+    submitButton: "ANFRAGE SENDEN",
+    successMsg: "Vielen Dank für Ihre Nachricht. Wir werden uns in Kürze bei Ihnen melden.",
+    follow: "Folgen Sie unserer Reise",
+    privacy: "Datenschutzerklärung",
+    cookie: "Cookie-Richtlinie",
+    rights: "Alle Rechte vorbehalten",
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11311.238128362706!2d10.428581023773539!3d44.86608935447101!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47801be6ca7f363b%3A0xc3f83737ec38a2e!2sMarinali%20Rooms!5e0!3m2!1sen!2sit!4v1709669524458!5m2!1sen!2sit",
   }
 };
 
 export default function Footer({ lang }: { lang: 'en' | 'it' | 'de' }) {
-  const t = footerData[lang];
+  const [formState, setFormState] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const t = staticContent[lang] || staticContent.en;
 
-  const { data: settings } = useQuery({
-    queryKey: ['settings'],
-    queryFn: async () => {
-      const res = await fetch('/api/settings');
-      if (!res.ok) throw new Error('Failed to fetch settings');
-      return res.json();
-    }
-  });
-
-  const footerConfigs = settings?.footerConfig as Record<string, any> | undefined;
-  const fc = footerConfigs?.[lang];
-
-  // Helper to render social icon by name
-  const renderSocialIcon = (iconName: string, className: string) => {
-    switch (iconName.toLowerCase()) {
-      case 'instagram': return <InstagramIcon className={className} />;
-      case 'facebook': return <FacebookIcon className={className} />;
-      case 'linkedin': return <LinkedinIcon className={className} />;
-      case 'youtube': return <YoutubeIcon className={className} />;
-      default: return null;
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormState('submitting');
+    setTimeout(() => setFormState('success'), 1500);
   };
 
   return (
-    <footer
-      id="main-footer"
-      className="bg-primary"
-      style={{
-        backgroundColor: settings?.primaryColor || undefined,
-        color: '#fff',
-        padding: 'clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem) 2rem',
-        marginTop: 'auto'
-      }}
-    >
-      <div className="mx-auto container">
-        {/* Main Content Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '40px',
-            marginBottom: '60px'
-          }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
-        >
-          {/* Logo Column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div className="flex flex-col items-start">
-              {settings?.logo ? (
-                <div className="relative h-40 w-40 rounded-full bg-background mb-2">
-                  <Image
-                    src={settings.logo}
-                    alt="Marinali Logo"
-                    fill
-                    className="object-contain object-left"
-                  />
+    <footer id="main-footer" className="bg-[#F8F6F2] font-playfair w-full relative z-30 text-[#123149] border-t border-gray-200">
+      {/* Main Content Grid */}
+      <section className="grid lg:grid-cols-2">
+        {/* Left Side: Info & Form */}
+        <div className="p-6 md:p-12 flex justify-center text-center">
+          <div className="max-w-xl w-full mx-auto">
+            <div className="mb-4">
+              <span className="text-xl lg:text-2xl tracking-[0.3em] font-bold text-primary mb-4 block uppercase">
+                {t.infoTitle}
+              </span>
+              <div className="space-y-2 text-sm font-medium">
+                <span className="block hover:opacity-70 transition-opacity">
+                  {t.address}
+                </span>
+                <span className=" text-sm hover:opacity-70 transition-opacity">
+                  {t.phone}
+                </span>
+                <span className=" text-sm hover:opacity-70 transition-opacity">
+                  || {t.email}
+                </span>
+              </div>
+            </div>
+
+            <hr className="my-5 border-gray-300" />
+
+            <div>
+
+
+              {formState === 'success' ? (
+                <div className="bg-green-50 text-green-800 p-6 rounded-sm italic animate-fade-in text-base border border-green-100">
+                  {t.successMsg}
                 </div>
               ) : (
-                <>
-                  <span className={`${yellowtail.className} text-4xl leading-none `}>
-                    Marinali
-                  </span>
-                  <div className="flex items-center gap-3 w-full mt-3">
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] tracking-[0.2em] font-bold uppercase text-gray-500 block">
+                        {t.nameLabel}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="w-full border-b border-gray-300 py-2 focus:border-[#123149] outline-none transition-colors bg-transparent font-sans text-center text-[#123149]"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] tracking-[0.2em] font-bold uppercase text-gray-500 block">
+                        {t.emailLabel}
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        className="w-full border-b border-gray-300 py-2 focus:border-[#123149] outline-none transition-colors bg-transparent font-sans text-center text-[#123149]"
+                      />
+                    </div>
                   </div>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Dynamic Columns or Fallback */}
-          {fc?.columns && fc.columns.length > 0 ? (
-            fc.columns.map((col: any, i: number) => (
-              <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <h4 className="text-[14px] font-bold mb-2 uppercase tracking-widest opacity-60">{col.title}</h4>
-                {col.links.map((link: any, j: number) => (
-                  <Link
-                    key={j}
-                    href={link.url || '#'}
-                    className="text-[11px] tracking-[0.1em] font-bold hover:opacity-70 transition-opacity uppercase"
+                  <div className="space-y-2">
+                    <label className="text-[10px] tracking-[0.2em] font-bold uppercase text-gray-500 block">
+                      {t.messageLabel}
+                    </label>
+                    <textarea
+                      rows={2}
+                      required
+                      className="w-full border-b border-gray-300 py-2 focus:border-[#123149] outline-none transition-colors bg-transparent resize-none font-sans text-center text-[#123149]"
+                    />
+                  </div>
+                  <button
+                    disabled={formState === 'submitting'}
+                    type="submit"
+                    className="px-8 py-3 bg-[#123149] text-white text-[10px] tracking-[0.3em] font-bold uppercase hover:bg-black transition-all disabled:opacity-50 mx-auto block cursor-pointer"
                   >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            ))
-          ) : (
-            <>
-              {/* Fallback Locations Column */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {t.locations.map((loc, i) => (
-                  <Link
-                    key={i}
-                    href="#"
-                    className="text-[11px] tracking-[0.1em] font-bold hover:opacity-70 transition-opacity uppercase"
-                  >
-                    {loc}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Fallback Links Column */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {t.links.map((link, i) => (
-                  <Link
-                    key={i}
-                    href="#"
-                    className="text-[11px] tracking-[0.1em] font-bold hover:opacity-70 transition-opacity uppercase"
-                  >
-                    {link}
-                  </Link>
-                ))}
-              </div>
-            </>
-          )}
-
-          {/* Socials Column */}
-          <div className="flex flex-col gap-5 lg:items-end">
-            <div className="flex gap-6 lg:flex-col lg:gap-4 lg:items-center">
-              {fc?.socialLinks && fc.socialLinks.length > 0 ? (
-                fc.socialLinks.map((social: any, i: number) => (
-                  <Link key={i} href={social.url || '#'}>
-                    {renderSocialIcon(social.icon, "w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity")}
-                  </Link>
-                ))
-              ) : (
-                <>
-                  <InstagramIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
-                  <FacebookIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
-                  <LinkedinIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
-                  <YoutubeIcon className="w-5 h-5 cursor-pointer opacity-80 hover:opacity-100 transition-opacity" />
-                </>
+                    {t.submitButton}
+                  </button>
+                </form>
               )}
             </div>
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div style={{ marginTop: '80px' }}>
-          {/* Legal Links */}
-          <div className="flex flex-col md:flex-row justify-between gap-6 mb-8 text-[12px] opacity-90 tracking-wide font-mono">
-            {fc?.bottomLinks && fc.bottomLinks.length > 0 ? (
-              fc.bottomLinks.map((link: any, i: number) => (
-                <Link key={i} href={link.url || '#'} className="hover:underline">
-                  {link.label}
-                </Link>
-              ))
-            ) : (
-              t.bottom.map((item, i) => (
-                <Link key={i} href="#" className="hover:underline">
-                  {item}
-                </Link>
-              ))
-            )}
-          </div>
+        {/* Right Side: Map */}
+        <div className="relative h-full overflow-hidden">
+          <iframe
+            src={t.mapUrl}
+            width="100%"
+            height="100%"
+            style={{ border: 0, filter: 'grayscale(1) contrast(1.2) opacity(0.8)' }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="absolute inset-0 grayscale"
+          />
+        </div>
+      </section>
 
-          {/* Separator Line */}
-          <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.2)', marginBottom: '20px' }} />
-
-          {/* Copyright */}
-          <div
-            style={{
-              textAlign: 'center',
-              fontSize: '11px',
-              opacity: 0.7,
-              letterSpacing: '0.05em',
-              fontFamily: 'monospace'
-            }}
-          >
-            {fc?.copyright || t.copyright}
+      {/* Navigation Footer for Contact */}
+      <div className="py-10 px-4 text-center bg-[#123149] text-white mt-auto">
+        <div className="relative z-10 flex flex-col items-center  justify-center text-white my-8">
+          <h1 className={`${yellowtail.className} text-4xl md:text-5xl tracking-wide mb-1`}>
+            Marinali
+          </h1>
+          <div className="flex items-center gap-3 mt-1">
+            <div className="w-10 h-[1px] bg-white opacity-80"></div>
+            <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] font-medium opacity-100">
+              Rooms
+            </span>
+            <div className="w-10 h-[1px] bg-white opacity-80"></div>
           </div>
+        </div>
+        {/* Bottom copyright info preserved from original footer */}
+        <div className="max-w-4xl mx-auto border-t border-white/20 pt-6 text-xs font-mono opacity-80 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div>
+            <Link href="#" className="hover:underline mr-4">{t.privacy}</Link>
+            <Link href="#" className="hover:underline">{t.cookie}</Link>
+          </div>
+          <div>© {new Date().getFullYear()} Marinali Rooms. {t.rights}.</div>
         </div>
       </div>
     </footer>
   );
-}
+};
+
