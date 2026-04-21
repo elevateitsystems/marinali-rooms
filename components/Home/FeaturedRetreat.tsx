@@ -48,7 +48,7 @@ export default function FeaturedRetreat({ lang, data }: { lang: string; data?: a
             objectFit: 'cover',
             filter: 'brightness(0.6)'
           }}
-          priority
+          loading="lazy"
         />
       </div>
 
