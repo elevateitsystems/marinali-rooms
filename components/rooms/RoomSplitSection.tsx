@@ -18,9 +18,10 @@ interface RoomSplitSectionProps {
   };
   reverse?: boolean;
   lang: string;
+  priority?: boolean;
 }
 
-export default function RoomSplitSection({ room, reverse = false, lang }: RoomSplitSectionProps) {
+export default function RoomSplitSection({ room, reverse = false, lang, priority = false }: RoomSplitSectionProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookingUrl, setBookingUrl] = useState("");
 
@@ -40,9 +41,10 @@ export default function RoomSplitSection({ room, reverse = false, lang }: RoomSp
           src={room.image}
           alt={room.name}
           fill
-          sizes="(max-width: 1024px) 100vw, 60vw"
+          sizes="(max-width: 1024px) 100vw, 55vw"
           className="object-cover"
-          priority
+          priority={priority}
+          loading={priority ? undefined : "lazy"}
         />
         <div className="absolute inset-0 bg-black/5 pointer-events-none" />
       </div>

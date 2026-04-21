@@ -40,6 +40,7 @@ export default function EnglishRoomsPage() {
           room={room} 
           reverse={index % 2 !== 0} 
           lang="en" 
+          priority={index === 0}
         />
       ))}
     </main>

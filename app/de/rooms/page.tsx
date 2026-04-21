@@ -38,6 +38,7 @@ export default function GermanRoomsPage() {
           room={room} 
           reverse={index % 2 !== 0} 
           lang="de" 
+          priority={index === 0}
         />
       ))}
     </main>
