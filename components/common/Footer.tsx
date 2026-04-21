@@ -166,7 +166,7 @@ export default function Footer({ lang }: { lang: 'en' | 'it' | 'de' }) {
       </section>
 
       {/* Navigation Footer for Contact */}
-      <div className="py-10 px-4 text-center bg-[#123149] text-white mt-auto">
+      <div className="pt-10 pb-36 px-4 text-center bg-[#123149] text-white mt-auto">
         <div className="relative z-10 flex flex-col items-center  justify-center text-white my-8">
           <h1 className={`${yellowtail.className} text-4xl md:text-5xl tracking-wide mb-1`}>
             Marinali

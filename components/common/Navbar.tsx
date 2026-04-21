@@ -29,16 +29,19 @@ const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 const navData = {
   en: {
     home: 'Home',
+    rooms: 'ROOMS',
     about: 'ABOUT',
     contact: 'CONTACT US'
   },
   it: {
     home: 'Home',
+    rooms: 'CAMERE',
     about: 'CHI SIAMO',
     contact: 'CONTATTACI'
   },
   de: {
     home: 'Home',
+    rooms: 'ZIMMER',
     about: 'ÜBER UNS',
     contact: 'KONTAKT'
   }
@@ -204,6 +207,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           <nav className="flex flex-col gap-6 md:gap-10 mt-10 md:mt-0">
             {[
               { name: t.home, path: '/' },
+              { name: t.rooms, path: '/rooms' },
               { name: t.about, path: '/about' },
               { name: t.contact, path: '/contact' },
             ].map((item, idx) => (

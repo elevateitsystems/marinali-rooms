@@ -43,7 +43,7 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
       className='mt-10 lg:mt-20 bg-primary'
       style={{
         color: '#fff',
-        padding: 'clamp(4rem, 10vw, 7rem) clamp(1.5rem, 5vw, 4rem)',
+        padding: 'clamp(3rem, 6vw, 5rem) clamp(1rem, 3vw, 2rem)',
         position: 'relative'
       }}
     >
@@ -66,12 +66,12 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div
                   style={{
-                    fontSize: 'clamp(1.1rem, 2.5vw, 1.8rem)',
+                    fontSize: 'clamp(1rem, 1.8vw, 1.35rem)',
                     fontWeight: 700,
                     lineHeight: 1.4,
-                    letterSpacing: '0.05em',
-                    marginBottom: 'clamp(2rem, 5vw, 3rem)',
-                    maxWidth: '900px',
+                    letterSpacing: '0.03em',
+                    marginBottom: 'clamp(1.5rem, 3vw, 2rem)',
+                    maxWidth: '800px',
                     width: '100%',
                     margin: '0 auto'
                   }}
@@ -93,7 +93,7 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
                     letterSpacing: '0.1em',
                     opacity: 0.9,
                     fontFamily: 'monospace',
-                    marginBottom: '10px'
+                    marginTop: '1rem',
                   }}
                 >
                   <EditableText
@@ -110,6 +110,7 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
                     color: '#fff',
                     textDecoration: 'underline',
                     opacity: 0.8,
+                    marginTop: '1rem',
                     letterSpacing: '0.1em'
                   }}
                 >
@@ -130,12 +131,12 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
       <div
         style={{
           maxWidth: '1200px',
-          margin: '3rem auto 0',
+          margin: '2rem auto 0',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           position: 'relative',
-          paddingTop: '2rem'
+          // paddingTop: '1rem'
         }}
       >
         {/* Pagination Status (Left) */}

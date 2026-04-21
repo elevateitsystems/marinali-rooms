@@ -148,7 +148,8 @@ export default function Highlights({ lang, data }: { lang: string; data?: any })
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setBookingUrl(`https://marinalirooms.kross.travel/book/step1?lang=${lang}`);
+                    const successUrl = `${window.location.origin}/${lang}/thank-you`;
+                    setBookingUrl(`https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`);
                     setIsModalOpen(true);
                   }}
                   style={{

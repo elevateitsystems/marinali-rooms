@@ -7,9 +7,11 @@ import { ReactNode } from 'react';
 export default function IntroSection({
   title,
   description,
+  children,
 }: {
   title?: string | ReactNode;
   description?: string | ReactNode;
+  children?: ReactNode;
 }) {
   return (
     <section
@@ -19,7 +21,7 @@ export default function IntroSection({
         textAlign: 'left',
       }}
     >
-      <motion.div 
+      <motion.div
         className="max-w-[1000px] mr-auto mt-10 lg:mt-20"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -63,6 +65,11 @@ export default function IntroSection({
           marginTop: '50px',
         }}
       />
+      {children && (
+        <div className="mt-16 w-full max-w-[1200px] mx-auto">
+          {children}
+        </div>
+      )}
     </section>
   );
 }
