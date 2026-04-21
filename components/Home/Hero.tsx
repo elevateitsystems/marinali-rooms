@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Yellowtail } from "next/font/google";
-import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 
 const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
@@ -16,8 +16,6 @@ export default function Hero({
   subtitle?: string;
   imgUrl?: string;
 }) {
-  const [scrollY, setScrollY] = useState(0);
-
   const { data: settings } = useQuery({
     queryKey: ['settings'],
     queryFn: async () => {
@@ -27,26 +25,20 @@ export default function Hero({
     }
   });
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const { scrollY } = useScroll();
 
   // Smooth scroll transformations
-  const scale = Math.max(1 - scrollY / 500, 0.2);
-  const opacity = Math.max(1 - scrollY / 400, 0);
-  const translateY = -scrollY * 0.3; // Negative to move UP as user scrolls down
-  const bgTranslateY = scrollY * 0.2; // Parallax for background
+  const scale = useTransform(scrollY, [0, 500], [1, 0.2]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const translateY = useTransform(scrollY, [0, 1000], [0, -300]);
+  const bgTranslateY = useTransform(scrollY, [0, 1000], [0, 200]);
 
   return (
     <section className="-mt-24 relative w-full h-[85vh] flex flex-col items-center justify-center overflow-hidden">
       {/* Background Image Overlay */}
-      <div
+      <motion.div
         className="absolute inset-0 z-0"
-        style={{ transform: `translateY(${bgTranslateY}px)` }}
+        style={{ y: bgTranslateY }}
       >
         <Image
           src={imgUrl}
@@ -56,13 +48,14 @@ export default function Hero({
           className="object-cover object-center brightness-[0.7]"
           priority
         />
-      </div>
+      </motion.div>
 
       {/* Main Content */}
-      <div
+      <motion.div
         className="relative z-10 flex flex-col items-center justify-center text-white mt-8 will-change-transform"
         style={{
-          transform: `translateY(${translateY}px) scale(${scale})`,
+          y: translateY,
+          scale,
           opacity,
           transformOrigin: "center center"
         }}
@@ -80,7 +73,7 @@ export default function Hero({
           </span>
           <div className="w-16 h-[1px] bg-white opacity-80"></div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

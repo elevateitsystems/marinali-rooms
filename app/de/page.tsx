@@ -2,11 +2,13 @@ import { ContentService } from "@/lib/services/contentService";
 import EditableText from "@/components/common/EditableText";
 import Hero from "@/components/Home/Hero";
 import IntroSection from "@/components/Home/IntroSection";
-import ImageSlider from "@/components/Home/RoomSlider";
-import ReviewSlider from "@/components/Home/ReviewSlider";
-import OfferSlider from "@/components/Home/OfferSlider";
-import Highlights from "@/components/Home/Highlights";
-import FeaturedRetreat from "@/components/Home/FeaturedRetreat";
+import dynamic from "next/dynamic";
+
+const ImageSlider = dynamic(() => import("@/components/Home/RoomSlider"));
+const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
+const OfferSlider = dynamic(() => import("@/components/Home/OfferSlider"));
+const Highlights = dynamic(() => import("@/components/Home/Highlights"));
+const FeaturedRetreat = dynamic(() => import("@/components/Home/FeaturedRetreat"));
 
 export default async function GermanHomePage() {
   const content = await ContentService.getContent("home", "de");
