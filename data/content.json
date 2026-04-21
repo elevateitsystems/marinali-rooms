@@ -70,6 +70,13 @@
         "messageLabel": "Your Message",
         "submitButton": "Send Inquiry",
         "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2778.675046274438!2d11.7335!3d45.7667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4778d65565555555%3A0x5555555555555555!2sVia%20Marinali%2C%2036061%20Bassano%20del%20Grappa%20VI!5e0!3m2!1sen!2sit!4v1713535000000!5m2!1sen!2sit"
+      },
+      "thankYou": {
+        "title": "Thank You",
+        "subtitle": "YOUR RESERVATION IS CONFIRMED",
+        "message": "We are delighted to welcome you to Marinali Rooms. A confirmation email with all the details has been sent to you.",
+        "returnHome": "Back to Home",
+        "contactUs": "Contact Us"
       }
     },
     "it": {
@@ -135,6 +142,13 @@
         "messageLabel": "Il tuo Messaggio",
         "submitButton": "Invia Richiesta",
         "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2778.675046274438!2d11.7335!3d45.7667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4778d65565555555%3A0x5555555555555555!2sVia%20Marinali%2C%2036061%20Bassano%20del%20Grappa%20VI!5e0!3m2!1sen!2sit!4v1713535000000!5m2!1sen!2sit"
+      },
+      "thankYou": {
+        "title": "Grazie",
+        "subtitle": "LA TUA PRENOTAZIONE È CONFERMATA",
+        "message": "Siamo felici di accoglierti a Marinali Rooms. Ti è stata inviata un'e-mail di conferma con tutti i dettagli.",
+        "returnHome": "Torna alla Home",
+        "contactUs": "Contattaci"
       }
     },
     "de": {
@@ -200,6 +214,13 @@
         "messageLabel": "Ihre Nachricht",
         "submitButton": "Anfrage senden",
         "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2778.675046274438!2d11.7335!3d45.7667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4778d65565555555%3A0x5555555555555555!2sVia%20Marinali%2C%2036061%20Bassano%20del%20Grappa%20VI!5e0!3m2!1sen!2sit!4v1713535000000!5m2!1sen!2sit"
+      },
+      "thankYou": {
+        "title": "Danke",
+        "subtitle": "IHRE RESERVIERUNG IST BESTÄTIGT",
+        "message": "Wir freuen uns, Sie im Marinali Rooms begrüßen zu dürfen. Eine Bestätigungs-E-Mail mit allen Details wurde an Sie gesendet.",
+        "returnHome": "Zurück zur Startseite",
+        "contactUs": "Kontaktieren Sie uns"
       }
     }
   }

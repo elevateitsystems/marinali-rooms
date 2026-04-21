@@ -27,7 +27,7 @@ export function BookingModal({ isOpen, onClose, bookingUrl }: BookingModalProps)
         </DialogHeader>
         
         <div className="relative w-full h-full flex flex-col pt-10 px-0">
-          {isLoading && (
+          {isOpen && isLoading && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-10 gap-4">
               <Loader2 className="animate-spin text-primary" size={40} />
               <p className="text-sm font-medium text-gray-500 uppercase tracking-widest">
@@ -36,16 +36,19 @@ export function BookingModal({ isOpen, onClose, bookingUrl }: BookingModalProps)
             </div>
           )}
           
-          <iframe
-            src={bookingUrl}
-            className={cn(
-              "w-full h-full border-none transition-opacity duration-500",
-              isLoading ? "opacity-0" : "opacity-100"
-            )}
-            onLoad={() => setIsLoading(false)}
-            title="Booking Engine"
-            allow="payment"
-          />
+          {isOpen && (
+            <iframe
+              src={bookingUrl}
+              className={cn(
+                "w-full h-full border-none transition-opacity duration-500",
+                isLoading ? "opacity-0" : "opacity-100"
+              )}
+              onLoad={() => setIsLoading(false)}
+              title="Booking Engine"
+              allow="payment"
+              loading="lazy"
+            />
+          )}
         </div>
       </DialogContent>
     </Dialog>

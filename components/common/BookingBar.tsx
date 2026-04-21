@@ -19,8 +19,9 @@ import {
 } from "@/components/ui/select";
 import { X } from 'lucide-react';
 import { useLenis } from 'lenis/react';
-import { BookingModal } from './BookingModal';
+import dynamic from 'next/dynamic';
 
+const BookingModal = dynamic(() => import('./BookingModal').then(mod => ({ default: mod.BookingModal })), { ssr: false });
 interface BookingBarProps {
   lang?: 'en' | 'it' | 'de';
   data?: {
@@ -87,13 +88,16 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     
     // Construct the URL manually
     const baseUrl = "https://marinalirooms.kross.travel/book/step1";
+    const successUrl = `${window.location.origin}/${lang}/thank-you`;
+    
     const params = new URLSearchParams({
       lang: lang,
       from: formatDateForKross(date?.from),
       to: formatDateForKross(date?.to),
       rooms: rooms,
       guests: guests,
-      coupon: coupon
+      coupon: coupon,
+      url_back: successUrl
     });
     
     const finalUrl = `${baseUrl}?${params.toString()}`;
@@ -218,7 +222,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     <>
       {/* ========== DESKTOP: Full booking bar (hidden on mobile) ========== */}
       <div 
-        className="hidden lg:block z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] sticky bottom-0 left-0 right-0"
+        className="hidden lg:block z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] fixed bottom-0 left-0 right-0"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {bookingFormContent}
@@ -227,7 +231,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
       {/* ========== MOBILE: Sticky button (visible on mobile only) ========== */}
       <div 
-        className="lg:hidden z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 sticky bottom-0 left-0 right-0"
+        className="lg:hidden z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 fixed bottom-0 left-0 right-0"
       >
         <button
           type="button"

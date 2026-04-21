@@ -8,34 +8,18 @@ const defaultRooms: SliderItem[] = [
   {
     id: 1,
     image: '/assets/Stanza%201%20-%20Foto-1.jpg',
-    name: 'MARINALI POOLSIDE',
+    name: 'JUNIOR SUITE',
     location: 'Bassano del Grappa',
     description:
-      'Experience the height of luxury in our poolside suites, where historic architecture meets modern relaxation.',
+      'A sanctuary of light and history, featuring original frescoes and bespoke Italian craftsmanship in an intimate setting.',
   },
   {
     id: 2,
     image: '/assets/Stanza%202%20-%20Foto-1.jpg',
-    name: 'MARINALI TERRACE',
+    name: 'SUITE DELUXE',
     location: 'Bassano del Grappa',
     description:
-      'Our terrace rooms offer breathtaking views of the Venetian pre-Alps and the historic city center.',
-  },
-  {
-    id: 3,
-    image: '/assets/Stanza%203%20-%20Foto-1.jpg',
-    name: 'MARINALI CLIFFSIDE',
-    location: 'Bassano del Grappa',
-    description:
-      'Immerse yourself in history with rooms that overlook the Brenta river and the iconic Ponte Vecchio.',
-  },
-  {
-    id: 4,
-    image: '/assets/Stanza%201%20-%20Foto-4.jpg',
-    name: 'MARINALI SUITE',
-    location: 'Bassano del Grappa',
-    description:
-      'The pinnacle of our palazzo, the Marinali Suite features hand-restored frescoes and bespoke Italian furniture.',
+      'Unparalleled elegance spanning historic walls, with Venetian terrazzo floors and panoramic views of the historic center.',
   },
 ];
 
