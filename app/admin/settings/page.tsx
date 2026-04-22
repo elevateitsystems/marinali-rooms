@@ -50,6 +50,11 @@ const DEFAULT_FOOTER_CONFIG: Record<string, FooterConfig> = {
       { label: "Cookie Policy", url: "#" },
       { label: "User Generated Content", url: "#" },
     ],
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11311.238128362706!2d10.428581023773539!3d44.86608935447101!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47801be6ca7f363b%3A0xc3f83737ec38a2e!2sMarinali%20Rooms!5e0!3m2!1sen!2sit!4v1709669524458!5m2!1sen!2sit",
+    address: "Piazza dell Unita', 1\n40128 Bologna, Italy",
+    phone: "+39 123 456 7890",
+    email: "info@marinalirooms.com",
+    whatsapp: "+391234567890",
   },
   it: {
     columns: [
@@ -86,6 +91,11 @@ const DEFAULT_FOOTER_CONFIG: Record<string, FooterConfig> = {
       { label: "Cookie Policy", url: "#" },
       { label: "Contenuti degli utenti", url: "#" },
     ],
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11311.238128362706!2d10.428581023773539!3d44.86608935447101!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47801be6ca7f363b%3A0xc3f83737ec38a2e!2sMarinali%20Rooms!5e0!3m2!1sen!2sit!4v1709669524458!5m2!1sen!2sit",
+    address: "Piazza dell Unita', 1\n40128 Bologna, Italia",
+    phone: "+39 123 456 7890",
+    email: "info@marinalirooms.com",
+    whatsapp: "+391234567890",
   },
   de: {
     columns: [
@@ -122,6 +132,11 @@ const DEFAULT_FOOTER_CONFIG: Record<string, FooterConfig> = {
       { label: "Cookie-Richtlinie", url: "#" },
       { label: "Nutzerinhalte", url: "#" },
     ],
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11311.238128362706!2d10.428581023773539!3d44.86608935447101!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47801be6ca7f363b%3A0xc3f83737ec38a2e!2sMarinali%20Rooms!5e0!3m2!1sen!2sit!4v1709669524458!5m2!1sen!2sit",
+    address: "Piazza dell Unita', 1\n40128 Bologna, Italien",
+    phone: "+39 123 456 7890",
+    email: "info@marinalirooms.com",
+    whatsapp: "+391234567890",
   },
 };
 
@@ -642,6 +657,61 @@ export default function SettingsPage() {
                     placeholder="© 2026 Marinali Rooms"
                     className="max-w-md"
                   />
+                </div>
+
+                {/* Contact & Map */}
+                <div className="border-t pt-8 space-y-6">
+                  <Label className="text-base font-semibold">Contact Info & Map</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <Label className="text-xs">Address</Label>
+                      <textarea
+                        value={fc.address || ""}
+                        onChange={(e) => updateFooterConfig({ address: e.target.value })}
+                        placeholder="Street, City, Country"
+                        className="w-full min-h-[80px] p-2 text-sm border rounded-md"
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label className="text-xs">Phone</Label>
+                        <Input
+                          value={fc.phone || ""}
+                          onChange={(e) => updateFooterConfig({ phone: e.target.value })}
+                          placeholder="+39 123 456 7890"
+                          className="text-sm"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs">Email</Label>
+                        <Input
+                          value={fc.email || ""}
+                          onChange={(e) => updateFooterConfig({ email: e.target.value })}
+                          placeholder="info@marinalirooms.com"
+                          className="text-sm"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs">WhatsApp Number (e.g. +391234567890)</Label>
+                        <Input
+                          value={fc.whatsapp || ""}
+                          onChange={(e) => updateFooterConfig({ whatsapp: e.target.value })}
+                          placeholder="+391234567890"
+                          className="text-sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <Label className="text-xs">Google Maps Embed URL</Label>
+                    <Input
+                      value={fc.mapUrl || ""}
+                      onChange={(e) => updateFooterConfig({ mapUrl: e.target.value })}
+                      placeholder="https://www.google.com/maps/embed?..."
+                      className="text-sm font-mono"
+                    />
+                    <p className="text-[10px] text-gray-400 italic">Paste the "src" attribute from the Google Maps iframe embed code.</p>
+                  </div>
                 </div>
               </CardContent>
             </Card>

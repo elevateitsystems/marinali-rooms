@@ -119,19 +119,19 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         <PopoverTrigger className="flex-[2] flex flex-row items-stretch">
           {/* Arrival */}
           <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
-            <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
+            <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
               {lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Arrival'}
             </span>
-            <span className="text-base font-semibold tracking-tight uppercase">
+            <span className="text-lg font-semibold tracking-tight uppercase">
               {date?.from ? format(date.from, "LLL dd, yyyy") : 'Select Date'}
             </span>
           </div>
           {/* Departure */}
           <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
-            <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
+            <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
               {lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Departure'}
             </span>
-            <span className="text-base font-semibold tracking-tight uppercase">
+            <span className="text-lg font-semibold tracking-tight uppercase">
               {date?.to ? format(date.to, "LLL dd, yyyy") : 'Select Date'}
             </span>
           </div>
@@ -151,12 +151,12 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
       {/* Rooms */}
       <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center gap-1 group transition-colors">
-        <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
+        <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
           {data?.bookingRoomsLabel || data?.roomsLabel || (lang === 'it' ? 'Camere' : lang === 'de' ? 'Zimmer' : 'Rooms')}
         </span>
         <div className="relative">
           <Select value={rooms} onValueChange={(val) => setRooms(val as string)}>
-            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-base font-semibold tracking-tight uppercase hover:text-primary transition-colors">
+            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-lg font-semibold tracking-tight uppercase hover:text-primary transition-colors">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -172,12 +172,12 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
       {/* Guests */}
       <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center gap-1 group transition-colors">
-        <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
+        <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
           {data?.bookingWhoLabel || data?.whoLabel || (lang === 'it' ? 'Ospiti' : lang === 'de' ? 'Gäste' : 'Guests')}
         </span>
         <div className="relative">
           <Select name="guests" value={guests} onValueChange={(val) => setGuests(val as string)}>
-            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-base font-semibold tracking-tight uppercase hover:text-primary transition-colors">
+            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-lg font-semibold tracking-tight uppercase hover:text-primary transition-colors">
               <SelectValue placeholder="Guests" />
             </SelectTrigger>
             <SelectContent>
@@ -193,7 +193,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
       {/* Code */}
       <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors">
-        <span className="text-[10px] sm:text-xs font-mono tracking-widest opacity-60 uppercase">
+        <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
           {data?.bookingCodeLabel || data?.codeLabel || (lang === 'it' ? 'Codice' : lang === 'de' ? 'Code' : 'Code')}
         </span>
         <input
@@ -202,7 +202,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           value={coupon}
           onChange={(e) => setCoupon(e.target.value)}
           placeholder={data?.bookingCodeValue || data?.codeValue || (lang === 'it' ? 'Inserisci' : 'Enter')}
-          className="bg-transparent border-none p-0 focus:ring-0 text-base font-semibold tracking-tight uppercase placeholder:text-current/30 w-full"
+          className="bg-transparent border-none p-0 focus:ring-0 text-lg font-semibold tracking-tight uppercase placeholder:text-current/30 w-full"
         />
       </div>
 

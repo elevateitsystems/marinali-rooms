@@ -66,9 +66,9 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div
                   style={{
-                    fontSize: 'clamp(1rem, 1.8vw, 1.35rem)',
+                    fontSize: 'clamp(0.9rem, 1.5vw, 1.15rem)',
                     fontWeight: 700,
-                    lineHeight: 1.4,
+                    lineHeight: 1.5,
                     letterSpacing: '0.03em',
                     marginBottom: 'clamp(1.5rem, 3vw, 2rem)',
                     maxWidth: '800px',
@@ -88,7 +88,7 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
 
                 <div
                   style={{
-                    fontSize: 'clamp(0.75rem, 1.2vw, 0.9rem)',
+                    fontSize: 'clamp(0.7rem, 1vw, 0.8rem)',
                     fontWeight: 400,
                     letterSpacing: '0.1em',
                     opacity: 0.9,
@@ -106,7 +106,7 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
 
                 <div
                   style={{
-                    fontSize: 'clamp(0.75rem, 1.2vw, 0.9rem)',
+                    fontSize: 'clamp(0.7rem, 1vw, 0.8rem)',
                     color: '#fff',
                     textDecoration: 'underline',
                     opacity: 0.8,

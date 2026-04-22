@@ -70,7 +70,7 @@ export default function AboutContent({ lang, initialData }: AboutContentProps) {
         </div>
 
         {/* Main Content */}
-        <Hero imgUrl="/assets/Stanza%203%20-%20Foto-15.jpg" title="Marinali" subtitle="ABOUT US" />
+        <Hero imgUrl="/assets/Stanza%203%20-%20Foto-15.jpg" title="Marinali" subtitle="ABOUT US" lang={lang} />
       </section>
 
       {/* Breadcrumb Bar */}

@@ -1,15 +1,11 @@
 import { ContentService } from "@/lib/services/contentService";
 import EditableText from "@/components/common/EditableText";
 import Hero from "@/components/Home/Hero";
-
 import IntroSection from "@/components/Home/IntroSection";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
-const ImageSlider = dynamic(() => import("@/components/Home/RoomSlider"));
 const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
-const OfferSlider = dynamic(() => import("@/components/Home/OfferSlider"));
-const Highlights = dynamic(() => import("@/components/Home/Highlights"));
-const FeaturedRetreat = dynamic(() => import("@/components/Home/FeaturedRetreat"));
 
 export default async function ItalianHomePage() {
   const content = await ContentService.getContent("home", "it");
@@ -17,7 +13,7 @@ export default async function ItalianHomePage() {
 
   return (
     <>
-      <Hero title="Marinali" subtitle="ROOMS" />
+      <Hero title="Marinali" subtitle="ROOMS" lang="it" />
       <div className="container mx-auto">
         <IntroSection
           title={
@@ -51,21 +47,37 @@ export default async function ItalianHomePage() {
               </p>
             </div>
           </div>
+
+          {/* Fresco + Floor images */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image
+                src="/assets/Stanza%201%20-%20Foto-5.jpg"
+                alt="L'affresco originale del 1460"
+                fill
+                className="object-cover hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+                <span className="text-white text-xs font-mono tracking-[0.25em] uppercase opacity-80">L&apos;Affresco del 1460</span>
+              </div>
+            </div>
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image
+                src="/assets/Stanza%202%20-%20Foto-3.jpg"
+                alt="Pavimenti in Terrazzo Veneziano"
+                fill
+                className="object-cover hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+                <span className="text-white text-xs font-mono tracking-[0.25em] uppercase opacity-80">Terrazzo Veneziano</span>
+              </div>
+            </div>
+          </div>
         </IntroSection>
-        <ImageSlider lang="it" data={data} />
       </div>
       <ReviewSlider lang="it" data={data} />
-      <div className="container mx-auto">
-        <Highlights lang="it" data={data} />
-      </div>
-      <FeaturedRetreat lang="it" data={data} />
-      <div className="container mx-auto">
-        <OfferSlider lang="it" data={data} />
-      </div>
-
-
-
     </>
-
   );
 }
