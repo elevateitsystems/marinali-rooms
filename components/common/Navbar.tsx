@@ -80,6 +80,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = navData[lang];
   const pathname = usePathname();
+  const isLeSuite = pathname.includes('/le-suite');
 
   const { data: settings } = useQuery({
     queryKey: ['settings'],
@@ -125,8 +126,8 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${scrolled
-          ? 'bg-[var(--background)]/80 backdrop-blur-md py-5 pb-6'
+        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${(scrolled || isLeSuite)
+          ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-5 pb-6'
           : 'bg-transparent py-5 md:py-10'
           } ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
@@ -149,7 +150,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           {/* Logo Section */}
           <Link
             href={getPath('/')}
-            className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-1 transition-all duration-500 ease-in-out ${showLogo
+            className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-1 transition-all duration-500 ease-in-out ${(showLogo || isLeSuite)
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-4 pointer-events-none'
               }`}

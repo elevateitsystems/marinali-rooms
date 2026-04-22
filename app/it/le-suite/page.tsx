@@ -1,5 +1,6 @@
-import RoomSplitSection from "@/components/rooms/RoomSplitSection";
 import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
+import RoomSplitSection from "@/components/rooms/RoomSplitSection";
+
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -43,7 +44,7 @@ const rooms = [
 export default function ItalianLeSuitePage() {
   return (
     <main className="pt-0">
-      <div className="bg-primary text-white py-24 px-5 text-center">
+      <div className="bg-primary text-white py-24 lg:py-36 px-5 text-center">
         <h1 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">Le Suite</h1>
         <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">Bassano del Grappa, Italia</p>
       </div>
