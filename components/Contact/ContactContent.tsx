@@ -61,7 +61,7 @@ export default function ContactContent({ lang, initialData }: ContactContentProp
   return (
     <div className="bg-[#F8F6F2] min-h-screen font-playfair">
       {/* Hero Section */}
-      <Hero imgUrl="/assets/Stanza%202%20-%20Foto-2.jpg" title="Marinali" subtitle="CONTACT US" />
+      <Hero imgUrl="/assets/Stanza%202%20-%20Foto-2.jpg" title="Marinali" subtitle="CONTACT US" lang={lang} />
     </div>
   );
 }

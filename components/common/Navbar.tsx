@@ -29,27 +29,21 @@ const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 const navData = {
   en: {
     home: 'Home',
-    rooms: 'ROOMS',
-    about: 'ABOUT',
-    contact: 'CONTACT US'
+    suites: 'Le Suite',
   },
   it: {
     home: 'Home',
-    rooms: 'CAMERE',
-    about: 'CHI SIAMO',
-    contact: 'CONTATTACI'
+    suites: 'Le Suite',
   },
   de: {
     home: 'Home',
-    rooms: 'ZIMMER',
-    about: 'ÜBER UNS',
-    contact: 'KONTAKT'
+    suites: 'Le Suite',
   }
 };
 
 // Flag Components
 const FlagEN = () => (
-  <svg width="24" height="18" viewBox="0 0 640 480" className="rounded-sm shadow-sm inline-block">
+  <svg width="32" height="24" viewBox="0 0 640 480" className="rounded-sm shadow-sm inline-block">
     <path fill="#012169" d="M0 0h640v480H0z" />
     <path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 240l240 178v62h-78L320 300 77 480H0v-62l240-178L0 62V0h75z" />
     <path fill="#C8102E" d="m424 281 216 159v40L369 281h55zM226 199 0 32V0l271 199h-45zm353 82L640 327v-62l-61 45zM0 321l121-89H66L0 281v40z" />
@@ -59,7 +53,7 @@ const FlagEN = () => (
 );
 
 const FlagIT = () => (
-  <svg width="24" height="18" viewBox="0 0 640 480" className="rounded-sm shadow-sm inline-block">
+  <svg width="32" height="24" viewBox="0 0 640 480" className="rounded-sm shadow-sm inline-block">
     <path fill="#fff" d="M0 0h640v480H0z" />
     <path fill="#009246" d="M0 0h213.3v480H0z" />
     <path fill="#ce2b37" d="M426.7 0H640v480H426.7z" />
@@ -67,7 +61,7 @@ const FlagIT = () => (
 );
 
 const FlagDE = () => (
-  <svg width="24" height="18" viewBox="0 0 640 480" className="rounded-sm shadow-sm inline-block">
+  <svg width="32" height="24" viewBox="0 0 640 480" className="rounded-sm shadow-sm inline-block">
     <path fill="#ffce00" d="M0 320h640v160H0z" />
     <path d="M0 0h640v160H0z" />
     <path fill="#d00" d="M0 160h640v160H0z" />
@@ -86,6 +80,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = navData[lang];
   const pathname = usePathname();
+  const isLeSuite = pathname.includes('/le-suite');
 
   const { data: settings } = useQuery({
     queryKey: ['settings'],
@@ -131,9 +126,9 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${scrolled
-          ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-4'
-          : 'bg-transparent py-5 md:py-8'
+        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${(scrolled || isLeSuite)
+          ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-5 pb-6'
+          : 'bg-transparent py-5 md:py-10'
           } ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <div className="container px-5 mx-auto relative flex items-center justify-between">
@@ -143,7 +138,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
                 key={l}
                 href={switchLangUrl(l)}
                 title={l.toUpperCase()}
-                className={`transition-all duration-300 transform ${lang === l
+                className={`p-2 -m-2 transition-all duration-300 transform ${lang === l
                   ? 'scale-110 opacity-100 saturate-100'
                   : 'scale-90 opacity-50 saturate-50 hover:opacity-100 hover:saturate-100 hover:scale-100'
                   }`}
@@ -155,7 +150,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           {/* Logo Section */}
           <Link
             href={getPath('/')}
-            className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-1 transition-all duration-500 ease-in-out ${showLogo
+            className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-1 transition-all duration-500 ease-in-out ${(showLogo || isLeSuite)
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-4 pointer-events-none'
               }`}
@@ -179,16 +174,18 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
                 </span>
                 <div className="w-8 h-[1px] bg-black opacity-80"></div>
               </div>
+              <span className="text-[7px] md:text-[8px] uppercase tracking-[0.2em] font-light opacity-70 mt-1">
+                Bassano del Grappa
+              </span>
             </div>
 
           </Link>
 
           {/* Right Section: Only Burger Menu (+ Flags on Desktop) */}
           <div className="flex items-center gap-6 ml-auto">
-            {/* Burger Menu Button */}
             <button
               onClick={() => setIsMenuOpen(true)}
-              className={`p-2 cursor-pointer transition-all hover:scale-110 active:scale-95 drop-shadow-md ${scrolled ? 'text-primary drop-shadow-none' : 'text-white'}`}
+              className="p-2 cursor-pointer transition-all hover:scale-110 active:scale-95 text-primary"
             >
               <Menu className="w-8 h-8 md:w-10 md:h-10" strokeWidth={1.5} />
             </button>
@@ -207,9 +204,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           <nav className="flex flex-col gap-6 md:gap-10 mt-10 md:mt-0">
             {[
               { name: t.home, path: '/' },
-              { name: t.rooms, path: '/rooms' },
-              { name: t.about, path: '/about' },
-              { name: t.contact, path: '/contact' },
+              { name: t.suites, path: '/le-suite' },
             ].map((item, idx) => (
               <Link
                 key={idx}
@@ -232,7 +227,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
                   <Link
                     key={l}
                     href={switchLangUrl(l)}
-                    className={`hover:scale-110 transition-all duration-300 ${lang === l ? 'ring-2 ring-white ring-offset-1 ring-offset-[#8b917c] scale-110' : 'opacity-60 saturate-50 hover:saturate-100 hover:opacity-100'}`}
+                    className={`p-2 -m-2 hover:scale-110 transition-all duration-300 ${lang === l ? 'ring-2 ring-white ring-offset-1 ring-offset-[#8b917c] scale-110' : 'opacity-60 saturate-50 hover:saturate-100 hover:opacity-100'}`}
                     title={l.toUpperCase()}
                   >
                     {flags[l]}

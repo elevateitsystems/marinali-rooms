@@ -42,7 +42,7 @@ export default function IntroSection({
           {title || 'Welcome'}
         </h2>
 
-        <p
+        <div
           style={{
             fontSize: 'clamp(0.875rem, 1.5vw, 1.05rem)',
             lineHeight: 1.85,
@@ -54,7 +54,7 @@ export default function IntroSection({
           }}
         >
           {description || 'Experience unforgettable hospitality at Marinali Rooms, right in the heart of the town center. We are passionate about creating welcoming stays with every comfort at your fingertips.'}
-        </p>
+        </div>
       </motion.div>
 
       <hr

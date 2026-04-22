@@ -1,15 +1,11 @@
 import { ContentService } from "@/lib/services/contentService";
 import EditableText from "@/components/common/EditableText";
 import Hero from "@/components/Home/Hero";
-
 import IntroSection from "@/components/Home/IntroSection";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
-const ImageSlider = dynamic(() => import("@/components/Home/RoomSlider"));
 const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
-const OfferSlider = dynamic(() => import("@/components/Home/OfferSlider"));
-const Highlights = dynamic(() => import("@/components/Home/Highlights"));
-const FeaturedRetreat = dynamic(() => import("@/components/Home/FeaturedRetreat"));
 
 export default async function EnglishHomePage() {
   const content = await ContentService.getContent("home", "en");
@@ -17,22 +13,23 @@ export default async function EnglishHomePage() {
 
   return (
     <>
-      <Hero title="Marinali" subtitle="ROOMS" />
+      <Hero title="Marinali" subtitle="ROOMS" lang="en" />
       <div className="container mx-auto">
         <IntroSection
           title={
-            <EditableText 
-              lang="en" page="home" path="aboutTitle" 
-              initialValue={data?.aboutTitle || data?.title || "Welcome"} 
+            <EditableText
+              lang="en" page="home" path="aboutTitle"
+              initialValue={data?.aboutTitle || data?.title || "Welcome"}
             />
           }
           description={
-            <EditableText 
+            <EditableText
               lang="en" page="home" path="aboutDescription" multiline
-              initialValue={data?.aboutDescription || data?.welcomeText || "Experience unforgettable hospitality..."} 
+              initialValue={data?.aboutDescription || data?.welcomeText || "Experience unforgettable hospitality..."}
             />
           }
         >
+          {/* Feature text grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 md:py-10">
             <div className="space-y-4">
               <h3 className="text-xl uppercase tracking-widest font-light text-[#1A1A1A]">
@@ -51,21 +48,37 @@ export default async function EnglishHomePage() {
               </p>
             </div>
           </div>
+
+          {/* Fresco + Floor images */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image
+                src="/assets/Stanza%201%20-%20Foto-5.jpg"
+                alt="The original 1460 fresco"
+                fill
+                className="object-cover hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+                <span className="text-white text-xs font-mono tracking-[0.25em] uppercase opacity-80">The 1460 Fresco</span>
+              </div>
+            </div>
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image
+                src="/assets/Stanza%202%20-%20Foto-3.jpg"
+                alt="Venetian Terrazzo floors"
+                fill
+                className="object-cover hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+                <span className="text-white text-xs font-mono tracking-[0.25em] uppercase opacity-80">Venetian Terrazzo Floors</span>
+              </div>
+            </div>
+          </div>
         </IntroSection>
-        <ImageSlider lang="en" data={data} />
       </div>
       <ReviewSlider lang="en" data={data} />
-      <div className="container mx-auto">
-        <Highlights lang="en" data={data} />
-      </div>
-      <FeaturedRetreat lang="en" data={data} />
-      <div className="container mx-auto">
-        <OfferSlider lang="en" data={data} />
-      </div>
-
-
-
     </>
-
   );
 }
