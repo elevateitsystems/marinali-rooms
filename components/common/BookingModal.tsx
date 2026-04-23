@@ -45,7 +45,8 @@ export function BookingModal({ isOpen, onClose, bookingUrl }: BookingModalProps)
               )}
               onLoad={() => setIsLoading(false)}
               title="Booking Engine"
-              allow="payment"
+              allow="payment; clipboard-write; camera; microphone; geolocation"
+              sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation allow-top-navigation-by-user-activation"
               loading="lazy"
             />
           )}

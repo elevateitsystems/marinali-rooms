@@ -14,8 +14,8 @@ export default function Hero({
   imgUrl = "/assets/Stanza%203%20-%20Foto-13.jpg",
   lang = "en",
 }: {
-  title?: string;
-  subtitle?: string;
+  title?: React.ReactNode;
+  subtitle?: React.ReactNode;
   imgUrl?: string;
   lang?: 'en' | 'it' | 'de';
 }) {
@@ -39,7 +39,7 @@ export default function Hero({
   const displayImgUrl = settings?.heroImage || imgUrl;
 
   return (
-    <section className="-mt-24 relative w-full h-[85vh] flex flex-col items-center justify-center overflow-hidden">
+    <section id="hero" className="-mt-24 relative w-full h-[85vh] flex flex-col items-center justify-center overflow-hidden">
       {/* Background Image Overlay */}
       <motion.div
         className="absolute inset-0 z-0"
@@ -67,7 +67,7 @@ export default function Hero({
       >
         <Link href={`/${lang}`} className="flex flex-col items-center justify-center group cursor-pointer">
           <h1
-            className={`${yellowtail.className} text-7xl md:text-9xl tracking-wide drop-shadow-md mb-4 group-hover:scale-[1.02] transition-transform duration-500`}
+            className={`${yellowtail.className} text-7xl md:text-9xl tracking-wide drop-shadow-md mb-4  transition-transform duration-500`}
           >
             {title}
           </h1>

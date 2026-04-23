@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import EditableText from '../common/EditableText';
 import { Yellowtail } from "next/font/google";
 import Hero from '../Home/Hero';
 

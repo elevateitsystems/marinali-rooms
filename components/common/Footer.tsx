@@ -1,10 +1,56 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Yellowtail } from "next/font/google";
+import { Loader2 } from 'lucide-react';
 
 const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
+
+const MapComponent = ({ url }: { url: string }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' } // Load slightly before it comes into view
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={containerRef} className="w-full h-full relative flex items-center justify-center">
+      {!isVisible && (
+        <div className="flex flex-col items-center gap-2 text-primary/40">
+          <Loader2 className="animate-spin" size={24} />
+          <span className="text-[10px] font-mono tracking-widest uppercase">Loading Map...</span>
+        </div>
+      )}
+      {isVisible && (
+        <iframe
+          src={url}
+          width="100%"
+          height="100%"
+          style={{ border: 0, filter: 'grayscale(1) contrast(1.2) opacity(0.8)' }}
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+          className="absolute inset-0 grayscale animate-fade-in"
+        />
+      )}
+    </div>
+  );
+};
 
 const staticContent = {
   en: {
@@ -88,7 +134,7 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
       {/* Main Content Grid */}
       <section className="grid lg:grid-cols-2">
         {/* Left Side: Centered Contact Info */}
-        <div className="p-8 md:p-16 flex flex-col items-center justify-center text-center">
+        <div id="contact" className="p-8 md:p-16 flex flex-col items-center justify-center text-center">
           <div className="max-w-xl w-full">
             <span className="text-xl lg:text-2xl tracking-[0.3em] font-bold text-primary mb-8 block uppercase">
               {t.infoTitle}
@@ -142,17 +188,8 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
         </div>
 
         {/* Right Side: Map */}
-        <div className="relative h-[400px] lg:h-full overflow-hidden">
-          <iframe
-            src={displayMapUrl}
-            width="100%"
-            height="100%"
-            style={{ border: 0, filter: 'grayscale(1) contrast(1.2) opacity(0.8)' }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="absolute inset-0 grayscale"
-          />
+        <div id="map" className="relative h-[400px] lg:h-full overflow-hidden bg-gray-100 flex items-center justify-center">
+          <MapComponent url={displayMapUrl} />
         </div>
       </section>
 

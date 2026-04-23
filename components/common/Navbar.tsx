@@ -28,51 +28,33 @@ const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 // Dictionary for 3 languages
 const navData = {
   en: {
-    home: 'Home',
+    hero: 'Hero',
     suites: 'Le Suite',
+    heritage: 'Heritage',
+    reviews: 'Reviews',
+    map: 'Map',
+    contact: 'Contact',
   },
   it: {
-    home: 'Home',
+    hero: 'Hero',
     suites: 'Le Suite',
+    heritage: 'Il Palazzetto',
+    reviews: 'Recensioni',
+    map: 'Mappa',
+    contact: 'Contatti',
   },
   de: {
-    home: 'Home',
+    hero: 'Hero',
     suites: 'Le Suite',
+    heritage: 'Heritage',
+    reviews: 'Bewertungen',
+    map: 'Karte',
+    contact: 'Kontakt',
   }
 };
 
-// Flag Components
-const FlagEN = () => (
-  <svg width="32" height="24" viewBox="0 0 640 480" className="rounded-sm shadow-sm inline-block">
-    <path fill="#012169" d="M0 0h640v480H0z" />
-    <path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 240l240 178v62h-78L320 300 77 480H0v-62l240-178L0 62V0h75z" />
-    <path fill="#C8102E" d="m424 281 216 159v40L369 281h55zM226 199 0 32V0l271 199h-45zm353 82L640 327v-62l-61 45zM0 321l121-89H66L0 281v40z" />
-    <path fill="#FFF" d="M241 0v480h158V0H241zM0 161v158h640V161H0z" />
-    <path fill="#C8102E" d="M0 193v95h640v-95H0zM272 0v480h96V0h-96z" />
-  </svg>
-);
-
-const FlagIT = () => (
-  <svg width="32" height="24" viewBox="0 0 640 480" className="rounded-sm shadow-sm inline-block">
-    <path fill="#fff" d="M0 0h640v480H0z" />
-    <path fill="#009246" d="M0 0h213.3v480H0z" />
-    <path fill="#ce2b37" d="M426.7 0H640v480H426.7z" />
-  </svg>
-);
-
-const FlagDE = () => (
-  <svg width="32" height="24" viewBox="0 0 640 480" className="rounded-sm shadow-sm inline-block">
-    <path fill="#ffce00" d="M0 320h640v160H0z" />
-    <path d="M0 0h640v160H0z" />
-    <path fill="#d00" d="M0 160h640v160H0z" />
-  </svg>
-);
-
-const flags = {
-  en: <FlagEN />,
-  it: <FlagIT />,
-  de: <FlagDE />
-};
+// Remove flag components and flags object as requested
+const languages = ['it', 'en', 'de'] as const;
 
 export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
   const [scrolled, setScrolled] = useState(false);
@@ -123,6 +105,9 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
     return `/${newLang}${currentRoute}`;
   };
 
+  const textColor = (scrolled || isLeSuite) ? 'text-black' : 'text-white';
+  const logoLineColor = (scrolled || isLeSuite) ? 'bg-black' : 'bg-white';
+
   return (
     <>
       <header
@@ -132,24 +117,19 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           } ${isMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <div className="container px-5 mx-auto relative flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {(['en', 'it', 'de'] as const).map((l) => (
-              <Link
-                key={l}
-                href={switchLangUrl(l)}
-                title={l.toUpperCase()}
-                className={`p-2 -m-2 transition-all duration-300 transform ${lang === l
-                  ? 'scale-110 opacity-100 saturate-100'
-                  : 'scale-90 opacity-50 saturate-50 hover:opacity-100 hover:saturate-100 hover:scale-100'
-                  }`}
-              >
-                {flags[l]}
-              </Link>
-            ))}
-          </div>
+          {/* Left spacer for desktop symmetry, hidden on mobile */}
+          <div className="hidden md:block w-32"></div>
           {/* Logo Section */}
           <Link
             href={getPath('/')}
+            onClick={(e) => {
+              e.preventDefault();
+              if (lenis) {
+                lenis.scrollTo(0);
+              } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
             className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-1 transition-all duration-500 ease-in-out ${(showLogo || isLeSuite)
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-4 pointer-events-none'
@@ -157,7 +137,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           >
 
             <div
-              className="relative z-10 flex flex-col items-center justify-center text-black will-change-transform mt-2"
+              className={`relative z-10 flex flex-col items-center justify-center ${textColor} will-change-transform mt-2`}
               style={{
                 transformOrigin: "center center"
               }}
@@ -168,11 +148,11 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
                 Marinali
               </h1>
               <div className="flex items-center gap-3 mt-0 md:-mt-1">
-                <div className="w-8 h-[1px] bg-black opacity-80"></div>
+                <div className={`w-8 h-[1px] ${logoLineColor} opacity-80`}></div>
                 <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] font-medium opacity-100">
                   Rooms
                 </span>
-                <div className="w-8 h-[1px] bg-black opacity-80"></div>
+                <div className={`w-8 h-[1px] ${logoLineColor} opacity-80`}></div>
               </div>
               <span className="text-[7px] md:text-[8px] uppercase tracking-[0.2em] font-light opacity-70 mt-1">
                 Bassano del Grappa
@@ -181,11 +161,25 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
 
           </Link>
 
-          {/* Right Section: Only Burger Menu (+ Flags on Desktop) */}
-          <div className="flex items-center gap-6 ml-auto">
+          {/* Right Section: Language Switcher (Desktop) + Burger Menu */}
+          <div className="flex items-center gap-8 ml-auto">
+            {/* Desktop Language Switcher */}
+            <div className={`hidden md:flex items-center gap-4 text-[10px] font-mono tracking-widest uppercase ${textColor}`}>
+              {languages.map((l, i) => (
+                <div key={l} className="flex items-center gap-4">
+                  <Link
+                    href={switchLangUrl(l)}
+                    className={`transition-all duration-300 ${lang === l ? 'font-bold opacity-100 border-b border-current' : 'opacity-40 hover:opacity-100'}`}
+                  >
+                    {l}
+                  </Link>
+                  {i < languages.length - 1 && <span className="opacity-20">|</span>}
+                </div>
+              ))}
+            </div>
             <button
               onClick={() => setIsMenuOpen(true)}
-              className="p-2 cursor-pointer transition-all hover:scale-110 active:scale-95 text-primary"
+              className={`p-2 cursor-pointer transition-all hover:scale-110 active:scale-95 ${textColor}`}
             >
               <Menu className="w-8 h-8 md:w-10 md:h-10" strokeWidth={1.5} />
             </button>
@@ -201,15 +195,26 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
         {/* Left Pane (Navigation Links & Solid Background) */}
         <div className="bg-primary text-white flex flex-col justify-center px-10 md:px-24 py-16 relative h-full">
           {/* Menu Items */}
-          <nav className="flex flex-col gap-6 md:gap-10 mt-10 md:mt-0">
+          <nav className="flex flex-col gap-4 md:gap-6 mt-10 md:mt-0">
             {[
-              { name: t.home, path: '/' },
-              { name: t.suites, path: '/le-suite' },
+              { name: t.hero, path: '#hero' },
+              { name: t.suites, path: '#le-suite' },
+              { name: t.heritage, path: '#heritage' },
+              { name: t.reviews, path: '#reviews' },
+              { name: t.map, path: '#map' },
+              { name: t.contact, path: '#contact' },
             ].map((item, idx) => (
               <Link
                 key={idx}
-                href={getPath(item.path)}
-                onClick={() => setIsMenuOpen(false)}
+                href={item.path}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMenuOpen(false);
+                  const el = document.querySelector(item.path);
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 className="text-2xl md:text-3xl font-medium tracking-wide uppercase transition-all duration-300 hover:text-white/70 hover:translate-x-2 w-fit"
               >
                 {item.name}
@@ -219,21 +224,19 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
 
           {/* Bottom Controls (Socials & Language) */}
           <div className="absolute bottom-10 left-10 md:left-24 flex flex-col gap-6">
-            {/* Language Switcher inside Menu */}
-            <div className="flex items-center gap-4 mt-2">
-              <Globe className="w-5 h-5 opacity-60" />
-              <div className="flex items-center gap-3">
-                {(['en', 'it', 'de'] as const).map((l) => (
+            {/* Language Switcher inside Menu - Text Only */}
+            <div className="flex items-center gap-6 text-[11px] font-mono tracking-[0.3em] uppercase">
+              {languages.map((l, i) => (
+                <div key={l} className="flex items-center gap-6">
                   <Link
-                    key={l}
                     href={switchLangUrl(l)}
-                    className={`p-2 -m-2 hover:scale-110 transition-all duration-300 ${lang === l ? 'ring-2 ring-white ring-offset-1 ring-offset-[#8b917c] scale-110' : 'opacity-60 saturate-50 hover:saturate-100 hover:opacity-100'}`}
-                    title={l.toUpperCase()}
+                    className={`transition-all duration-300 ${lang === l ? 'font-bold text-white opacity-100 border-b border-white' : 'text-white/40 hover:text-white hover:opacity-100'}`}
                   >
-                    {flags[l]}
+                    {l}
                   </Link>
-                ))}
-              </div>
+                  {i < languages.length - 1 && <span className="opacity-20 text-white">|</span>}
+                </div>
+              ))}
             </div>
           </div>
 
