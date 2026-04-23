@@ -105,6 +105,9 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
     return `/${newLang}${currentRoute}`;
   };
 
+  const textColor = (scrolled || isLeSuite) ? 'text-black' : 'text-white';
+  const logoLineColor = (scrolled || isLeSuite) ? 'bg-black' : 'bg-white';
+
   return (
     <>
       <header
@@ -119,6 +122,14 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           {/* Logo Section */}
           <Link
             href={getPath('/')}
+            onClick={(e) => {
+              e.preventDefault();
+              if (lenis) {
+                lenis.scrollTo(0);
+              } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
             className={`absolute left-1/2 -translate-x-1/2 flex items-center gap-1 transition-all duration-500 ease-in-out ${(showLogo || isLeSuite)
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-4 pointer-events-none'
@@ -126,7 +137,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           >
 
             <div
-              className="relative z-10 flex flex-col items-center justify-center text-black will-change-transform mt-2"
+              className={`relative z-10 flex flex-col items-center justify-center ${textColor} will-change-transform mt-2`}
               style={{
                 transformOrigin: "center center"
               }}
@@ -137,11 +148,11 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
                 Marinali
               </h1>
               <div className="flex items-center gap-3 mt-0 md:-mt-1">
-                <div className="w-8 h-[1px] bg-black opacity-80"></div>
+                <div className={`w-8 h-[1px] ${logoLineColor} opacity-80`}></div>
                 <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] font-medium opacity-100">
                   Rooms
                 </span>
-                <div className="w-8 h-[1px] bg-black opacity-80"></div>
+                <div className={`w-8 h-[1px] ${logoLineColor} opacity-80`}></div>
               </div>
               <span className="text-[7px] md:text-[8px] uppercase tracking-[0.2em] font-light opacity-70 mt-1">
                 Bassano del Grappa
@@ -153,12 +164,12 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
           {/* Right Section: Language Switcher (Desktop) + Burger Menu */}
           <div className="flex items-center gap-8 ml-auto">
             {/* Desktop Language Switcher */}
-            <div className="hidden md:flex items-center gap-4 text-[10px] font-mono tracking-widest uppercase">
+            <div className={`hidden md:flex items-center gap-4 text-[10px] font-mono tracking-widest uppercase ${textColor}`}>
               {languages.map((l, i) => (
                 <div key={l} className="flex items-center gap-4">
                   <Link
                     href={switchLangUrl(l)}
-                    className={`transition-all duration-300 ${lang === l ? 'font-bold opacity-100 border-b border-primary' : 'opacity-40 hover:opacity-100'}`}
+                    className={`transition-all duration-300 ${lang === l ? 'font-bold opacity-100 border-b border-current' : 'opacity-40 hover:opacity-100'}`}
                   >
                     {l}
                   </Link>
@@ -168,7 +179,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
             </div>
             <button
               onClick={() => setIsMenuOpen(true)}
-              className="p-2 cursor-pointer transition-all hover:scale-110 active:scale-95 text-primary"
+              className={`p-2 cursor-pointer transition-all hover:scale-110 active:scale-95 ${textColor}`}
             >
               <Menu className="w-8 h-8 md:w-10 md:h-10" strokeWidth={1.5} />
             </button>

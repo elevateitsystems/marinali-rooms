@@ -48,7 +48,11 @@ export default async function GermanHomePage() {
 
   return (
     <>
-      <Hero title="Marinali" subtitle="ROOMS" lang="de" />
+      <Hero 
+        title={<EditableText lang="de" page="home" path="heroTitle" initialValue="Marinali" />}
+        subtitle={<EditableText lang="de" page="home" path="heroSubtitle" initialValue="ROOMS" />}
+        lang="de" 
+      />
       
       {/* Le Suite Section */}
       <section id="le-suite" className="pt-20">

@@ -14,8 +14,8 @@ export default function Hero({
   imgUrl = "/assets/Stanza%203%20-%20Foto-13.jpg",
   lang = "en",
 }: {
-  title?: string;
-  subtitle?: string;
+  title?: React.ReactNode;
+  subtitle?: React.ReactNode;
   imgUrl?: string;
   lang?: 'en' | 'it' | 'de';
 }) {

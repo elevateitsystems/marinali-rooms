@@ -40,24 +40,25 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
 
   const closeLightbox = () => setLightboxOpen(false);
 
-  const prevImage = () => setLightboxIndex((i) => (i - 1 + allImages.length) % allImages.length);
-  const nextImage = () => setLightboxIndex((i) => (i + 1) % allImages.length);
-
   return (
     <>
       <section className="w-full min-h-[80vh] flex flex-col lg:flex-row items-stretch overflow-hidden bg-[var(--background)]">
         {/* Image Column — Swiper Carousel */}
-        <div className={`w-full lg:w-[55%] h-[500px] lg:h-[700px] ${reverse ? 'lg:order-2' : ''}`}>
+        <div className={`w-full lg:w-[55%] h-[500px] lg:h-[700px] relative group ${reverse ? 'lg:order-2' : ''}`}>
           <Swiper
             modules={[Autoplay, Navigation, Pagination]}
             pagination={{ clickable: true }}
+            navigation={{
+              prevEl: `.prev-${room.id}`,
+              nextEl: `.next-${room.id}`,
+            }}
             loop={allImages.length > 1}
             autoplay={{
-              delay: 3500,
+              delay: 4500,
               disableOnInteraction: false,
               pauseOnMouseEnter: true,
             }}
-            speed={800}
+            speed={1000}
             className="h-full w-full room-gallery-swiper"
           >
             {allImages.map((img, idx) => (
@@ -76,24 +77,28 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
                     priority={priority && idx === 0}
                     loading={priority && idx === 0 ? undefined : 'lazy'}
                   />
-                  {/* Enlarge hint */}
-                  <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm rounded-full p-2 pointer-events-none opacity-70">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                    </svg>
-                  </div>
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
 
+          {/* Main Gallery Navigation Buttons */}
+          <button className={`prev-${room.id} absolute left-6 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/90 backdrop-blur-md rounded-full text-white hover:text-black transition-all opacity-0 group-hover:opacity-100 hidden md:flex active:scale-90 border border-white/20`}>
+            <ChevronLeft size={20} />
+          </button>
+          <button className={`next-${room.id} absolute right-6 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/90 backdrop-blur-md rounded-full text-white hover:text-black transition-all opacity-0 group-hover:opacity-100 hidden md:flex active:scale-90 border border-white/20`}>
+            <ChevronRight size={20} />
+          </button>
+
           <style>{`
             .room-gallery-swiper,
             .room-gallery-swiper .swiper-wrapper,
             .room-gallery-swiper .swiper-slide { height: 100% !important; }
-            .room-gallery-swiper .swiper-pagination { bottom: 12px; }
-            .room-gallery-swiper .swiper-pagination-bullet { background: white; opacity: 0.6; width: 8px; height: 8px; }
-            .room-gallery-swiper .swiper-pagination-bullet-active { opacity: 1; }
+            .room-gallery-swiper .swiper-pagination { bottom: 24px; text-align: center; width: 100%; left: 0; }
+            .room-gallery-swiper .swiper-pagination-bullet { background: white; opacity: 0.4; width: 6px; height: 6px; transition: all 0.3s ease; }
+            .room-gallery-swiper .swiper-pagination-bullet-active { opacity: 1; transform: scale(1.5); }
+            
+            .lightbox-swiper .swiper-pagination-fraction { color: white; opacity: 0.6; font-family: var(--font-mono); }
           `}</style>
         </div>
 
@@ -130,55 +135,58 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
       {/* Lightbox */}
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center"
+          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-sm flex items-center justify-center"
           onClick={closeLightbox}
         >
-          {/* Close */}
+          {/* Close Button */}
           <button
             onClick={closeLightbox}
-            className="absolute top-5 right-5 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+            className="absolute top-8 right-8 z-[210] p-4 bg-white/5 hover:bg-white/10 rounded-full text-white transition-all hover:scale-110 active:scale-95 border border-white/10"
           >
             <X className="w-6 h-6" />
           </button>
 
-          {/* Counter */}
-          <div className="absolute top-5 left-5 text-white/60 text-sm font-mono tracking-widest">
-            {lightboxIndex + 1} / {allImages.length}
+          {/* Swiper inside Lightbox */}
+          <div className="w-full h-full" onClick={(e) => e.stopPropagation()}>
+            <Swiper
+              modules={[Navigation, Pagination]}
+              initialSlide={lightboxIndex}
+              navigation={{
+                prevEl: '.lightbox-prev',
+                nextEl: '.lightbox-next',
+              }}
+              pagination={{ type: 'fraction', el: '.lightbox-counter' }}
+              className="w-full h-full lightbox-swiper"
+              speed={600}
+              onSlideChange={(swiper) => setLightboxIndex(swiper.activeIndex)}
+            >
+              {allImages.map((img, idx) => (
+                <SwiperSlide key={idx} className="flex items-center justify-center p-4 md:p-20">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={img}
+                      alt={`${room.name} — ${idx + 1}`}
+                      fill
+                      className="object-contain"
+                      sizes="100vw"
+                      quality={100}
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
 
-          {/* Prev */}
-          {allImages.length > 1 && (
-            <button
-              onClick={(e) => { e.stopPropagation(); prevImage(); }}
-              className="absolute left-4 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
-            >
-              <ChevronLeft className="w-7 h-7" />
+          {/* Custom Controls */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[210] flex items-center gap-12 text-white">
+            <button className="lightbox-prev p-4 hover:opacity-50 transition-opacity cursor-pointer">
+              <ChevronLeft className="w-8 h-8" strokeWidth={1} />
             </button>
-          )}
-
-          {/* Image */}
-          <div
-            className="relative w-full h-full max-w-6xl max-h-[90vh] mx-16 my-16"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={allImages[lightboxIndex]}
-              alt={`${room.name} — ${lightboxIndex + 1}`}
-              fill
-              className="object-contain"
-              sizes="100vw"
-            />
+            <div className="lightbox-counter font-mono text-sm tracking-[0.3em] uppercase opacity-60"></div>
+            <button className="lightbox-next p-4 hover:opacity-50 transition-opacity cursor-pointer">
+              <ChevronRight className="w-8 h-8" strokeWidth={1} />
+            </button>
           </div>
-
-          {/* Next */}
-          {allImages.length > 1 && (
-            <button
-              onClick={(e) => { e.stopPropagation(); nextImage(); }}
-              className="absolute right-4 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
-            >
-              <ChevronRight className="w-7 h-7" />
-            </button>
-          )}
         </div>
       )}
     </>

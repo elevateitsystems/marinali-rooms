@@ -64,6 +64,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookingUrl, setBookingUrl] = useState("");
+  const [arrivalPopoverOpen, setArrivalPopoverOpen] = useState(false);
   const [departurePopoverOpen, setDeparturePopoverOpen] = useState(false);
 
   const lenis = useLenis();
@@ -116,18 +117,16 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       className="flex flex-col lg:flex-row items-stretch lg:items-center w-full"
     >
       {/* Arrival Date Picker */}
-      <Popover>
-        <PopoverTrigger className="flex-1 flex flex-row items-stretch">
-          <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
-            <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
-              {lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Arrival'}
-            </span>
-            <span className="text-lg font-semibold tracking-tight uppercase">
-              {date?.from ? format(date.from, "LLL dd, yyyy") : 'Select Date'}
-            </span>
-          </div>
+      <Popover open={arrivalPopoverOpen} onOpenChange={setArrivalPopoverOpen}>
+        <PopoverTrigger type="button" className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
+          <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
+            {lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Arrival'}
+          </span>
+          <span className="text-lg font-semibold tracking-tight uppercase">
+            {date?.from ? format(date.from, "LLL dd, yyyy") : 'Select Date'}
+          </span>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0" align="start" side="top">
           <Calendar
             mode="single"
             selected={date?.from}
@@ -137,6 +136,8 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
                 const newFrom = selectedDate;
                 const newTo = (date?.to && date.to > newFrom) ? date.to : addDays(newFrom, 1);
                 setDate({ from: newFrom, to: newTo });
+                setArrivalPopoverOpen(false);
+                setDeparturePopoverOpen(true); // Auto-open Departure on Arrival select
               }
             }}
             disabled={{ before: new Date() }}
@@ -147,7 +148,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
       {/* Departure Date Picker */}
       <Popover open={departurePopoverOpen} onOpenChange={setDeparturePopoverOpen}>
-        <PopoverTrigger className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
+        <PopoverTrigger type="button" className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
           <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
             {lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Departure'}
           </span>
@@ -155,7 +156,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
             {date?.to ? format(date.to, "LLL dd, yyyy") : 'Select Date'}
           </span>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0" align="start" side="top">
           <Calendar
             mode="single"
             selected={date?.to}
@@ -250,7 +251,8 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         className="hidden lg:block z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] fixed bottom-0 left-0 right-0"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          {bookingFormContent}
+          {/* Only render desktop form if mobile drawer is closed to prevent double popovers */}
+          {!drawerOpen && bookingFormContent}
         </div>
       </div>
 
@@ -300,7 +302,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
         {/* Drawer Content */}
         <div className="px-2 pb-8">
-          {bookingFormContent}
+          {drawerOpen && bookingFormContent}
         </div>
       </div>
 
