@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import EditableText from '../common/EditableText';
 import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '../ui/skeleton';
 import { BookingModal } from '../common/BookingModal';
@@ -61,7 +60,7 @@ export default function Highlights({ lang, data }: { lang: string; data?: any })
             textTransform: 'uppercase'
           }}
         >
-          <EditableText lang={lang} page="home" path="highlightsTitle" initialValue={data?.highlightsTitle || "HIGHLIGHTS"} />
+          {data?.highlightsTitle || "HIGHLIGHTS"}
         </h2>
 
         <div

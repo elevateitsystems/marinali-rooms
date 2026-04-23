@@ -2,7 +2,6 @@
 
 import { useQuery } from '@tanstack/react-query';
 import CustomSlider, { SliderItem } from '../common/CustomSlider';
-import EditableText from '../common/EditableText';
 
 const defaultRooms: SliderItem[] = [
   {
@@ -36,7 +35,7 @@ export default function RoomSlider({ lang, data }: { lang: string; data?: any })
 
   return (
     <CustomSlider 
-      title={<EditableText lang={lang} page="home" path="roomsTitle" initialValue={data?.roomsTitle || "ROOMS"} />} 
+      title={data?.roomsTitle || "ROOMS"} 
       items={rooms} 
       sectionId="room-slider" 
       showBookNow={true}

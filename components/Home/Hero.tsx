@@ -67,7 +67,7 @@ export default function Hero({
       >
         <Link href={`/${lang}`} className="flex flex-col items-center justify-center group cursor-pointer">
           <h1
-            className={`${yellowtail.className} text-7xl md:text-9xl tracking-wide drop-shadow-md mb-4 group-hover:scale-[1.02] transition-transform duration-500`}
+            className={`${yellowtail.className} text-7xl md:text-9xl tracking-wide drop-shadow-md mb-4  transition-transform duration-500`}
           >
             {title}
           </h1>

@@ -1,5 +1,4 @@
 import { ContentService } from "@/lib/services/contentService";
-import EditableText from "@/components/common/EditableText";
 import Hero from "@/components/Home/Hero";
 import IntroSection from "@/components/Home/IntroSection";
 import dynamic from "next/dynamic";
@@ -49,8 +48,8 @@ export default async function EnglishHomePage() {
   return (
     <>
       <Hero 
-        title={<EditableText lang="en" page="home" path="heroTitle" initialValue="Marinali" />}
-        subtitle={<EditableText lang="en" page="home" path="heroSubtitle" initialValue="ROOMS" />}
+        title={data?.heroTitle || "Marinali"}
+        subtitle={data?.heroSubtitle || "ROOMS"}
         lang="en" 
       />
       
@@ -76,36 +75,26 @@ export default async function EnglishHomePage() {
 
       <div className="container mx-auto">
         <IntroSection
-          title={
-            <EditableText
-              lang="en" page="home" path="aboutTitle"
-              initialValue={data?.aboutTitle || data?.title || "Welcome"}
-            />
-          }
-          description={
-            <EditableText
-              lang="en" page="home" path="aboutDescription" multiline
-              initialValue={data?.aboutDescription || data?.welcomeText || "Experience unforgettable hospitality..."}
-            />
-          }
+          title={data?.aboutTitle || data?.title || "Welcome"}
+          description={data?.aboutDescription || data?.welcomeText || "Experience unforgettable hospitality..."}
         >
           {/* Feature text grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 md:py-10">
             <div className="space-y-4">
-              <h3 className="text-xl uppercase tracking-widest font-light text-[#1A1A1A]">
-                <EditableText lang="en" page="home" path="frescoTitle" initialValue={data?.frescoTitle || "The 1460 Fresco"} />
-              </h3>
-              <p className="opacity-70 font-light leading-relaxed text-[15px] text-[#555] font-mono">
-                <EditableText lang="en" page="home" path="frescoDescription" multiline initialValue={data?.frescoDescription || "Discovered during restoration, our original 1460 fresco serves as a breathtaking centerpiece that connects your stay to centuries of rich Italian heritage and artisanal craftsmanship."} />
-              </p>
+                <h3 className="text-xl uppercase tracking-widest font-light text-[#1A1A1A]">
+                  {data?.frescoTitle || "The 1460 Fresco"}
+                </h3>
+                <p className="opacity-70 font-light leading-relaxed text-[15px] text-[#555] font-mono">
+                  {data?.frescoDescription || "Discovered during restoration, our original 1460 fresco serves as a breathtaking centerpiece that connects your stay to centuries of rich Italian heritage and artisanal craftsmanship."}
+                </p>
             </div>
             <div className="space-y-4">
-               <h3 className="text-xl uppercase tracking-widest font-light text-[#1A1A1A]">
-                <EditableText lang="en" page="home" path="terrazzoTitle" initialValue={data?.terrazzoTitle || "Venetian Terrazzo Floors"} />
-              </h3>
-              <p className="opacity-70 font-light leading-relaxed text-[15px] text-[#555] font-mono">
-                <EditableText lang="en" page="home" path="terrazzoDescription" multiline initialValue={data?.terrazzoDescription || "Step onto history with our authentic Venetian terrazzo floors, carefully preserved to maintain their original luster and intricate patterns that reflect the timeless elegance of Veneto architecture."} />
-              </p>
+                <h3 className="text-xl uppercase tracking-widest font-light text-[#1A1A1A]">
+                  {data?.terrazzoTitle || "Venetian Terrazzo Floors"}
+                </h3>
+                <p className="opacity-70 font-light leading-relaxed text-[15px] text-[#555] font-mono">
+                  {data?.terrazzoDescription || "Step onto history with our authentic Venetian terrazzo floors, carefully preserved to maintain their original luster and intricate patterns that reflect the timeless elegance of Veneto architecture."}
+                </p>
             </div>
           </div>
 
