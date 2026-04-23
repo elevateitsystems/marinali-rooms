@@ -78,50 +78,55 @@ export default async function EnglishHomePage() {
           title={data?.aboutTitle || data?.title || "Welcome"}
           description={data?.aboutDescription || data?.welcomeText || "Experience unforgettable hospitality..."}
         >
-          {/* Feature text grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20 md:py-10">
-            <div className="space-y-4">
+          {/* Feature text and images grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 md:py-10 mt-8 md:mt-0">
+            {/* Fresco Block */}
+            <div className="flex flex-col h-full">
+              <div className="space-y-4 mb-8">
                 <h3 className="text-xl uppercase tracking-widest font-light text-[#1A1A1A]">
                   {data?.frescoTitle || "The 1460 Fresco"}
                 </h3>
                 <p className="opacity-70 font-light leading-relaxed text-[15px] text-[#555] font-mono">
                   {data?.frescoDescription || "Discovered during restoration, our original 1460 fresco serves as a breathtaking centerpiece that connects your stay to centuries of rich Italian heritage and artisanal craftsmanship."}
                 </p>
+              </div>
+              <div className="relative aspect-[4/3] overflow-hidden mt-auto">
+                <Image
+                  src="/assets/Stanza%201%20-%20Foto-5.jpg"
+                  alt="The original 1460 fresco"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="lazy"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+                  <span className="text-white text-xs font-mono tracking-[0.25em] uppercase opacity-80">The 1460 Fresco</span>
+                </div>
+              </div>
             </div>
-            <div className="space-y-4">
+
+            {/* Terrazzo Block */}
+            <div className="flex flex-col h-full">
+              <div className="space-y-4 mb-8">
                 <h3 className="text-xl uppercase tracking-widest font-light text-[#1A1A1A]">
                   {data?.terrazzoTitle || "Venetian Terrazzo Floors"}
                 </h3>
                 <p className="opacity-70 font-light leading-relaxed text-[15px] text-[#555] font-mono">
                   {data?.terrazzoDescription || "Step onto history with our authentic Venetian terrazzo floors, carefully preserved to maintain their original luster and intricate patterns that reflect the timeless elegance of Veneto architecture."}
                 </p>
-            </div>
-          </div>
-
-          {/* Fresco + Floor images */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <Image
-                src="/assets/Stanza%201%20-%20Foto-5.jpg"
-                alt="The original 1460 fresco"
-                fill
-                className="object-cover hover:scale-105 transition-transform duration-700"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
-                <span className="text-white text-xs font-mono tracking-[0.25em] uppercase opacity-80">The 1460 Fresco</span>
               </div>
-            </div>
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <Image
-                src="/assets/Stanza%202%20-%20Foto-3.jpg"
-                alt="Venetian Terrazzo floors"
-                fill
-                className="object-cover hover:scale-105 transition-transform duration-700"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
-                <span className="text-white text-xs font-mono tracking-[0.25em] uppercase opacity-80">Venetian Terrazzo Floors</span>
+              <div className="relative aspect-[4/3] overflow-hidden mt-auto">
+                <Image
+                  src="/assets/Stanza%202%20-%20Foto-3.jpg"
+                  alt="Venetian Terrazzo floors"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="lazy"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+                  <span className="text-white text-xs font-mono tracking-[0.25em] uppercase opacity-80">Venetian Terrazzo Floors</span>
+                </div>
               </div>
             </div>
           </div>
