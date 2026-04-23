@@ -39,7 +39,7 @@ export default function Hero({
   const displayImgUrl = settings?.heroImage || imgUrl;
 
   return (
-    <section className="-mt-24 relative w-full h-[85vh] flex flex-col items-center justify-center overflow-hidden">
+    <section id="hero" className="-mt-24 relative w-full h-[85vh] flex flex-col items-center justify-center overflow-hidden">
       {/* Background Image Overlay */}
       <motion.div
         className="absolute inset-0 z-0"

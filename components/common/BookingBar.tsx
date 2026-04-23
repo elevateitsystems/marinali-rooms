@@ -61,9 +61,10 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
   const [rooms, setRooms] = useState("1");
   const [coupon, setCoupon] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookingUrl, setBookingUrl] = useState("");
+  const [departurePopoverOpen, setDeparturePopoverOpen] = useState(false);
 
   const lenis = useLenis();
 
@@ -85,11 +86,11 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Construct the URL manually
     const baseUrl = "https://marinalirooms.kross.travel/book/step1";
     const successUrl = `${window.location.origin}/${lang}/thank-you`;
-    
+
     const params = new URLSearchParams({
       lang: lang,
       from: formatDateForKross(date?.from),
@@ -99,7 +100,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       coupon: coupon,
       url_back: successUrl
     });
-    
+
     const finalUrl = `${baseUrl}?${params.toString()}`;
     setBookingUrl(finalUrl);
     setIsModalOpen(true);
@@ -114,10 +115,9 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       onSubmit={handleBookingSubmit}
       className="flex flex-col lg:flex-row items-stretch lg:items-center w-full"
     >
-      {/* Dates */}
+      {/* Arrival Date Picker */}
       <Popover>
-        <PopoverTrigger className="flex-[2] flex flex-row items-stretch">
-          {/* Arrival */}
+        <PopoverTrigger className="flex-1 flex flex-row items-stretch">
           <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
             <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
               {lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Arrival'}
@@ -126,25 +126,50 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
               {date?.from ? format(date.from, "LLL dd, yyyy") : 'Select Date'}
             </span>
           </div>
-          {/* Departure */}
-          <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
-            <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
-              {lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Departure'}
-            </span>
-            <span className="text-lg font-semibold tracking-tight uppercase">
-              {date?.to ? format(date.to, "LLL dd, yyyy") : 'Select Date'}
-            </span>
-          </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
-            initialFocus
-            mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={setDate}
-            numberOfMonths={2}
+            mode="single"
+            selected={date?.from}
+            onSelect={(selectedDate) => {
+              if (selectedDate) {
+                // Set 'from' and ensure 'to' is at least one day after
+                const newFrom = selectedDate;
+                const newTo = (date?.to && date.to > newFrom) ? date.to : addDays(newFrom, 1);
+                setDate({ from: newFrom, to: newTo });
+              }
+            }}
             disabled={{ before: new Date() }}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
+
+      {/* Departure Date Picker */}
+      <Popover open={departurePopoverOpen} onOpenChange={setDeparturePopoverOpen}>
+        <PopoverTrigger className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
+          <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
+            {lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Departure'}
+          </span>
+          <span className="text-lg font-semibold tracking-tight uppercase">
+            {date?.to ? format(date.to, "LLL dd, yyyy") : 'Select Date'}
+          </span>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={date?.to}
+            onSelect={(selectedDate) => {
+              if (selectedDate) {
+                // Set 'to' and ensure 'from' is at least one day before
+                const newTo = selectedDate;
+                const newFrom = (date?.from && date.from < newTo) ? date.from : addDays(newTo, -1);
+                setDate({ from: newFrom, to: newTo });
+                setDeparturePopoverOpen(false); // Auto-close Departure on select
+              }
+            }}
+            disabled={{ before: date?.from || new Date() }}
+            initialFocus
           />
         </PopoverContent>
       </Popover>
@@ -221,7 +246,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
   return (
     <>
       {/* ========== DESKTOP: Full booking bar (hidden on mobile) ========== */}
-      <div 
+      <div
         className="hidden lg:block z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] fixed bottom-0 left-0 right-0"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -230,7 +255,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       </div>
 
       {/* ========== MOBILE: Sticky button (visible on mobile only) ========== */}
-      <div 
+      <div
         className="lg:hidden z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 fixed bottom-0 left-0 right-0"
       >
         <button
@@ -279,10 +304,10 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         </div>
       </div>
 
-      <BookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        bookingUrl={bookingUrl} 
+      <BookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        bookingUrl={bookingUrl}
       />
     </>
   );

@@ -40,6 +40,7 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
 
   return (
     <section
+      id="reviews"
       className='mt-10 lg:mt-20 bg-primary'
       style={{
         color: '#fff',

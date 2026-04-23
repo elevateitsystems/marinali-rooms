@@ -15,6 +15,7 @@ export default function IntroSection({
 }) {
   return (
     <section
+      id="heritage"
       className='px-5 '
       style={{
         margin: '0 auto',

@@ -88,7 +88,7 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
       {/* Main Content Grid */}
       <section className="grid lg:grid-cols-2">
         {/* Left Side: Centered Contact Info */}
-        <div className="p-8 md:p-16 flex flex-col items-center justify-center text-center">
+        <div id="contact" className="p-8 md:p-16 flex flex-col items-center justify-center text-center">
           <div className="max-w-xl w-full">
             <span className="text-xl lg:text-2xl tracking-[0.3em] font-bold text-primary mb-8 block uppercase">
               {t.infoTitle}
@@ -142,7 +142,7 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
         </div>
 
         {/* Right Side: Map */}
-        <div className="relative h-[400px] lg:h-full overflow-hidden">
+        <div id="map" className="relative h-[400px] lg:h-full overflow-hidden">
           <iframe
             src={displayMapUrl}
             width="100%"
