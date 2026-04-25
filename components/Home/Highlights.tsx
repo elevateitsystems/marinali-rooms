@@ -4,8 +4,6 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '../ui/skeleton';
-import { BookingModal } from '../common/BookingModal';
-import { useState } from 'react';
 
 interface HighlightRoom {
   id: string;
@@ -16,9 +14,6 @@ interface HighlightRoom {
 }
 
 export default function Highlights({ lang, data }: { lang: string; data?: any }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingUrl, setBookingUrl] = useState("");
-
   const { data: rooms = [], isLoading } = useQuery<HighlightRoom[]>({
     queryKey: ["rooms", "highlights", lang],
     queryFn: async () => {
@@ -148,8 +143,7 @@ export default function Highlights({ lang, data }: { lang: string; data?: any })
                   onClick={(e) => {
                     e.stopPropagation();
                     const successUrl = `${window.location.origin}/${lang}/thank-you`;
-                    setBookingUrl(`https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`);
-                    setIsModalOpen(true);
+                    window.location.href = `https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`;
                   }}
                   style={{
                     padding: '12px 24px',
@@ -183,12 +177,6 @@ export default function Highlights({ lang, data }: { lang: string; data?: any })
           }
         }
       `}</style>
-
-      <BookingModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        bookingUrl={bookingUrl}
-      />
     </motion.section>
   );
 }

@@ -12,7 +12,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const BookingModal = dynamic(() => import('../common/BookingModal').then(mod => ({ default: mod.BookingModal })), { ssr: false });
 
 interface RoomSplitSectionProps {
   room: {
@@ -40,9 +39,13 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
 
   const closeLightbox = () => setLightboxOpen(false);
 
+  const [lightboxPrevEl, setLightboxPrevEl] = useState<HTMLElement | null>(null);
+  const [lightboxNextEl, setLightboxNextEl] = useState<HTMLElement | null>(null);
+  const [lightboxPaginationEl, setLightboxPaginationEl] = useState<HTMLElement | null>(null);
+
   return (
     <>
-      <section className="w-full min-h-[80vh] flex flex-col lg:flex-row items-stretch overflow-hidden bg-[var(--background)]">
+      <section className={`w-full min-h-[80vh] flex ${reverse ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row'} items-stretch overflow-hidden bg-[var(--background)]`}>
         {/* Image Column — Swiper Carousel */}
         <div className={`w-full lg:w-[55%] h-[500px] lg:h-[700px] relative group ${reverse ? 'lg:order-2' : ''}`}>
           <Swiper
@@ -132,36 +135,36 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
         </div>
       </section>
 
-      {/* Lightbox */}
+      {/* Lightbox - Casa Cook Style */}
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-sm flex items-center justify-center"
+          className="fixed inset-0 z-[200] bg-black flex items-center justify-center"
           onClick={closeLightbox}
         >
           {/* Close Button */}
           <button
-            onClick={closeLightbox}
-            className="absolute top-8 right-8 z-[210] p-4 bg-white/5 hover:bg-white/10 rounded-full text-white transition-all hover:scale-110 active:scale-95 border border-white/10"
+            onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+            className="absolute top-6 right-6 md:top-8 md:right-8 z-[210] p-2 text-white/70 hover:text-white transition-all hover:scale-110 active:scale-95"
           >
-            <X className="w-6 h-6" />
+            <X className="w-8 h-8" strokeWidth={1} />
           </button>
 
           {/* Swiper inside Lightbox */}
-          <div className="w-full h-full" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full h-full relative" onClick={(e) => e.stopPropagation()}>
             <Swiper
               modules={[Navigation, Pagination]}
               initialSlide={lightboxIndex}
               navigation={{
-                prevEl: '.lightbox-prev',
-                nextEl: '.lightbox-next',
+                prevEl: lightboxPrevEl,
+                nextEl: lightboxNextEl,
               }}
-              pagination={{ type: 'fraction', el: '.lightbox-counter' }}
+              pagination={{ type: 'fraction', el: lightboxPaginationEl }}
               className="w-full h-full lightbox-swiper"
-              speed={600}
+              speed={800}
               onSlideChange={(swiper) => setLightboxIndex(swiper.activeIndex)}
             >
               {allImages.map((img, idx) => (
-                <SwiperSlide key={idx} className="flex items-center justify-center p-4 md:p-20">
+                <SwiperSlide key={idx} className="flex items-center justify-center w-full h-full">
                   <div className="relative w-full h-full">
                     <Image
                       src={img}
@@ -175,17 +178,29 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
                 </SwiperSlide>
               ))}
             </Swiper>
-          </div>
 
-          {/* Custom Controls */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[210] flex items-center gap-12 text-white">
-            <button className="lightbox-prev p-4 hover:opacity-50 transition-opacity cursor-pointer">
-              <ChevronLeft className="w-8 h-8" strokeWidth={1} />
+            {/* Custom Minimal Controls - Casa Cook Style */}
+            {/* Left Arrow */}
+            <button
+              ref={setLightboxPrevEl}
+              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-[210] p-4 text-white/50 hover:text-white transition-opacity cursor-pointer hidden md:block"
+            >
+              <ChevronLeft className="w-10 h-10 md:w-12 md:h-12" strokeWidth={1} />
             </button>
-            <div className="lightbox-counter font-mono text-sm tracking-[0.3em] uppercase opacity-60"></div>
-            <button className="lightbox-next p-4 hover:opacity-50 transition-opacity cursor-pointer">
-              <ChevronRight className="w-8 h-8" strokeWidth={1} />
+            
+            {/* Right Arrow */}
+            <button
+              ref={setLightboxNextEl}
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[210] p-4 text-white/50 hover:text-white transition-opacity cursor-pointer hidden md:block"
+            >
+              <ChevronRight className="w-10 h-10 md:w-12 md:h-12" strokeWidth={1} />
             </button>
+
+            {/* Counter */}
+            <div
+              ref={setLightboxPaginationEl}
+              className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[210] font-mono text-xs md:text-sm tracking-[0.3em] uppercase text-white/60"
+            ></div>
           </div>
         </div>
       )}

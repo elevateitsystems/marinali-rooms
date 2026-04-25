@@ -2,18 +2,11 @@
 
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-const BookingModal = dynamic(() => import('../common/BookingModal').then(mod => ({ default: mod.BookingModal })), { ssr: false });
 
 export default function LeSuiteBookingFooter({ lang }: { lang: string }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingUrl, setBookingUrl] = useState('');
-
   const handleBookNow = () => {
     const successUrl = `${window.location.origin}/${lang}/thank-you`;
-    setBookingUrl(`https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`);
-    setIsModalOpen(true);
+    window.location.href = `https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`;
   };
 
   const label =
@@ -43,12 +36,6 @@ export default function LeSuiteBookingFooter({ lang }: { lang: string }) {
         {btnText}
         <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
       </button>
-
-      <BookingModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        bookingUrl={bookingUrl}
-      />
     </section>
   );
 }

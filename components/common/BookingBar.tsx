@@ -10,45 +10,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { X } from 'lucide-react';
-import { useLenis } from 'lenis/react';
-import dynamic from 'next/dynamic';
 
-const BookingModal = dynamic(() => import('./BookingModal').then(mod => ({ default: mod.BookingModal })), { ssr: false });
+import { X, Bed, Calendar as CalendarIcon, User, ChevronDown } from 'lucide-react';
+import { useLenis } from 'lenis/react';
+
 interface BookingBarProps {
   lang?: 'en' | 'it' | 'de';
-  data?: {
-    bookingWhereLabel?: string;
-    bookingWhereValue?: string;
-    bookingDatesLabel?: string;
-    bookingDatesValue?: string;
-    bookingWhoLabel?: string;
-    bookingWhoValue?: string;
-    bookingRoomsLabel?: string;
-    bookingRoomsValue?: string;
-    bookingCodeLabel?: string;
-    bookingCodeValue?: string;
-    bookingButtonText?: string;
-    // Map with shorter names from content.json
-    whereLabel?: string;
-    whereValue?: string;
-    datesLabel?: string;
-    datesValue?: string;
-    whoLabel?: string;
-    whoValue?: string;
-    roomsLabel?: string;
-    roomsValue?: string;
-    codeLabel?: string;
-    codeValue?: string;
-    buttonText?: string;
-  };
+  data?: any;
 }
 
 const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
@@ -61,15 +29,11 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
   const [rooms, setRooms] = useState("1");
   const [coupon, setCoupon] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingUrl, setBookingUrl] = useState("");
   const [arrivalPopoverOpen, setArrivalPopoverOpen] = useState(false);
   const [departurePopoverOpen, setDeparturePopoverOpen] = useState(false);
 
   const lenis = useLenis();
 
-  // Prevent background scrolling when drawer is open
   useEffect(() => {
     if (!lenis) return;
     if (drawerOpen) {
@@ -79,7 +43,6 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     }
   }, [drawerOpen, lenis]);
 
-
   const formatDateForKross = (d?: Date) => {
     if (!d) return "";
     return format(d, "yyyy-MM-dd");
@@ -88,7 +51,6 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Construct the URL manually
     const baseUrl = "https://marinalirooms.kross.travel/book/step1";
     const successUrl = `${window.location.origin}/${lang}/thank-you`;
 
@@ -103,41 +65,39 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     });
 
     const finalUrl = `${baseUrl}?${params.toString()}`;
-    setBookingUrl(finalUrl);
-    setIsModalOpen(true);
-    setDrawerOpen(false); // Close mobile drawer if open
+    window.location.href = finalUrl;
+    setDrawerOpen(false);
   };
 
-  const mobileButtonText = lang === 'it' ? 'Prenota il tuo soggiorno' : lang === 'de' ? 'Buchen Sie Ihren Aufenthalt' : 'Book Your Stay';
+  const mobileButtonText = lang === 'it' ? 'Cerca' : lang === 'de' ? 'Suchen' : 'Search';
 
-  // --- Shared form content (used in both desktop bar and mobile drawer) ---
   const bookingFormContent = (
     <form
       onSubmit={handleBookingSubmit}
-      className="flex flex-col lg:flex-row items-stretch lg:items-center w-full"
+      className="bg-secondary p-1 rounded-md flex flex-col lg:flex-row items-stretch w-full gap-1 shadow-2xl font-sans"
     >
-      {/* Arrival Date Picker */}
+      {/* 1. Arrival Date Picker */}
       <Popover open={arrivalPopoverOpen} onOpenChange={setArrivalPopoverOpen}>
-        <PopoverTrigger type="button" className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
-          <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
-            {lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Arrival'}
-          </span>
-          <span className="text-lg font-semibold tracking-tight uppercase">
-            {date?.from ? format(date.from, "LLL dd, yyyy") : 'Select Date'}
-          </span>
+        <PopoverTrigger type="button" className="bg-white rounded-sm flex items-center px-4 py-3 lg:py-0 flex-1 gap-3 text-gray-700 cursor-pointer hover:bg-gray-50 transition-colors text-left outline-none focus:ring-2 focus:ring-primary min-h-[52px]">
+          <CalendarIcon className="w-6 h-6 text-gray-500 shrink-0" strokeWidth={1.5} />
+          <div className="flex flex-col">
+            <span className="text-xs opacity-60 font-medium">{lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Check-in'}</span>
+            <span className="text-sm md:text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+              {date?.from ? format(date.from, "MMM d, yyyy") : "Select"}
+            </span>
+          </div>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start" side="top">
+        <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={10}>
           <Calendar
             mode="single"
             selected={date?.from}
             onSelect={(selectedDate) => {
               if (selectedDate) {
-                // Set 'from' and ensure 'to' is at least one day after
                 const newFrom = selectedDate;
                 const newTo = (date?.to && date.to > newFrom) ? date.to : addDays(newFrom, 1);
                 setDate({ from: newFrom, to: newTo });
                 setArrivalPopoverOpen(false);
-                setDeparturePopoverOpen(true); // Auto-open Departure on Arrival select
+                setDeparturePopoverOpen(true);
               }
             }}
             disabled={{ before: new Date() }}
@@ -146,27 +106,27 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         </PopoverContent>
       </Popover>
 
-      {/* Departure Date Picker */}
+      {/* 2. Departure Date Picker */}
       <Popover open={departurePopoverOpen} onOpenChange={setDeparturePopoverOpen}>
-        <PopoverTrigger type="button" className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center items-start gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors text-left font-sans">
-          <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
-            {lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Departure'}
-          </span>
-          <span className="text-lg font-semibold tracking-tight uppercase">
-            {date?.to ? format(date.to, "LLL dd, yyyy") : 'Select Date'}
-          </span>
+        <PopoverTrigger type="button" className="bg-white rounded-sm flex items-center px-4 py-3 lg:py-0 flex-1 gap-3 text-gray-700 hover:bg-gray-50 transition-colors text-left outline-none focus:ring-2 cursor-pointer focus:ring-primary min-h-[52px]">
+          <CalendarIcon className="w-6 h-6 text-gray-500 shrink-0" strokeWidth={1.5} />
+          <div className="flex flex-col">
+            <span className="text-xs opacity-60 font-medium">{lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Check-out'}</span>
+            <span className="text-sm md:text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+              {date?.to ? format(date.to, "MMM d, yyyy") : "Select"}
+            </span>
+          </div>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start" side="top">
+        <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={10}>
           <Calendar
             mode="single"
             selected={date?.to}
             onSelect={(selectedDate) => {
               if (selectedDate) {
-                // Set 'to' and ensure 'from' is at least one day before
                 const newTo = selectedDate;
                 const newFrom = (date?.from && date.from < newTo) ? date.from : addDays(newTo, -1);
                 setDate({ from: newFrom, to: newTo });
-                setDeparturePopoverOpen(false); // Auto-close Departure on select
+                setDeparturePopoverOpen(false);
               }
             }}
             disabled={{ before: date?.from || new Date() }}
@@ -175,142 +135,136 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         </PopoverContent>
       </Popover>
 
-      {/* Rooms */}
-      <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center gap-1 group transition-colors">
-        <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
-          {data?.bookingRoomsLabel || data?.roomsLabel || (lang === 'it' ? 'Camere' : lang === 'de' ? 'Zimmer' : 'Rooms')}
-        </span>
-        <div className="relative">
-          <Select value={rooms} onValueChange={(val) => setRooms(val as string)}>
-            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-lg font-semibold tracking-tight uppercase hover:text-primary transition-colors">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {[1, 2, 3, 4].map((num) => (
-                <SelectItem key={num} value={num.toString()}>
-                  {num} {num === 1 ? (lang === 'it' ? 'Camera' : lang === 'de' ? 'Zimmer' : 'Room') : (lang === 'it' ? 'Camere' : lang === 'de' ? 'Zimmer' : 'Rooms')}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      {/* 3. Guests & Rooms */}
+      <Popover>
+        <PopoverTrigger type="button" className="bg-white rounded-sm flex items-center px-4 py-3 lg:py-0 flex-[1.2] gap-3 text-gray-700 hover:bg-gray-50 transition-colors text-left outline-none focus:ring-2 focus:ring-primary min-h-[52px]">
+          <User className="w-6 h-6 text-gray-500 shrink-0" strokeWidth={1.5} />
+          <span className="text-sm md:text-base font-medium flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
+            {guests} {Number(guests) === 1 ? (lang === 'it' ? 'ospite' : lang === 'de' ? 'Gast' : 'guest') : (lang === 'it' ? 'ospiti' : lang === 'de' ? 'Gäste' : 'guests')} · {rooms} {Number(rooms) === 1 ? (lang === 'it' ? 'camera' : lang === 'de' ? 'Zimmer' : 'room') : (lang === 'it' ? 'camere' : lang === 'de' ? 'Zimmer' : 'rooms')}
+          </span>
+          <ChevronDown className="w-5 h-5 text-gray-500 shrink-0" />
+        </PopoverTrigger>
+        <PopoverContent className="w-80 p-4 flex flex-col gap-4 font-sans text-gray-800" align="end" side="top" sideOffset={10}>
 
-      {/* Guests */}
-      <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center gap-1 group transition-colors">
-        <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
-          {data?.bookingWhoLabel || data?.whoLabel || (lang === 'it' ? 'Ospiti' : lang === 'de' ? 'Gäste' : 'Guests')}
-        </span>
-        <div className="relative">
-          <Select name="guests" value={guests} onValueChange={(val) => setGuests(val as string)}>
-            <SelectTrigger className="border-none cursor-pointer p-0 h-auto bg-transparent focus:ring-0 shadow-none text-lg font-semibold tracking-tight uppercase hover:text-primary transition-colors">
-              <SelectValue placeholder="Guests" />
-            </SelectTrigger>
-            <SelectContent>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                <SelectItem key={num} value={num.toString()}>
-                  {num} {num === 1 ? (lang === 'it' ? 'Ospite' : lang === 'de' ? 'Gast' : 'Guest') : (lang === 'it' ? 'Ospiti' : lang === 'de' ? 'Gäste' : 'Guests')}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+          <div className="flex items-center justify-between">
+            <span className="font-medium">{lang === 'it' ? 'Camere' : lang === 'de' ? 'Zimmer' : 'Rooms'}</span>
+            <div className="flex items-center gap-3 border border-gray-300 rounded-md p-1">
+              <button
+                type="button"
+                className="w-8 h-8 flex items-center justify-center text-primary text-xl leading-none hover:bg-primary/10 rounded disabled:opacity-30 transition-colors cursor-pointer"
+                onClick={(e) => { e.preventDefault(); setRooms(prev => Math.max(1, parseInt(prev) - 1).toString()); }}
+                disabled={parseInt(rooms) <= 1}
+              >
+                −
+              </button>
+              <span className="w-4 text-center font-semibold">{rooms}</span>
+              <button
+                type="button"
+                className="w-8 h-8 flex items-center justify-center text-primary text-xl leading-none hover:bg-primary/10 rounded disabled:opacity-30 transition-colors cursor-pointer"
+                onClick={(e) => { e.preventDefault(); setRooms(prev => Math.min(4, parseInt(prev) + 1).toString()); }}
+                disabled={parseInt(rooms) >= 4}
+              >
+                +
+              </button>
+            </div>
+          </div>
 
-      {/* Code */}
-      <div className="flex-1 border-b lg:border-b-0 lg:border-r border-[var(--foreground)]/10 py-4 px-6 flex flex-col justify-center gap-1 group cursor-pointer hover:bg-[var(--foreground)]/5 transition-colors">
-        <span className="text-xs sm:text-sm font-mono tracking-widest opacity-60 uppercase">
-          {data?.bookingCodeLabel || data?.codeLabel || (lang === 'it' ? 'Codice' : lang === 'de' ? 'Code' : 'Code')}
-        </span>
-        <input
-          name="coupon"
-          type="text"
-          value={coupon}
-          onChange={(e) => setCoupon(e.target.value)}
-          placeholder={data?.bookingCodeValue || data?.codeValue || (lang === 'it' ? 'Inserisci' : 'Enter')}
-          className="bg-transparent border-none p-0 focus:ring-0 text-lg font-semibold tracking-tight uppercase placeholder:text-current/30 w-full"
-        />
-      </div>
+          <div className="flex items-center justify-between">
+            <span className="font-medium">{lang === 'it' ? 'Ospiti' : lang === 'de' ? 'Gäste' : 'Guests'}</span>
+            <div className="flex items-center gap-3 border border-gray-300 rounded-md p-1">
+              <button
+                type="button"
+                className="w-8 h-8 flex items-center justify-center text-primary text-xl leading-none hover:bg-primary/10 rounded disabled:opacity-30 transition-colors cursor-pointer"
+                onClick={(e) => { e.preventDefault(); setGuests(prev => Math.max(1, parseInt(prev) - 1).toString()); }}
+                disabled={parseInt(guests) <= 1}
+              >
+                −
+              </button>
+              <span className="w-4 text-center font-semibold">{guests}</span>
+              <button
+                type="button"
+                className="w-8 h-8 flex items-center justify-center text-primary text-xl leading-none hover:bg-primary/10 rounded disabled:opacity-30 transition-colors cursor-pointer"
+                onClick={(e) => { e.preventDefault(); setGuests(prev => Math.min(8, parseInt(prev) + 1).toString()); }}
+                disabled={parseInt(guests) >= 8}
+              >
+                +
+              </button>
+            </div>
+          </div>
 
-      {/* Book Now Button */}
-      <div className="py-4 px-6 flex items-center justify-center">
-        <button
-          type="submit"
-          className="w-full lg:w-auto px-10 py-5 bg-primary hover:bg-primary/90 text-white font-bold tracking-[0.2em] text-xs transition-all active:scale-95 shadow-xl uppercase cursor-pointer"
-        >
-          {data?.bookingButtonText || data?.buttonText || (lang === 'it' ? 'Prenota Ora' : lang === 'de' ? 'Jetzt Buchen' : 'Book Now')}
-        </button>
-      </div>
+          <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
+            <span className="font-medium text-sm">{lang === 'it' ? 'Codice Promozionale' : lang === 'de' ? 'Gutscheincode' : 'Promo Code (Optional)'}</span>
+            <input
+              type="text"
+              value={coupon}
+              onChange={e => setCoupon(e.target.value)}
+              placeholder={lang === 'it' ? 'Inserisci codice' : lang === 'de' ? 'Code eingeben' : 'Enter code'}
+              className="border border-gray-300 p-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+        </PopoverContent>
+      </Popover>
+
+      {/* 4. Search Button */}
+      <button
+        type="submit"
+        className="bg-primary hover:bg-primary/90 text-white font-bold text-lg md:text-xl px-8 py-3 lg:py-0 rounded-sm transition-colors cursor-pointer outline-none min-h-[52px]"
+      >
+        {data?.bookingButtonText || data?.buttonText || mobileButtonText}
+      </button>
     </form>
   );
 
   return (
     <>
-      {/* ========== DESKTOP: Full booking bar (hidden on mobile) ========== */}
-      <div
-        className="hidden lg:block z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] fixed bottom-0 left-0 right-0"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          {/* Only render desktop form if mobile drawer is closed to prevent double popovers */}
+      {/* ========== DESKTOP: Floating booking bar (hidden on mobile) ========== */}
+      <div className="hidden lg:flex z-40 fixed bottom-8 left-0 right-0 justify-center px-6 pointer-events-none">
+        <div className="w-full max-w-5xl pointer-events-auto shadow-2xl rounded-md transition-transform  duration-300">
           {!drawerOpen && bookingFormContent}
         </div>
       </div>
 
       {/* ========== MOBILE: Sticky button (visible on mobile only) ========== */}
-      <div
-        className="lg:hidden z-40 w-full bg-[var(--background)]/90 backdrop-blur-md border-t border-[var(--foreground)]/10 fixed bottom-0 left-0 right-0"
-      >
+      <div className="lg:hidden z-40 w-full bg-white border-t border-gray-200 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] fixed bottom-0 left-0 right-0 p-3">
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="w-full py-5 bg-primary hover:bg-primary/90 text-white font-bold tracking-[0.2em] text-sm uppercase transition-all shadow-xl cursor-pointer"
+          className="w-full py-3 bg-primary hover:bg-primary/90 rounded-sm text-white font-bold text-base transition-colors shadow-md cursor-pointer"
         >
           {mobileButtonText}
         </button>
       </div>
 
       {/* ========== MOBILE DRAWER: Slides up from bottom ========== */}
-      {/* Backdrop */}
       <div
-        className={`lg:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${drawerOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-          }`}
+        className={`lg:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${drawerOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setDrawerOpen(false)}
       />
 
-      {/* Drawer Panel */}
       <div
-        className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[var(--background)] rounded-t-2xl shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.2)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${drawerOpen ? 'translate-y-0' : 'translate-y-full'
-          }`}
+        className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-gray-100 rounded-t-xl shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${drawerOpen ? 'translate-y-0' : 'translate-y-full'}`}
         style={{ maxHeight: '90vh', overflowY: 'auto' }}
       >
-        {/* Drawer Handle */}
         <div className="flex items-center justify-center pt-3 pb-1">
-          <div className="w-10 h-1 rounded-full bg-[var(--foreground)]/15" />
+          <div className="w-12 h-1.5 rounded-full bg-gray-300" />
         </div>
 
-        {/* Drawer Header */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-[var(--foreground)]/10">
-          <h3 className="text-sm font-bold tracking-[0.15em] uppercase">{mobileButtonText}</h3>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+          <h3 className="text-base font-bold text-gray-800">{lang === 'it' ? 'Cerca' : lang === 'de' ? 'Suchen' : 'Search'}</h3>
           <button
             type="button"
             onClick={() => setDrawerOpen(false)}
-            className="p-2 hover:bg-[var(--foreground)]/5 rounded-full transition-colors cursor-pointer"
+            className="p-2 hover:bg-gray-200 rounded-full transition-colors cursor-pointer text-gray-500"
           >
-            <X className="w-5 h-5 opacity-60" strokeWidth={1.5} />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Drawer Content */}
-        <div className="px-2 pb-8">
+        <div className="p-4">
           {drawerOpen && bookingFormContent}
         </div>
       </div>
-
-      <BookingModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        bookingUrl={bookingUrl}
-      />
     </>
   );
 };
