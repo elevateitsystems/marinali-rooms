@@ -12,7 +12,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const BookingModal = dynamic(() => import('../common/BookingModal').then(mod => ({ default: mod.BookingModal })), { ssr: false });
 
 interface RoomSplitSectionProps {
   room: {
