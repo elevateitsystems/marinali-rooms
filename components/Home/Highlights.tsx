@@ -143,7 +143,7 @@ export default function Highlights({ lang, data }: { lang: string; data?: any })
                   onClick={(e) => {
                     e.stopPropagation();
                     const successUrl = `${window.location.origin}/${lang}/thank-you`;
-                    window.location.href = `https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`;
+                    window.open(`https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`, '_blank');
                   }}
                   style={{
                     padding: '12px 24px',

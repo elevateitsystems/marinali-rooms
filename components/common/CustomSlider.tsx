@@ -289,7 +289,7 @@ export default function CustomSlider({ title, items, sectionId, showBookNow, lan
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        window.location.href = `https://marinalirooms.kross.travel/book/step1?lang=${lang}`;
+                        window.open(`https://marinalirooms.kross.travel/book/step1?lang=${lang}`, '_blank');
                       }}
                       style={{
                         padding: '12px 24px',

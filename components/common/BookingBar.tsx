@@ -65,7 +65,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     });
 
     const finalUrl = `${baseUrl}?${params.toString()}`;
-    window.location.href = finalUrl;
+    window.open(finalUrl, '_blank');
     setDrawerOpen(false);
   };
 
