@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 export default function LeSuiteBookingFooter({ lang }: { lang: string }) {
   const handleBookNow = () => {
     const successUrl = `${window.location.origin}/${lang}/thank-you`;
-    window.location.href = `https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`;
+    window.open(`https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`, '_blank');
   };
 
   const label =
