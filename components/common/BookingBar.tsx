@@ -209,7 +209,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       {/* 4. Search Button */}
       <button
         type="submit"
-        className="bg-primary hover:bg-primary/90 text-white font-bold text-lg md:text-xl px-8 py-3 lg:py-0 rounded-sm transition-colors cursor-pointer outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#febb02] min-h-[52px]"
+        className="bg-primary hover:bg-primary/90 text-white font-bold text-lg md:text-xl px-8 py-3 lg:py-0 rounded-sm transition-colors cursor-pointer outline-none min-h-[52px]"
       >
         {data?.bookingButtonText || data?.buttonText || mobileButtonText}
       </button>
