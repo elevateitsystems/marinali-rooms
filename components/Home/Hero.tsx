@@ -10,7 +10,7 @@ const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 
 export default function Hero({
   title = "Marinali",
-  subtitle = "ROOMS",
+  subtitle = "Rooms",
   imgUrl = "/assets/Stanza%203%20-%20Foto-13.jpg",
   lang = "en",
 }: {
@@ -72,11 +72,11 @@ export default function Hero({
             {title}
           </h1>
           <div className="flex items-center gap-6 mt-1 md:-mt-4">
-            <div className="w-16 h-[1px] bg-white opacity-80"></div>
-            <span className="text-xs md:text-sm uppercase tracking-[0.4em] font-medium opacity-100">
-              {subtitle}
+            <div className="w-16 h-px bg-white opacity-80"></div>
+            <span className={`${yellowtail.className} text-3xl md:text-5xl capitalize tracking-wide opacity-100`}>
+              {typeof subtitle === 'string' ? subtitle.toLowerCase() : subtitle}
             </span>
-            <div className="w-16 h-[1px] bg-white opacity-80"></div>
+            <div className="w-16 h-px bg-white opacity-80"></div>
           </div>
           <span className="text-[10px] md:text-[12px] uppercase tracking-[0.3em] font-light opacity-80 mt-4 animate-fade-in">
             Bassano del Grappa

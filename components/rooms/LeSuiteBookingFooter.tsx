@@ -5,8 +5,8 @@ import { ArrowRight } from 'lucide-react';
 
 export default function LeSuiteBookingFooter({ lang }: { lang: string }) {
   const handleBookNow = () => {
-    const successUrl = `${window.location.origin}/${lang}/thank-you`;
-    window.open(`https://marinalirooms.kross.travel/book/step1?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`, '_blank');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.dispatchEvent(new CustomEvent('open-booking-drawer'));
   };
 
   const label =
@@ -20,9 +20,9 @@ export default function LeSuiteBookingFooter({ lang }: { lang: string }) {
     'Book directly for the best guaranteed rates.';
 
   const btnText =
-    lang === 'it' ? 'Prenota Ora' :
-    lang === 'de' ? 'Jetzt Buchen' :
-    'Book Now';
+    lang === 'it' ? 'PRENOTA ORA' :
+    lang === 'de' ? 'JETZT BUCHEN' :
+    'BOOK NOW';
 
   return (
     <section className="w-full bg-primary text-white py-20 px-5 flex flex-col items-center text-center">

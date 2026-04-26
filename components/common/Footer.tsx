@@ -201,7 +201,7 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
           </h1>
           <div className="flex items-center gap-3 mt-1">
             <div className="w-10 h-px bg-white opacity-80"></div>
-            <span className="text-xs md:text-[10px] uppercase tracking-[0.4em] font-medium opacity-100">
+            <span className={`${yellowtail.className} text-xl md:text-2xl tracking-wide opacity-100`}>
               Rooms
             </span>
             <div className="w-10 h-px bg-white opacity-80"></div>

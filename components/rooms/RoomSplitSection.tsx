@@ -2,11 +2,12 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { useLenis } from 'lenis/react';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -41,7 +42,23 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
 
   const [lightboxPrevEl, setLightboxPrevEl] = useState<HTMLElement | null>(null);
   const [lightboxNextEl, setLightboxNextEl] = useState<HTMLElement | null>(null);
-  const [lightboxPaginationEl, setLightboxPaginationEl] = useState<HTMLElement | null>(null);
+
+  const lenis = useLenis();
+
+  useEffect(() => {
+    if (lightboxOpen) {
+      document.body.style.overflow = 'hidden';
+      if (lenis) lenis.stop();
+    } else {
+      document.body.style.overflow = '';
+      if (lenis) lenis.start();
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      if (lenis) lenis.start();
+    };
+  }, [lightboxOpen, lenis]);
 
   return (
     <>
@@ -101,7 +118,7 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
             .room-gallery-swiper .swiper-pagination-bullet { background: white; opacity: 0.4; width: 6px; height: 6px; transition: all 0.3s ease; }
             .room-gallery-swiper .swiper-pagination-bullet-active { opacity: 1; transform: scale(1.5); }
             
-            .lightbox-swiper .swiper-pagination-fraction { color: white; opacity: 0.6; font-family: var(--font-mono); }
+            .lightbox-swiper .swiper-pagination-fraction { color: black; opacity: 0.6; font-family: var(--font-mono); }
           `}</style>
         </div>
 
@@ -138,19 +155,19 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
       {/* Lightbox - Casa Cook Style */}
       {lightboxOpen && (
         <div
-          className="fixed inset-0 z-[200] bg-black flex items-center justify-center"
+          className="fixed inset-0 z-[200] bg-white flex flex-col lg:flex-row items-stretch animate-fade-in"
           onClick={closeLightbox}
         >
           {/* Close Button */}
           <button
             onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
-            className="absolute top-6 right-6 md:top-8 md:right-8 z-[210] p-2 text-white/70 hover:text-white transition-all hover:scale-110 active:scale-95"
+            className="absolute top-4 right-4 lg:top-8 lg:right-8 z-[210] p-2 text-black/70 hover:text-black transition-all hover:scale-110 active:scale-95 bg-white/50 rounded-full backdrop-blur-sm"
           >
-            <X className="w-8 h-8" strokeWidth={1} />
+            <X className="w-6 h-6 lg:w-8 lg:h-8" strokeWidth={1} />
           </button>
 
-          {/* Swiper inside Lightbox */}
-          <div className="w-full h-full relative" onClick={(e) => e.stopPropagation()}>
+          {/* Image Area */}
+          <div className="w-full lg:w-[70%] h-[55vh] lg:h-full relative bg-[#F8F6F2]" onClick={(e) => e.stopPropagation()}>
             <Swiper
               modules={[Navigation, Pagination]}
               initialSlide={lightboxIndex}
@@ -158,14 +175,14 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
                 prevEl: lightboxPrevEl,
                 nextEl: lightboxNextEl,
               }}
-              pagination={{ type: 'fraction', el: lightboxPaginationEl }}
+              loop={true}
               className="w-full h-full lightbox-swiper"
               speed={800}
-              onSlideChange={(swiper) => setLightboxIndex(swiper.activeIndex)}
+              onSlideChange={(swiper) => setLightboxIndex(swiper.realIndex)}
             >
               {allImages.map((img, idx) => (
                 <SwiperSlide key={idx} className="flex items-center justify-center w-full h-full">
-                  <div className="relative w-full h-full">
+                  <div className="relative w-full h-full p-4 lg:p-12">
                     <Image
                       src={img}
                       alt={`${room.name} — ${idx + 1}`}
@@ -183,24 +200,35 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
             {/* Left Arrow */}
             <button
               ref={setLightboxPrevEl}
-              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-[210] p-4 text-white/50 hover:text-white transition-opacity cursor-pointer hidden md:block"
+              className="absolute left-2 lg:left-8 top-1/2 -translate-y-1/2 z-[210] p-2 lg:p-4 text-black/50 hover:text-black transition-opacity cursor-pointer hidden md:block bg-white/30 hover:bg-white/60 rounded-full backdrop-blur-sm"
             >
-              <ChevronLeft className="w-10 h-10 md:w-12 md:h-12" strokeWidth={1} />
+              <ChevronLeft className="w-8 h-8 lg:w-10 lg:h-10" strokeWidth={1} />
             </button>
             
             {/* Right Arrow */}
             <button
               ref={setLightboxNextEl}
-              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[210] p-4 text-white/50 hover:text-white transition-opacity cursor-pointer hidden md:block"
+              className="absolute right-2 lg:right-8 top-1/2 -translate-y-1/2 z-[210] p-2 lg:p-4 text-black/50 hover:text-black transition-opacity cursor-pointer hidden md:block bg-white/30 hover:bg-white/60 rounded-full backdrop-blur-sm"
             >
-              <ChevronRight className="w-10 h-10 md:w-12 md:h-12" strokeWidth={1} />
+              <ChevronRight className="w-8 h-8 lg:w-10 lg:h-10" strokeWidth={1} />
             </button>
 
-            {/* Counter */}
-            <div
-              ref={setLightboxPaginationEl}
-              className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[210] font-mono text-xs md:text-sm tracking-[0.3em] uppercase text-white/60"
-            ></div>
+          </div>
+
+          {/* Content Area */}
+          <div 
+            className="w-full lg:w-[30%] h-[45vh] lg:h-full overflow-y-auto px-6 lg:px-16 py-10 lg:py-24 flex flex-col justify-center bg-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span className="text-[10px] font-mono tracking-[0.3em] uppercase opacity-60 mb-4 lg:mb-6 block">
+              {room.location}
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-primary mb-4 lg:mb-6 leading-tight tracking-tight text-[var(--primary-color)]">
+              {room.name}
+            </h2>
+            <p className="text-sm lg:text-base leading-relaxed opacity-80 font-light">
+              {room.description}
+            </p>
           </div>
         </div>
       )}
