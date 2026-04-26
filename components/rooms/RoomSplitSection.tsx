@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Autoplay, Navigation, Pagination, Thumbs, FreeMode } from 'swiper/modules';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useLenis } from 'lenis/react';
@@ -22,6 +22,8 @@ interface RoomSplitSectionProps {
     image: string;
     images?: string[];
     location: string;
+    capacity?: string;
+    amenities?: string[];
   };
   reverse?: boolean;
   lang: string;
@@ -32,6 +34,7 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
   const allImages = room.images && room.images.length > 0 ? room.images : [room.image];
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
@@ -159,15 +162,15 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 md:p-8 lg:p-12 overflow-hidden"
+            className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 md:p-8 lg:p-12 "
             onClick={closeLightbox}
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-white w-full max-w-7xl h-full max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row relative"
+              className="bg-white w-full max-w-7xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row relative"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
@@ -179,64 +182,124 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
               </button>
 
               {/* Image Area */}
-              <div className="w-full lg:w-[65%] h-[50%] lg:h-full relative bg-[#F8F6F2]">
-                <Swiper
-                  modules={[Navigation, Pagination]}
-                  initialSlide={lightboxIndex}
-                  navigation={{
-                    prevEl: lightboxPrevEl,
-                    nextEl: lightboxNextEl,
-                  }}
-                  loop={true}
-                  className="w-full h-full"
-                  speed={800}
-                  onSlideChange={(swiper) => setLightboxIndex(swiper.realIndex)}
-                >
-                  {allImages.map((img, idx) => (
-                    <SwiperSlide key={idx} className="flex items-center justify-center w-full h-full">
-                      <div className="relative w-full h-full p-4 lg:p-10">
-                        <Image
-                          src={img}
-                          alt={`${room.name} — ${idx + 1}`}
-                          fill
-                          className="object-contain"
-                          sizes="(max-width: 1024px) 100vw, 65vw"
-                          quality={100}
-                        />
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+              <div className="w-full lg:w-[50%] h-[450px] sm:h-[550px] lg:h-full flex flex-col bg-[#F8F6F2] shrink-0">
+                <div className="flex-1 relative min-h-0">
+                  <Swiper
+                    modules={[Navigation, Thumbs, FreeMode]}
+                    initialSlide={lightboxIndex}
+                    thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                    navigation={{
+                      prevEl: lightboxPrevEl,
+                      nextEl: lightboxNextEl,
+                    }}
+                    loop={true}
+                    className="w-full h-full"
+                    speed={800}
+                    onSlideChange={(swiper) => setLightboxIndex(swiper.realIndex)}
+                  >
+                    {allImages.map((img, idx) => (
+                      <SwiperSlide key={idx} className="flex items-center justify-center w-full h-full">
+                        <div className="relative w-full h-full p-4 lg:p-10">
+                          <Image
+                            src={img}
+                            alt={`${room.name} — ${idx + 1}`}
+                            fill
+                            className="object-contain"
+                            sizes="(max-width: 1024px) 100vw, 60vw"
+                            quality={100}
+                          />
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
 
-                {/* Minimal Controls */}
-                <button
-                  ref={setLightboxPrevEl}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-[210] p-3 text-black/40 hover:text-black transition-all cursor-pointer hidden md:block bg-white/40 hover:bg-white/80 rounded-full backdrop-blur-sm"
-                >
-                  <ChevronLeft className="w-6 h-6" strokeWidth={1.5} />
-                </button>
-                
-                <button
-                  ref={setLightboxNextEl}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-[210] p-3 text-black/40 hover:text-black transition-all cursor-pointer hidden md:block bg-white/40 hover:bg-white/80 rounded-full backdrop-blur-sm"
-                >
-                  <ChevronRight className="w-6 h-6" strokeWidth={1.5} />
-                </button>
+                  {/* Minimal Controls */}
+                  <button
+                    ref={setLightboxPrevEl}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-[210] p-3 text-black/40 hover:text-black transition-all cursor-pointer hidden md:block bg-white/40 hover:bg-white/80 rounded-full backdrop-blur-sm"
+                  >
+                    <ChevronLeft className="w-6 h-6" strokeWidth={1.5} />
+                  </button>
+
+                  <button
+                    ref={setLightboxNextEl}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-[210] p-3 text-black/40 hover:text-black transition-all cursor-pointer hidden md:block bg-white/40 hover:bg-white/80 rounded-full backdrop-blur-sm"
+                  >
+                    <ChevronRight className="w-6 h-6" strokeWidth={1.5} />
+                  </button>
+                </div>
+
+                {/* Thumbnails Gallery */}
+                <div className="p-4 bg-white/50 backdrop-blur-sm border-t border-gray-100">
+                  <Swiper
+                    onSwiper={setThumbsSwiper}
+                    modules={[FreeMode, Thumbs]}
+                    spaceBetween={10}
+                    slidesPerView={5}
+                    freeMode={true}
+                    watchSlidesProgress={true}
+                    className="thumbs-swiper"
+                  >
+                    {allImages.map((img, idx) => (
+                      <SwiperSlide key={idx} className="cursor-pointer">
+                        <div className={`relative aspect-square rounded-sm overflow-hidden transition-all duration-300 ${lightboxIndex === idx ? 'ring-2 ring-primary ring-offset-2 scale-95 opacity-100' : 'opacity-40 hover:opacity-80'}`}>
+                          <Image
+                            src={img}
+                            alt={`Thumbnail ${idx + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
               </div>
 
               {/* Content Area */}
-              <div className="w-full lg:w-[35%] h-[50%] lg:h-full overflow-y-auto px-8 lg:px-12 py-12 lg:py-20 flex flex-col justify-center bg-white border-l border-gray-100">
-                <div className="max-w-md mx-auto lg:mx-0">
-                  <span className="text-[10px] font-mono tracking-[0.3em] uppercase opacity-50 mb-4 block">
-                    {room.location}
-                  </span>
-                  <h2 className="text-3xl lg:text-4xl font-primary mb-6 leading-tight tracking-tight text-primary">
+              <div 
+                className="w-full lg:w-[50%] flex-1 lg:h-full overflow-y-auto px-8 lg:px-12 py-12 lg:py-16 flex flex-col bg-white border-l border-gray-100 font-sans"
+                data-lenis-prevent
+              >
+                <div className="max-w-md mx-auto lg:mx-0 w-full">
+                  <h2 className="text-2xl lg:text-3xl font-primary mb-6 leading-tight tracking-tight text-primary uppercase">
                     {room.name}
                   </h2>
-                  <div className="w-12 h-px bg-primary/20 mb-8"></div>
-                  <p className="text-sm lg:text-base leading-relaxed opacity-70 font-light whitespace-pre-line">
+
+                  <p className="text-sm lg:text-base leading-relaxed opacity-70 font-light mb-8 whitespace-pre-line">
                     {room.description}
                   </p>
+
+                  {/* Max Capacity */}
+                  <div className="pt-8 border-t border-gray-100 mb-8">
+                    <span className="text-[10px] font-mono tracking-[0.3em] uppercase opacity-60 mb-3 block font-bold">
+                      {lang === 'it' ? 'CAPACITÀ MASSIMA' : lang === 'de' ? 'MAX. KAPAZITÄT' : 'MAX CAPACITY'}
+                    </span>
+                    <p className="text-sm font-mono opacity-80">
+                      {room.capacity || (lang === 'it' ? '2 Adulti' : lang === 'de' ? '2 Erwachsene' : '2 Adults')}
+                    </p>
+                  </div>
+
+                  {/* Amenities */}
+                  <div className="pt-8 border-t border-gray-100">
+                    <span className="text-[10px] font-mono tracking-[0.3em] uppercase opacity-60 mb-5 block font-bold">
+                      {lang === 'it' ? 'SERVIZI' : lang === 'de' ? 'AUSSTATTUNG' : 'AMENITIES'}
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                      {(room.amenities || [
+                        'Cable / satellite TV', 'Flat-Screen TV',
+                        'Direct dial phone', 'Coffee maker',
+                        'In Room Safe', 'Mini-bar (extra charge)',
+                        'Non-Smoking', 'Natural bath amenities',
+                        'WiFi'
+                      ]).map((amenity, i) => (
+                        <div key={i} className="flex items-center gap-2 text-xs font-mono opacity-80">
+                          <span className="text-primary/60">✓</span>
+                          <span>{amenity}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
