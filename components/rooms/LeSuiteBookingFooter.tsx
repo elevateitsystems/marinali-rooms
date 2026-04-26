@@ -5,24 +5,34 @@ import { ArrowRight } from 'lucide-react';
 
 export default function LeSuiteBookingFooter({ lang }: { lang: string }) {
   const handleBookNow = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    window.dispatchEvent(new CustomEvent('open-booking-drawer'));
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 1024) {
+        // Mobile: Open the booking drawer/modal
+        window.dispatchEvent(new CustomEvent('open-booking-drawer'));
+      } else {
+        // Desktop: Navigate to the external booking site
+        const baseUrl = "https://marinalirooms.kross.travel/book/step1";
+        const successUrl = `${window.location.origin}/${lang}/thank-you`;
+        const finalUrl = `${baseUrl}?lang=${lang}&url_back=${encodeURIComponent(successUrl)}`;
+        window.open(finalUrl, '_blank');
+      }
+    }
   };
 
   const label =
     lang === 'it' ? 'Pronto per il tuo soggiorno?' :
-    lang === 'de' ? 'Bereit für Ihren Aufenthalt?' :
-    'Ready for your stay?';
+      lang === 'de' ? 'Bereit für Ihren Aufenthalt?' :
+        'Ready for your stay?';
 
   const sub =
     lang === 'it' ? 'Prenota direttamente per le migliori tariffe garantite.' :
-    lang === 'de' ? 'Direkt buchen für die besten garantierten Preise.' :
-    'Book directly for the best guaranteed rates.';
+      lang === 'de' ? 'Direkt buchen für die besten garantierten Preise.' :
+        'Book directly for the best guaranteed rates.';
 
   const btnText =
     lang === 'it' ? 'PRENOTA ORA' :
-    lang === 'de' ? 'JETZT BUCHEN' :
-    'BOOK NOW';
+      lang === 'de' ? 'JETZT BUCHEN' :
+        'BOOK NOW';
 
   return (
     <section className="w-full bg-primary text-white py-20 px-5 flex flex-col items-center text-center">

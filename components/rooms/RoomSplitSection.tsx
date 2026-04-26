@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
@@ -152,86 +152,97 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
         </div>
       </section>
 
-      {/* Lightbox - Casa Cook Style */}
-      {lightboxOpen && (
-        <div
-          className="fixed inset-0 z-[200] bg-white flex flex-col lg:flex-row items-stretch animate-fade-in"
-          onClick={closeLightbox}
-        >
-          {/* Close Button */}
-          <button
-            onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
-            className="absolute top-4 right-4 lg:top-8 lg:right-8 z-[210] p-2 text-black/70 hover:text-black transition-all hover:scale-110 active:scale-95 bg-white/50 rounded-full backdrop-blur-sm"
+      {/* Lightbox - Casa Cook Style Modal Overlay */}
+      <AnimatePresence>
+        {lightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 md:p-8 lg:p-12 overflow-hidden"
+            onClick={closeLightbox}
           >
-            <X className="w-6 h-6 lg:w-8 lg:h-8" strokeWidth={1} />
-          </button>
-
-          {/* Image Area */}
-          <div className="w-full lg:w-[70%] h-[55vh] lg:h-full relative bg-[#F8F6F2]" onClick={(e) => e.stopPropagation()}>
-            <Swiper
-              modules={[Navigation, Pagination]}
-              initialSlide={lightboxIndex}
-              navigation={{
-                prevEl: lightboxPrevEl,
-                nextEl: lightboxNextEl,
-              }}
-              loop={true}
-              className="w-full h-full lightbox-swiper"
-              speed={800}
-              onSlideChange={(swiper) => setLightboxIndex(swiper.realIndex)}
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="bg-white w-full max-w-7xl h-full max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row relative"
+              onClick={(e) => e.stopPropagation()}
             >
-              {allImages.map((img, idx) => (
-                <SwiperSlide key={idx} className="flex items-center justify-center w-full h-full">
-                  <div className="relative w-full h-full p-4 lg:p-12">
-                    <Image
-                      src={img}
-                      alt={`${room.name} — ${idx + 1}`}
-                      fill
-                      className="object-contain"
-                      sizes="100vw"
-                      quality={100}
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+              {/* Close Button */}
+              <button
+                onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+                className="absolute top-4 right-4 z-[220] p-2 text-black/50 hover:text-black transition-all hover:scale-110 active:scale-95 bg-white/80 rounded-full backdrop-blur-sm shadow-sm"
+              >
+                <X className="w-6 h-6" strokeWidth={1.5} />
+              </button>
 
-            {/* Custom Minimal Controls - Casa Cook Style */}
-            {/* Left Arrow */}
-            <button
-              ref={setLightboxPrevEl}
-              className="absolute left-2 lg:left-8 top-1/2 -translate-y-1/2 z-[210] p-2 lg:p-4 text-black/50 hover:text-black transition-opacity cursor-pointer hidden md:block bg-white/30 hover:bg-white/60 rounded-full backdrop-blur-sm"
-            >
-              <ChevronLeft className="w-8 h-8 lg:w-10 lg:h-10" strokeWidth={1} />
-            </button>
-            
-            {/* Right Arrow */}
-            <button
-              ref={setLightboxNextEl}
-              className="absolute right-2 lg:right-8 top-1/2 -translate-y-1/2 z-[210] p-2 lg:p-4 text-black/50 hover:text-black transition-opacity cursor-pointer hidden md:block bg-white/30 hover:bg-white/60 rounded-full backdrop-blur-sm"
-            >
-              <ChevronRight className="w-8 h-8 lg:w-10 lg:h-10" strokeWidth={1} />
-            </button>
+              {/* Image Area */}
+              <div className="w-full lg:w-[65%] h-[50%] lg:h-full relative bg-[#F8F6F2]">
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  initialSlide={lightboxIndex}
+                  navigation={{
+                    prevEl: lightboxPrevEl,
+                    nextEl: lightboxNextEl,
+                  }}
+                  loop={true}
+                  className="w-full h-full"
+                  speed={800}
+                  onSlideChange={(swiper) => setLightboxIndex(swiper.realIndex)}
+                >
+                  {allImages.map((img, idx) => (
+                    <SwiperSlide key={idx} className="flex items-center justify-center w-full h-full">
+                      <div className="relative w-full h-full p-4 lg:p-10">
+                        <Image
+                          src={img}
+                          alt={`${room.name} — ${idx + 1}`}
+                          fill
+                          className="object-contain"
+                          sizes="(max-width: 1024px) 100vw, 65vw"
+                          quality={100}
+                        />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
 
-          </div>
+                {/* Minimal Controls */}
+                <button
+                  ref={setLightboxPrevEl}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-[210] p-3 text-black/40 hover:text-black transition-all cursor-pointer hidden md:block bg-white/40 hover:bg-white/80 rounded-full backdrop-blur-sm"
+                >
+                  <ChevronLeft className="w-6 h-6" strokeWidth={1.5} />
+                </button>
+                
+                <button
+                  ref={setLightboxNextEl}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-[210] p-3 text-black/40 hover:text-black transition-all cursor-pointer hidden md:block bg-white/40 hover:bg-white/80 rounded-full backdrop-blur-sm"
+                >
+                  <ChevronRight className="w-6 h-6" strokeWidth={1.5} />
+                </button>
+              </div>
 
-          {/* Content Area */}
-          <div 
-            className="w-full lg:w-[30%] h-[45vh] lg:h-full overflow-y-auto px-6 lg:px-16 py-10 lg:py-24 flex flex-col justify-center bg-white"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <span className="text-[10px] font-mono tracking-[0.3em] uppercase opacity-60 mb-4 lg:mb-6 block">
-              {room.location}
-            </span>
-            <h2 className="text-3xl lg:text-4xl font-primary mb-4 lg:mb-6 leading-tight tracking-tight text-[var(--primary-color)]">
-              {room.name}
-            </h2>
-            <p className="text-sm lg:text-base leading-relaxed opacity-80 font-light">
-              {room.description}
-            </p>
-          </div>
-        </div>
-      )}
+              {/* Content Area */}
+              <div className="w-full lg:w-[35%] h-[50%] lg:h-full overflow-y-auto px-8 lg:px-12 py-12 lg:py-20 flex flex-col justify-center bg-white border-l border-gray-100">
+                <div className="max-w-md mx-auto lg:mx-0">
+                  <span className="text-[10px] font-mono tracking-[0.3em] uppercase opacity-50 mb-4 block">
+                    {room.location}
+                  </span>
+                  <h2 className="text-3xl lg:text-4xl font-primary mb-6 leading-tight tracking-tight text-primary">
+                    {room.name}
+                  </h2>
+                  <div className="w-12 h-px bg-primary/20 mb-8"></div>
+                  <p className="text-sm lg:text-base leading-relaxed opacity-70 font-light whitespace-pre-line">
+                    {room.description}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
