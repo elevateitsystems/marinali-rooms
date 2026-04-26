@@ -91,7 +91,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
       </h1>
       <div className="flex items-center gap-3 mt-0 md:-mt-1">
         <div className={`w-8 h-px ${logoLineColor} opacity-80`}></div>
-        <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] font-medium opacity-100">
+        <span className={`${yellowtail.className} text-xl md:text-2xl tracking-wide opacity-100`}>
           Rooms
         </span>
         <div className={`w-8 h-px ${logoLineColor} opacity-80`}></div>
@@ -114,7 +114,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
 
           {/* Left: Navigation Links */}
           <div className="flex-1 flex justify-start z-20">
-            <nav className={`flex items-center justify-start flex-wrap gap-x-3 gap-y-1 md:gap-x-4 md:gap-y-2 lg:gap-6 ${textColor}`}>
+            <nav className={`hidden md:flex items-center justify-start flex-wrap gap-x-3 gap-y-1 md:gap-x-4 md:gap-y-2 lg:gap-6 ${textColor}`}>
               {[
                 { name: t.suites, path: '#le-suite' },
                 { name: t.heritage, path: '#heritage' },
@@ -158,7 +158,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
 
           {/* Right: Language Switcher */}
           <div className="flex-1 flex justify-end z-20">
-            <div className={`flex items-center gap-2 sm:gap-3 md:gap-4 text-xs md:text-base font-mono tracking-widest uppercase ${textColor}`}>
+            <div className={`flex items-center gap-2 sm:gap-3 md:gap-4 text-base font-mono tracking-widest uppercase ${textColor}`}>
               {languages.map((l, i) => (
                 <div key={l} className="flex items-center gap-2 sm:gap-3 md:gap-4">
                   <Link

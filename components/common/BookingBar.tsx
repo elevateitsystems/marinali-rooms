@@ -43,6 +43,12 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     }
   }, [drawerOpen, lenis]);
 
+  useEffect(() => {
+    const handleOpenDrawer = () => setDrawerOpen(true);
+    window.addEventListener('open-booking-drawer', handleOpenDrawer);
+    return () => window.removeEventListener('open-booking-drawer', handleOpenDrawer);
+  }, []);
+
   const formatDateForKross = (d?: Date) => {
     if (!d) return "";
     return format(d, "yyyy-MM-dd");
@@ -69,7 +75,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     setDrawerOpen(false);
   };
 
-  const mobileButtonText = lang === 'it' ? 'Cerca' : lang === 'de' ? 'Suchen' : 'Search';
+  const mobileButtonText = lang === 'it' ? 'VERIFICA DISPONIBILITÀ' : lang === 'de' ? 'VERFÜGBARKEIT PRÜFEN' : 'CHECK AVAILABILITY';
 
   const bookingFormContent = (
     <form
@@ -211,7 +217,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         type="submit"
         className="bg-primary hover:bg-primary/90 text-white font-bold text-lg md:text-xl px-8 py-3 lg:py-0 rounded-sm transition-colors cursor-pointer outline-none min-h-[52px]"
       >
-        {data?.bookingButtonText || data?.buttonText || mobileButtonText}
+        {mobileButtonText}
       </button>
     </form>
   );
