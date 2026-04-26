@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { format, addDays } from "date-fns";
+import { it, de, enGB } from 'date-fns/locale';
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -24,6 +25,8 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     from: new Date(),
     to: addDays(new Date(), 1),
   });
+
+  const currentLocale = lang === 'it' ? it : lang === 'de' ? de : enGB;
 
   const [guests, setGuests] = useState("2");
   const [rooms, setRooms] = useState("1");
@@ -89,26 +92,27 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           <div className="flex flex-col">
             <span className="text-xs opacity-60 font-medium">{lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Check-in'}</span>
             <span className="text-sm md:text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-              {date?.from ? format(date.from, "MMM d, yyyy") : "Select"}
+              {date?.from ? format(date.from, "d MMM yyyy", { locale: currentLocale }) : "Select"}
             </span>
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={10}>
-          <Calendar
-            mode="single"
-            selected={date?.from}
-            onSelect={(selectedDate) => {
-              if (selectedDate) {
-                const newFrom = selectedDate;
-                const newTo = (date?.to && date.to > newFrom) ? date.to : addDays(newFrom, 1);
-                setDate({ from: newFrom, to: newTo });
-                setArrivalPopoverOpen(false);
-                setDeparturePopoverOpen(true);
-              }
-            }}
-            disabled={{ before: new Date() }}
-            initialFocus
-          />
+            <Calendar
+              mode="single"
+              selected={date?.from}
+              locale={currentLocale}
+              onSelect={(selectedDate) => {
+                if (selectedDate) {
+                  const newFrom = selectedDate;
+                  const newTo = (date?.to && date.to > newFrom) ? date.to : addDays(newFrom, 1);
+                  setDate({ from: newFrom, to: newTo });
+                  setArrivalPopoverOpen(false);
+                  setDeparturePopoverOpen(true);
+                }
+              }}
+              disabled={{ before: new Date() }}
+              initialFocus
+            />
         </PopoverContent>
       </Popover>
 
@@ -119,25 +123,26 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           <div className="flex flex-col">
             <span className="text-xs opacity-60 font-medium">{lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Check-out'}</span>
             <span className="text-sm md:text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-              {date?.to ? format(date.to, "MMM d, yyyy") : "Select"}
+              {date?.to ? format(date.to, "d MMM yyyy", { locale: currentLocale }) : "Select"}
             </span>
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={10}>
-          <Calendar
-            mode="single"
-            selected={date?.to}
-            onSelect={(selectedDate) => {
-              if (selectedDate) {
-                const newTo = selectedDate;
-                const newFrom = (date?.from && date.from < newTo) ? date.from : addDays(newTo, -1);
-                setDate({ from: newFrom, to: newTo });
-                setDeparturePopoverOpen(false);
-              }
-            }}
-            disabled={{ before: date?.from || new Date() }}
-            initialFocus
-          />
+            <Calendar
+              mode="single"
+              selected={date?.to}
+              locale={currentLocale}
+              onSelect={(selectedDate) => {
+                if (selectedDate) {
+                  const newTo = selectedDate;
+                  const newFrom = (date?.from && date.from < newTo) ? date.from : addDays(newTo, -1);
+                  setDate({ from: newFrom, to: newTo });
+                  setDeparturePopoverOpen(false);
+                }
+              }}
+              disabled={{ before: date?.from || new Date() }}
+              initialFocus
+            />
         </PopoverContent>
       </Popover>
 
