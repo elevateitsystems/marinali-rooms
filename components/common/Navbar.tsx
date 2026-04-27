@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { Yellowtail } from "next/font/google";
 import { useQuery } from '@tanstack/react-query';
 import { useLenis } from 'lenis/react';
+import BrandLogo from './BrandLogo';
 
 const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 
@@ -46,6 +47,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
   const t = navData[lang];
   const pathname = usePathname();
   const isLeSuite = pathname.includes('/le-suite');
+  const isPolicyPage = pathname.includes('/privacy-policy') || pathname.includes('/cookie-policy');
 
   const { data: settings } = useQuery({
     queryKey: ['settings'],
@@ -78,34 +80,16 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
     return `/${newLang}${currentRoute}`;
   };
 
-  const textColor = (scrolled || isLeSuite) ? 'text-black' : 'text-white';
-  const logoLineColor = (scrolled || isLeSuite) ? 'bg-black' : 'bg-white';
+  const textColor = (scrolled || isLeSuite || isPolicyPage) ? 'text-black' : 'text-white';
+  const logoLineColor = (scrolled || isLeSuite || isPolicyPage) ? 'bg-black' : 'bg-white';
 
-  const logoContent = (
-    <div
-      className={`relative z-10 flex flex-col items-center justify-center ${textColor} will-change-transform`}
-      style={{ transformOrigin: "center center" }}
-    >
-      <h1 className={`${yellowtail.className} text-3xl md:text-4xl tracking-wide mb-1`}>
-        Marinali
-      </h1>
-      <div className="flex items-center gap-3 mt-0 md:-mt-1">
-        <div className={`w-8 h-px ${logoLineColor} opacity-80`}></div>
-        <span className={`${yellowtail.className} text-xl md:text-2xl tracking-wide opacity-100`}>
-          Rooms
-        </span>
-        <div className={`w-8 h-px ${logoLineColor} opacity-80`}></div>
-      </div>
-      <span className="text-[7px] md:text-[8px] uppercase tracking-[0.2em] font-light opacity-70 mt-1">
-        Bassano del Grappa
-      </span>
-    </div>
-  );
+  const logoContent = <BrandLogo lang={lang} variant={(scrolled || isLeSuite || isPolicyPage) ? 'dark' : 'light'} size="md" />;
+
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${(scrolled || isLeSuite)
+        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${(scrolled || isLeSuite || isPolicyPage)
           ? 'bg-[var(--background)]/80 backdrop-blur-md shadow-sm py-2 pb-3'
           : 'bg-transparent py-2 md:py-4'
           }`}
@@ -122,12 +106,14 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
               ].map((item, idx) => (
                 <Link
                   key={idx}
-                  href={item.path}
+                  href={pathname === `/${lang}` ? item.path : `/${lang}${item.path}`}
                   onClick={(e) => {
-                    e.preventDefault();
-                    const el = document.querySelector(item.path);
-                    if (el) {
-                      el.scrollIntoView({ behavior: 'smooth' });
+                    if (pathname === `/${lang}`) {
+                      e.preventDefault();
+                      const el = document.querySelector(item.path);
+                      if (el) {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                      }
                     }
                   }}
                   className="text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-medium tracking-widest uppercase transition-all duration-300 hover:opacity-70"
@@ -147,7 +133,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
                 if (lenis) lenis.scrollTo(0);
                 else window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className={`flex items-center gap-1 transition-all duration-500 ease-in-out ${(showLogo || isLeSuite)
+              className={`flex items-center gap-1 transition-all duration-500 ease-in-out ${(showLogo || isLeSuite || isPolicyPage)
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-4 pointer-events-none'
                 }`}

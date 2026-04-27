@@ -46,7 +46,7 @@ export default function EditableText({
     },
     onSuccess: () => {
       toast.success("Text updated successfully!", { className: "text-green-600 bg-green-50" });
-      queryClient.invalidateQueries({ queryKey: [page, lang] });
+      queryClient.invalidateQueries({ queryKey: ["content", lang, page] });
       setIsEditing(false);
     },
     onError: () => {

@@ -38,7 +38,6 @@ export const metadata: Metadata = {
 };
 
 import { SettingsService } from "@/lib/services/settingsService";
-import SmoothScrolling from "@/components/common/SmoothScrolling";
 import Providers from "./providers";
 
 export default async function RootLayout({
@@ -69,9 +68,7 @@ export default async function RootLayout({
     >
       <body className="min-h-screen flex flex-col">
         <Providers>
-          <SmoothScrolling>
-            {children}
-          </SmoothScrolling>
+          {children}
         </Providers>
       </body>
     </html>

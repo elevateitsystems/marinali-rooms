@@ -14,6 +14,7 @@ import {
 
 import { X, Bed, Calendar as CalendarIcon, User, ChevronDown } from 'lucide-react';
 import { useLenis } from 'lenis/react';
+import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 
 interface BookingBarProps {
   lang?: 'en' | 'it' | 'de';
@@ -34,6 +35,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [arrivalPopoverOpen, setArrivalPopoverOpen] = useState(false);
   const [departurePopoverOpen, setDeparturePopoverOpen] = useState(false);
+  const dragControls = useDragControls();
 
   const lenis = useLenis();
 
@@ -248,34 +250,62 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       </div>
 
       {/* ========== MOBILE DRAWER: Slides up from bottom ========== */}
-      <div
-        className={`lg:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${drawerOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        onClick={() => setDrawerOpen(false)}
-      />
+      <AnimatePresence>
+        {drawerOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="lg:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+              onClick={() => setDrawerOpen(false)}
+            />
 
-      <div
-        className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-gray-100 rounded-t-xl shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${drawerOpen ? 'translate-y-0' : 'translate-y-full'}`}
-        style={{ maxHeight: '90vh', overflowY: 'auto' }}
-      >
-        <div className="flex items-center justify-center pt-3 pb-1">
-          <div className="w-12 h-1.5 rounded-full bg-gray-300" />
-        </div>
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              drag="y"
+              dragControls={dragControls}
+              dragListener={false}
+              dragConstraints={{ top: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 500) {
+                  setDrawerOpen(false);
+                }
+              }}
+              className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-gray-100 rounded-t-2xl shadow-2xl overflow-hidden"
+              style={{ maxHeight: '92vh' }}
+            >
+              {/* Handle */}
+              <div 
+                className="flex items-center justify-center pt-4 pb-2 cursor-grab active:cursor-grabbing touch-none"
+                onPointerDown={(e) => dragControls.start(e)}
+              >
+                <div className="w-12 h-1.5 rounded-full bg-gray-400/50" />
+              </div>
 
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-          <h3 className="text-base font-bold text-gray-800">{lang === 'it' ? 'Cerca' : lang === 'de' ? 'Suchen' : 'Search'}</h3>
-          <button
-            type="button"
-            onClick={() => setDrawerOpen(false)}
-            className="p-2 hover:bg-gray-200 rounded-full transition-colors cursor-pointer text-gray-500"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-bold text-gray-800">{lang === 'it' ? 'Cerca' : lang === 'de' ? 'Suchen' : 'Search'}</h3>
+                <button
+                  type="button"
+                  onClick={() => setDrawerOpen(false)}
+                  className="p-2 hover:bg-gray-200 rounded-full transition-colors cursor-pointer text-gray-500"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
 
-        <div className="p-4">
-          {drawerOpen && bookingFormContent}
-        </div>
-      </div>
+              <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(92vh - 80px)' }}>
+                {bookingFormContent}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };

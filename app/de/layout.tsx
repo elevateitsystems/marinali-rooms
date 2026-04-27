@@ -3,6 +3,10 @@ import Footer from "@/components/common/Footer";
 import BookingBar from "@/components/common/BookingBar";
 import { getContent } from "@/lib/content";
 import { SettingsService } from "@/lib/services/settingsService";
+import SmoothScrolling from "@/components/common/SmoothScrolling";
+
+export const dynamic = 'force-dynamic';
+
 
 export default async function GermanLayout({ children }: { children: React.ReactNode }) {
   const { home } = getContent("de");
@@ -11,7 +15,7 @@ export default async function GermanLayout({ children }: { children: React.React
   const footerConfig = settings.footerConfig?.de;
 
   return (
-    <>
+    <SmoothScrolling>
       <Navbar lang="de" />
       <div className="pt-24 min-h-screen">
         {children}
@@ -25,7 +29,9 @@ export default async function GermanLayout({ children }: { children: React.React
         whatsapp={footerConfig?.whatsapp}
         mapUrl={footerConfig?.mapUrl}
         copyright={footerConfig?.copyright}
+        columns={footerConfig?.columns}
+        bottomLinks={footerConfig?.bottomLinks}
       />
-    </>
+    </SmoothScrolling>
   );
 }

@@ -5,6 +5,9 @@ import Link from "next/link";
 import { Yellowtail } from "next/font/google";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
+import EditableText from "../common/EditableText";
+import EditableImage from "../common/EditableImage";
+import BrandLogo from "../common/BrandLogo";
 
 const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 
@@ -13,11 +16,15 @@ export default function Hero({
   subtitle = "Rooms",
   imgUrl = "/assets/Stanza%203%20-%20Foto-13.jpg",
   lang = "en",
+  data,
+  isEditable = false,
 }: {
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
   imgUrl?: string;
   lang?: 'en' | 'it' | 'de';
+  data?: any;
+  isEditable?: boolean;
 }) {
   const { data: settings } = useQuery({
     queryKey: ['settings'],
@@ -36,7 +43,18 @@ export default function Hero({
   const translateY = useTransform(scrollY, [0, 1000], [0, -300]);
   const bgTranslateY = useTransform(scrollY, [0, 1000], [0, 200]);
 
-  const displayImgUrl = settings?.heroImage || imgUrl;
+  const displayImgUrl = data?.heroImage || settings?.heroImage || imgUrl;
+
+  const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
+    if (isEditable) {
+      return <div className="flex flex-col items-center justify-center group">{children}</div>;
+    }
+    return (
+      <Link href={`/${lang}`} className="flex flex-col items-center justify-center group cursor-pointer">
+        {children}
+      </Link>
+    );
+  };
 
   return (
     <section id="hero" className="-mt-24 relative w-full h-[85vh] flex flex-col items-center justify-center overflow-hidden">
@@ -53,6 +71,18 @@ export default function Hero({
           className="object-cover object-center brightness-[0.7]"
           priority
         />
+        {isEditable && (
+          <div className="absolute top-32 right-10 z-50">
+            <EditableImage 
+              lang={lang as string} 
+              page="home" 
+              path="heroImage" 
+              currentValue={displayImgUrl} 
+              className="w-40 h-10"
+              label="Change Background"
+            />
+          </div>
+        )}
       </motion.div>
 
       {/* Main Content */}
@@ -65,23 +95,13 @@ export default function Hero({
           transformOrigin: "center center"
         }}
       >
-        <Link href={`/${lang}`} className="flex flex-col items-center justify-center group cursor-pointer">
-          <h1
-            className={`${yellowtail.className} text-7xl md:text-9xl tracking-wide drop-shadow-md mb-4  transition-transform duration-500`}
-          >
-            {title}
-          </h1>
-          <div className="flex items-center gap-6 mt-1 md:-mt-4">
-            <div className="w-16 h-px bg-white opacity-80"></div>
-            <span className={`${yellowtail.className} text-3xl md:text-5xl capitalize tracking-wide opacity-100`}>
-              {typeof subtitle === 'string' ? subtitle.toLowerCase() : subtitle}
-            </span>
-            <div className="w-16 h-px bg-white opacity-80"></div>
-          </div>
-          <span className="text-[10px] md:text-[12px] uppercase tracking-[0.3em] font-light opacity-80 mt-4 animate-fade-in">
-            Bassano del Grappa
-          </span>
-        </Link>
+        <ContentWrapper>
+          <BrandLogo 
+            lang={lang} 
+            size="xl" 
+            variant="light" 
+          />
+        </ContentWrapper>
       </motion.div>
     </section>
   );

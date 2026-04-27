@@ -9,8 +9,6 @@
   "content": {
     "en": {
       "home": {
-        "title": "Marinali",
-        "subtitle": "ROOMS",
         "welcomeText": "A historic Palazzo from 1460 in the heart of Bassano del Grappa, offering Italian luxury and heritage.",
         "aboutTitle": "Our Heritage",
         "aboutDescription": "Built in 1460, Marinali Rooms preserves the authentic Italian Palazzo experience with modern comfort.",
@@ -81,8 +79,6 @@
     },
     "it": {
       "home": {
-        "title": "Marinali",
-        "subtitle": "CAMERE",
         "welcomeText": "Un Palazzo storico del 1460 nel cuore di Bassano del Grappa, che offre lusso e tradizione italiana.",
         "aboutTitle": "La Nostra Storia",
         "aboutDescription": "Costruito nel 1460, Marinali Rooms conserva l'autentica esperienza del Palazzo italiano con il comfort moderno.",
@@ -153,8 +149,6 @@
     },
     "de": {
       "home": {
-        "title": "Marinali",
-        "subtitle": "ZIMMER",
         "welcomeText": "Ein historischer Palazzo aus dem Jahr 1460 im Herzen von Bassano del Grappa, der italienischen Luxus und Erbe bietet.",
         "aboutTitle": "Unser Erbe",
         "aboutDescription": "Das Marinali Rooms wurde 1460 erbaut und bewahrt das authentische italienische Palazzo-Erlebnis mit modernem Komfort.",
