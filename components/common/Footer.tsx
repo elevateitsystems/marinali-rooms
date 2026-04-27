@@ -114,9 +114,11 @@ interface FooterProps {
   whatsapp?: string;
   mapUrl?: string;
   copyright?: string;
+  columns?: any[];
+  bottomLinks?: any[];
 }
 
-export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, copyright }: FooterProps) {
+export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, copyright, columns, bottomLinks }: FooterProps) {
   const t = staticContent[lang] || staticContent.en;
 
   const displayAddress = address || t.address;
@@ -213,8 +215,8 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
         {/* Bottom copyright info preserved from original footer */}
         <div className="max-w-4xl mx-auto border-t border-white/20 pt-6 text-xs font-mono opacity-80 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex gap-4">
-            <Link href="#" className="hover:underline">{t.privacy}</Link>
-            <Link href="#" className="hover:underline">{t.cookie}</Link>
+            <Link href={`/${lang}/privacy-policy`} className="hover:underline">{t.privacy}</Link>
+            <Link href={`/${lang}/cookie-policy`} className="hover:underline">{t.cookie}</Link>
           </div>
           <div>{displayCopyright}</div>
         </div>

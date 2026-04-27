@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from '../ui/skeleton';
+import EditableText from '../common/EditableText';
 
 interface HighlightRoom {
   id: string;
@@ -13,7 +14,7 @@ interface HighlightRoom {
   isLargeHighlight: boolean;
 }
 
-export default function Highlights({ lang, data }: { lang: string; data?: any }) {
+export default function Highlights({ lang, data, isEditable = false }: { lang: string; data?: any; isEditable?: boolean }) {
   const { data: rooms = [], isLoading } = useQuery<HighlightRoom[]>({
     queryKey: ["rooms", "highlights", lang],
     queryFn: async () => {
@@ -55,7 +56,11 @@ export default function Highlights({ lang, data }: { lang: string; data?: any })
             textTransform: 'uppercase'
           }}
         >
-          {data?.highlightsTitle || "HIGHLIGHTS"}
+          {isEditable ? (
+            <EditableText lang={lang} page="home" path="highlightsTitle" initialValue={data?.highlightsTitle || "HIGHLIGHTS"} />
+          ) : (
+            data?.highlightsTitle || "HIGHLIGHTS"
+          )}
         </h2>
 
         <div

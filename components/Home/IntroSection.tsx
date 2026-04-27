@@ -3,16 +3,25 @@
 import { motion } from 'framer-motion';
 
 import { ReactNode } from 'react';
+import EditableText from '../common/EditableText';
 
 export default function IntroSection({
   title,
   description,
   children,
+  data,
+  lang = "en",
+  isEditable = false,
 }: {
   title?: string | ReactNode;
   description?: string | ReactNode;
   children?: ReactNode;
+  data?: any;
+  lang?: string;
+  isEditable?: boolean;
 }) {
+  const displayTitle = data?.aboutTitle || data?.title || title;
+  const displayDescription = data?.aboutDescription || data?.welcomeText || description;
   return (
     <section
       id="heritage"
@@ -40,7 +49,11 @@ export default function IntroSection({
             color: 'var(--foreground)',
           }}
         >
-          {title || 'Welcome'}
+          {isEditable ? (
+            <EditableText lang={lang} page="home" path="aboutTitle" initialValue={displayTitle as string} />
+          ) : (
+            displayTitle || 'Welcome'
+          )}
         </h2>
 
         <div
@@ -54,7 +67,11 @@ export default function IntroSection({
             marginBottom: '20px',
           }}
         >
-          {description || 'Experience unforgettable hospitality at Marinali Rooms, right in the heart of the town center. We are passionate about creating welcoming stays with every comfort at your fingertips.'}
+          {isEditable ? (
+            <EditableText lang={lang} page="home" path="aboutDescription" initialValue={displayDescription as string} multiline />
+          ) : (
+            displayDescription || 'Experience unforgettable hospitality at Marinali Rooms...'
+          )}
         </div>
       </motion.div>
 

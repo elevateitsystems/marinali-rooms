@@ -31,11 +31,7 @@ export interface ThemeSettings {
   backgroundColor: string;
   textColor: string;
   fontFamily: string;
-  logo?: string | null;
-  logoKey?: string | null;
   heroImage?: string | null;
   heroImageKey?: string | null;
-  retreatImage?: string | null;
-  retreatImageKey?: string | null;
   footerConfig?: Record<string, FooterConfig> | null;
 }
