@@ -22,20 +22,6 @@ export function SettingsPreview({
     return (
       <>
         {/* Navbar */}
-        <div className="relative flex flex-col items-center justify-center px-3 py-3 border-b border-current/10 sticky top-0 bg-inherit z-20 backdrop-blur-sm bg-opacity-90">
-          <div className="flex flex-col items-center">
-            <span className="text-[10px] font-serif tracking-tight leading-none" style={{ color: formData.textColor }}>Marinali</span>
-            <div className="flex items-center gap-1.5 -mt-0.5">
-              <div className="w-2.5 h-[0.5px] bg-current opacity-40"></div>
-              <span className="text-[6px] tracking-[0.2em] uppercase opacity-60" style={{ color: formData.textColor }}>Rooms</span>
-              <div className="w-2.5 h-[0.5px] bg-current opacity-40"></div>
-            </div>
-          </div>
-          <div className="absolute right-3 flex gap-4 text-[8px] uppercase font-bold tracking-widest opacity-80">
-            <Menu size={10} />
-          </div>
-        </div>
-
         {/* Banner / Hero */}
         <div className="relative flex flex-col items-center justify-center text-center px-4 py-4 border-b border-current/5 h-[140px] flex-shrink-0">
           <div className="absolute inset-0 z-0">
@@ -81,31 +67,42 @@ export function SettingsPreview({
             <p className="text-[4px] tracking-[0.3em] uppercase opacity-60 font-mono">Bassano del Grappa, Italy</p>
           </div>
 
-
-        </div>
-
-
-
-        {/* Heritage Section Preview */}
-        <div className="px-3 py-4 border-b border-current/5">
-          <h2 className="text-[6px] uppercase tracking-widest font-light mb-3 text-center">Heritage & History</h2>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-2">
-              <div className="aspect-[4/3] bg-gray-100 rounded-sm overflow-hidden relative">
-                <div className="absolute inset-0 bg-black/10"></div>
+          <div className="space-y-0">
+            {/* Split Section 1 */}
+            <div className="flex items-stretch border-b border-current/5">
+              <div className="w-1/2 aspect-square bg-gray-100 relative">
+                <div className="absolute inset-0 bg-black/5"></div>
               </div>
-              <div className="h-1.5 w-full bg-current/10 rounded-xs"></div>
-              <div className="h-1 w-2/3 bg-current/5 rounded-xs"></div>
+              <div className="w-1/2 p-4 flex flex-col justify-center items-center text-center">
+                <h3 className="text-[7px] font-serif uppercase tracking-widest mb-1.5">Junior Suite</h3>
+                <div className="space-y-[1.5px] w-3/4">
+                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
+                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
+                  <div className="h-[2px] w-[60%] bg-current/10 rounded-full mx-auto"></div>
+                </div>
+                <div className="mt-3 px-3 py-1 border border-current opacity-40 text-[3px] tracking-widest uppercase">Discover</div>
+              </div>
             </div>
-            <div className="space-y-2">
-              <div className="aspect-[4/3] bg-gray-100 rounded-sm overflow-hidden relative">
-                <div className="absolute inset-0 bg-black/10"></div>
+            {/* Split Section 2 */}
+            <div className="flex flex-row-reverse items-stretch border-b border-current/5">
+              <div className="w-1/2 aspect-square bg-gray-100 relative">
+                <div className="absolute inset-0 bg-black/5"></div>
               </div>
-              <div className="h-1.5 w-full bg-current/10 rounded-xs"></div>
-              <div className="h-1 w-2/3 bg-current/5 rounded-xs"></div>
+              <div className="w-1/2 p-4 flex flex-col justify-center items-center text-center">
+                <h3 className="text-[7px] font-serif uppercase tracking-widest mb-1.5">Suite Deluxe</h3>
+                <div className="space-y-[1.5px] w-3/4">
+                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
+                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
+                  <div className="h-[2px] w-[60%] bg-current/10 rounded-full mx-auto"></div>
+                </div>
+                <div className="mt-3 px-3 py-1 border border-current opacity-40 text-[3px] tracking-widest uppercase">Discover</div>
+              </div>
             </div>
           </div>
         </div>
+
+
+
 
         {/* Review Section Preview */}
         <div className="px-3 py-4 border-b border-current/5 text-center flex-shrink-0" style={{ backgroundColor: formData.primaryColor, color: '#fff' }}>
