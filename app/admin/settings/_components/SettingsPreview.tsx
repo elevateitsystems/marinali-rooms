@@ -17,7 +17,7 @@ export function SettingsPreview({
   showPreviewDrawer,
   setShowPreviewDrawer,
 }: SettingsPreviewProps) {
-  
+
   const renderPreviewContent = () => {
     return (
       <>
@@ -39,10 +39,10 @@ export function SettingsPreview({
         {/* Banner / Hero */}
         <div className="relative flex flex-col items-center justify-center text-center px-4 py-4 border-b border-current/5 h-[140px] flex-shrink-0">
           <div className="absolute inset-0 z-0">
-            <img 
-              src={formData.heroImage || "/assets/Stanza%203%20-%20Foto-13.jpg"} 
-              alt="Hero" 
-              className="w-full h-full object-cover brightness-[0.6]" 
+            <img
+              src={formData.heroImage || "/assets/Stanza%203%20-%20Foto-13.jpg"}
+              alt="Hero"
+              className="w-full h-full object-cover brightness-[0.6]"
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20 z-0"></div>
@@ -77,42 +77,11 @@ export function SettingsPreview({
         {/* Le Suite Section Preview */}
         <div className="border-b border-current/5">
           <div className="py-8 text-center" style={{ backgroundColor: formData.primaryColor, color: '#fff' }}>
-             <h2 className="text-xl font-serif tracking-tight mb-1">Le Suite</h2>
-             <p className="text-[4px] tracking-[0.3em] uppercase opacity-60 font-mono">Bassano del Grappa, Italy</p>
+            <h2 className="text-xl font-serif tracking-tight mb-1">Le Suite</h2>
+            <p className="text-[4px] tracking-[0.3em] uppercase opacity-60 font-mono">Bassano del Grappa, Italy</p>
           </div>
-          
-          <div className="space-y-0">
-            {/* Split Section 1 */}
-            <div className="flex items-stretch border-b border-current/5">
-              <div className="w-1/2 aspect-square bg-gray-100 relative">
-                <div className="absolute inset-0 bg-black/5"></div>
-              </div>
-              <div className="w-1/2 p-4 flex flex-col justify-center items-center text-center">
-                <h3 className="text-[7px] font-serif uppercase tracking-widest mb-1.5">Junior Suite</h3>
-                <div className="space-y-[1.5px] w-3/4">
-                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
-                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
-                  <div className="h-[2px] w-[60%] bg-current/10 rounded-full mx-auto"></div>
-                </div>
-                <div className="mt-3 px-3 py-1 border border-current opacity-40 text-[3px] tracking-widest uppercase">Discover</div>
-              </div>
-            </div>
-            {/* Split Section 2 */}
-            <div className="flex flex-row-reverse items-stretch border-b border-current/5">
-              <div className="w-1/2 aspect-square bg-gray-100 relative">
-                <div className="absolute inset-0 bg-black/5"></div>
-              </div>
-              <div className="w-1/2 p-4 flex flex-col justify-center items-center text-center">
-                <h3 className="text-[7px] font-serif uppercase tracking-widest mb-1.5">Suite Deluxe</h3>
-                <div className="space-y-[1.5px] w-3/4">
-                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
-                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
-                  <div className="h-[2px] w-[60%] bg-current/10 rounded-full mx-auto"></div>
-                </div>
-                <div className="mt-3 px-3 py-1 border border-current opacity-40 text-[3px] tracking-widest uppercase">Discover</div>
-              </div>
-            </div>
-          </div>
+
+
         </div>
 
 

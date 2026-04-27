@@ -356,12 +356,12 @@ export default function SettingsPage() {
         </form>
       </div>
 
-      {/* <SettingsPreview
+      <SettingsPreview
         formData={formData}
         fc={fc}
         showPreviewDrawer={showPreviewDrawer}
         setShowPreviewDrawer={setShowPreviewDrawer}
-      /> */}
+      />
     </div>
   );
 }
