@@ -30,16 +30,17 @@ export default async function GermanHomePage() {
 
   return (
     <>
-      <Hero 
+      <Hero
         title={data?.heroTitle || "Marinali"}
         subtitle={data?.heroSubtitle || "ROOMS"}
-        lang="de" 
+        lang="de"
         data={data}
       />
-      
+
       {/* Le Suite Section */}
       <section id="le-suite" className="pt-20">
-        <div className="bg-primary text-white py-24 lg:py-36 px-5 text-center mb-12">
+        <div className="bg-primary text-white py-12 lg:py-20 px-5 text-center ">
+
           <h2 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">
             {data?.leSuiteTitle || "Le Suite"}
           </h2>
@@ -57,7 +58,7 @@ export default async function GermanHomePage() {
             priority={index === 0}
           />
         ))}
-        
+
         <LeSuiteBookingFooter lang="de" />
       </section>
 
