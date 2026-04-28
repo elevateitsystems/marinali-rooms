@@ -7,56 +7,76 @@ import RoomSplitSection from "@/components/rooms/RoomSplitSection";
 import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
 import HeritageSection from "@/components/Home/HeritageSection";
 
-
-
 const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
-
-const rooms = [
-  {
-    id: 'junior-suite',
-    name: 'JUNIOR SUITE',
-    location: 'Bassano del Grappa',
-    description: "Un santuario di luce e storia, con affreschi originali e artigianato italiano su misura in un ambiente intimo. Perfetto per chi cerca un'autentica esperienza in un Palazzo con il comfort moderno.",
-    image: '/assets/Stanza%201%20-%20Foto-1.jpg',
-    images: [
-      '/assets/Stanza%201%20-%20Foto-1.jpg',
-      '/assets/Stanza%201%20-%20Foto-4.jpg',
-      '/assets/Stanza%201%20-%20Foto-5.jpg',
-      '/assets/Stanza%201%20-%20Foto-6.jpg',
-      '/assets/Stanza%201%20-%20Foto-7.jpg',
-      '/assets/Stanza%201%20-%20Foto-11.jpg',
-    ]
-  },
-  {
-    id: 'suite-deluxe',
-    name: 'SUITE DELUXE',
-    location: 'Bassano del Grappa',
-    description: 'Eleganza senza pari tra mura storiche, con pavimenti in terrazzo veneziano e vista panoramica sul centro storico. La nostra offerta più grandiosa per un soggiorno indimenticabile nel cuore di Bassano.',
-    image: '/assets/Stanza%202%20-%20Foto-1.jpg',
-    images: [
-      '/assets/Stanza%202%20-%20Foto-1.jpg',
-      '/assets/Stanza%202%20-%20Foto-2.jpg',
-      '/assets/Stanza%202%20-%20Foto-3.jpg',
-      '/assets/Stanza%202%20-%20Foto-7.jpg',
-      '/assets/Stanza%202%20-%20Foto-11.jpg',
-      '/assets/Stanza%202%20-%20Foto-12.jpg',
-    ]
-  }
-];
 
 export default async function ItalianHomePage() {
   const content = await ContentService.getContent("home", "it");
   const data = (content?.sections as any) || {};
-
+  const rooms = [
+    {
+      id: 'junior-suite',
+      name: 'JUNIOR SUITE',
+      location: 'Bassano del Grappa',
+      description: 'Ein Refugium aus Licht und Geschichte, mit originalen Fresken und maßgeschneiderter italienischer Handwerkskunst in einem intimen Rahmen. Perfekt für alle, die ein authentisches Palazzo-Erlebnis mit modernem Komfort suchen.',
+      capacity: '2 Erwachsene',
+      amenities: [
+        'Kostenloses Highspeed-WLAN',
+        'Klimaanlage',
+        'Minibar',
+        'Zimmersafe',
+        'Flachbild-TV',
+        'Nespresso-Kaffeemaschine',
+        'Luxuriöses Badezimmer',
+        'Haartrockner',
+        'Bio-Pflegeprodukte'
+      ],
+      image: '/assets/Stanza%201%20-%20Foto-1.jpg',
+      images: [
+        '/assets/Stanza%201%20-%20Foto-1.jpg',
+        '/assets/Stanza%201%20-%20Foto-4.jpg',
+        '/assets/Stanza%201%20-%20Foto-5.jpg',
+        '/assets/Stanza%201%20-%20Foto-6.jpg',
+        '/assets/Stanza%201%20-%20Foto-7.jpg',
+        '/assets/Stanza%201%20-%20Foto-11.jpg',
+      ]
+    },
+    {
+      id: 'suite-deluxe',
+      name: 'SUITE DELUXE',
+      location: 'Bassano del Grappa',
+      description: 'Unvergleichliche Eleganz in historischen Mauern, mit venezianischen Terrazzoböden und Panoramablick auf das historische Zentrum. Unser prachtvollstes Angebot für einen unvergesslichen Aufenthalt im Herzen von Bassano.',
+      capacity: '2 Erwachsene',
+      amenities: [
+        'Kostenloses Highspeed-WLAN',
+        'Klimaanlage',
+        'Minibar',
+        'Zimmersafe',
+        'Flachbild-TV',
+        'Nespresso-Kaffeemaschine',
+        'Luxuriöses Badezimmer',
+        'Haartrockner',
+        'Bio-Pflegeprodukte'
+      ],
+      image: '/assets/Stanza%202%20-%20Foto-1.jpg',
+      images: [
+        '/assets/Stanza%202%20-%20Foto-1.jpg',
+        '/assets/Stanza%202%20-%20Foto-2.jpg',
+        '/assets/Stanza%202%20-%20Foto-3.jpg',
+        '/assets/Stanza%202%20-%20Foto-7.jpg',
+        '/assets/Stanza%202%20-%20Foto-11.jpg',
+        '/assets/Stanza%202%20-%20Foto-12.jpg',
+      ]
+    }
+  ];
   return (
     <>
-      <Hero 
+      <Hero
         title={data?.heroTitle || "Marinali"}
         subtitle={data?.heroSubtitle || "ROOMS"}
-        lang="it" 
+        lang="it"
         data={data}
       />
-      
+
       {/* Le Suite Section */}
       <section id="le-suite" className="pt-20">
         <div className="bg-primary text-white py-24 lg:py-36 px-5 text-center mb-12">
@@ -68,7 +88,7 @@ export default async function ItalianHomePage() {
           </p>
         </div>
 
-        {rooms.map((room, index) => (
+        {rooms?.map((room: any, index: number) => (
           <RoomSplitSection
             key={room.id}
             room={room}
@@ -77,7 +97,7 @@ export default async function ItalianHomePage() {
             priority={index === 0}
           />
         ))}
-        
+
         <LeSuiteBookingFooter lang="it" />
       </section>
 

@@ -16,6 +16,18 @@ const rooms = [
     name: 'JUNIOR SUITE',
     location: 'Bassano del Grappa',
     description: 'A sanctuary of light and history, featuring original frescoes and bespoke Italian craftsmanship in an intimate setting. Perfect for those seeking an authentic Palazzo experience with modern comfort.',
+    capacity: '2 Adults',
+    amenities: [
+      'Free high-speed WiFi',
+      'Air conditioning',
+      'Mini-bar',
+      'In-room safe',
+      'Flat-screen TV',
+      'Nespresso coffee machine',
+      'Luxury bathroom',
+      'Hair dryer',
+      'Organic bath amenities'
+    ],
     image: '/assets/Stanza%201%20-%20Foto-1.jpg',
     images: [
       '/assets/Stanza%201%20-%20Foto-1.jpg',
@@ -31,6 +43,18 @@ const rooms = [
     name: 'SUITE DELUXE',
     location: 'Bassano del Grappa',
     description: 'Unparalleled elegance spanning historic walls, with Venetian terrazzo floors and panoramic views of the historic center. Our grandest offering for an unforgettable stay in the heart of Bassano.',
+    capacity: '2 Adults',
+    amenities: [
+      'Free high-speed WiFi',
+      'Air conditioning',
+      'Mini-bar',
+      'In-room safe',
+      'Flat-screen TV',
+      'Nespresso coffee machine',
+      'Luxury bathroom',
+      'Hair dryer',
+      'Organic bath amenities'
+    ],
     image: '/assets/Stanza%202%20-%20Foto-1.jpg',
     images: [
       '/assets/Stanza%202%20-%20Foto-1.jpg',
