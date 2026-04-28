@@ -5,9 +5,9 @@ import PolicyPage from '@/components/common/PolicyPage';
 export default function CookiePolicyIT() {
   return (
     <PolicyPage
-      lang="it"
       title="Cookie Policy"
       content={
+
         <div className="space-y-6 text-left">
           <p className="text-sm opacity-60 italic">Ultimo aggiornamento: Aprile 2026</p>
           
