@@ -1,4 +1,6 @@
 import { ContentService } from "@/lib/services/contentService";
+import { RoomService } from "@/lib/services/roomService";
+
 import Hero from "@/components/Home/Hero";
 import IntroSection from "@/components/Home/IntroSection";
 import dynamic from "next/dynamic";
@@ -11,13 +13,15 @@ import HeritageSection from "@/components/Home/HeritageSection";
 const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
 
 export default async function EnglishHomePage() {
-  const roomsData = require("@/data/rooms.json");
+  const roomsData = await RoomService.getRooms();
   const rooms = roomsData.map((room: any) => ({
-    id: room.id,
+    id: room.slug,
     image: room.image,
     images: room.images,
     ...room.translations.en
   }));
+
+
 
   const content = await ContentService.getContent("home", "en");
   const data = (content?.sections as any) || {};

@@ -14,7 +14,8 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="p-6 md:p-12 bg-slate-50/50 min-h-full">
+    <div className="p-6 md:p-12 bg-slate-50/50 h-full overflow-y-auto">
+
       <div className="mb-10">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-gray-500 mt-2">Welcome back! Here's an overview of your CMS.</p>

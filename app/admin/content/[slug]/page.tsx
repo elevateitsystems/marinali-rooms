@@ -25,6 +25,8 @@ import Link from "next/link";
 import { toast } from "sonner";
 import EditableText from "@/components/common/EditableText";
 import { PageEditorSkeleton } from "./_components/PageEditorSkeleton";
+import { RoomsManager } from "./_components/RoomsManager";
+
 
 // Import UI components for preview
 import Hero from "@/components/Home/Hero";
@@ -45,7 +47,6 @@ const PAGE_SECTIONS: Record<string, any[]> = {
     { id: "le-suite", label: "Le Suite Section", component: null, icon: Bed },
     { id: "welcome", label: "Welcome Section", component: IntroSection, icon: Type },
     { id: "heritage", label: "Heritage Blocks", component: HeritageSection, icon: History },
-    { id: "highlights", label: "Highlights", component: Highlights, icon: Star },
   ],
   about: [
     { id: "hero", label: "About Hero", component: null, icon: ImageIcon },
@@ -247,25 +248,32 @@ export default function VisualPageEditor() {
             <div className="w-full bg-white shadow-2xl rounded overflow-hidden max-w-6xl">
               {/* This is where we render the actual site components */}
               {activeSection === "le-suite" ? (
-                <div className="bg-primary text-white py-24 px-5 text-center">
-                  <h2 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">
-                    <EditableText
-                      lang={activeLang}
-                      page={slug}
-                      path="leSuiteTitle"
-                      initialValue={content?.sections?.leSuiteTitle || "Le Suite"}
-                    />
-                  </h2>
-                  <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">
-                    <EditableText
-                      lang={activeLang}
-                      page={slug}
-                      path="leSuiteSubtitle"
-                      initialValue={content?.sections?.leSuiteSubtitle || "Bassano del Grappa, Italy"}
-                    />
-                  </p>
+                <div className="space-y-0">
+
+                  <div className="bg-primary text-white py-24 px-5 text-center">
+                    <h2 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">
+                      <EditableText
+                        lang={activeLang}
+                        page={slug}
+                        path="leSuiteTitle"
+                        initialValue={content?.sections?.leSuiteTitle || "Le Suite"}
+                      />
+                    </h2>
+                    <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">
+                      <EditableText
+                        lang={activeLang}
+                        page={slug}
+                        path="leSuiteSubtitle"
+                        initialValue={content?.sections?.leSuiteSubtitle || "Bassano del Grappa, Italy"}
+                      />
+                    </p>
+                  </div>
+                  <div className="bg-slate-50 border-t border-slate-200">
+                    <RoomsManager lang={activeLang} />
+                  </div>
                 </div>
               ) : (
+
                 PreviewComponent && content ? (
                   <div>
                     <PreviewComponent
