@@ -24,6 +24,7 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import EditableText from "@/components/common/EditableText";
+import { PageEditorSkeleton } from "./_components/PageEditorSkeleton";
 
 // Import UI components for preview
 import Hero from "@/components/Home/Hero";
@@ -105,11 +106,7 @@ export default function VisualPageEditor() {
   });
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="animate-spin text-blue-900" size={40} />
-      </div>
-    );
+    return <PageEditorSkeleton />;
   }
 
   if (isError || !PAGE_SECTIONS[slug]) {
