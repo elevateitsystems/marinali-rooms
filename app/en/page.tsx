@@ -10,64 +10,15 @@ import HeritageSection from "@/components/Home/HeritageSection";
 
 const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
 
-const rooms = [
-  {
-    id: 'junior-suite',
-    name: 'JUNIOR SUITE',
-    location: 'Bassano del Grappa',
-    description: 'A sanctuary of light and history, featuring original frescoes and bespoke Italian craftsmanship in an intimate setting. Perfect for those seeking an authentic Palazzo experience with modern comfort.',
-    capacity: '2 Adults',
-    amenities: [
-      'Free high-speed WiFi',
-      'Air conditioning',
-      'Mini-bar',
-      'In-room safe',
-      'Flat-screen TV',
-      'Nespresso coffee machine',
-      'Luxury bathroom',
-      'Hair dryer',
-      'Organic bath amenities'
-    ],
-    image: '/assets/Stanza%201%20-%20Foto-1.jpg',
-    images: [
-      '/assets/Stanza%201%20-%20Foto-1.jpg',
-      '/assets/Stanza%201%20-%20Foto-4.jpg',
-      '/assets/Stanza%201%20-%20Foto-5.jpg',
-      '/assets/Stanza%201%20-%20Foto-6.jpg',
-      '/assets/Stanza%201%20-%20Foto-7.jpg',
-      '/assets/Stanza%201%20-%20Foto-11.jpg',
-    ]
-  },
-  {
-    id: 'suite-deluxe',
-    name: 'SUITE DELUXE',
-    location: 'Bassano del Grappa',
-    description: 'Unparalleled elegance spanning historic walls, with Venetian terrazzo floors and panoramic views of the historic center. Our grandest offering for an unforgettable stay in the heart of Bassano.',
-    capacity: '2 Adults',
-    amenities: [
-      'Free high-speed WiFi',
-      'Air conditioning',
-      'Mini-bar',
-      'In-room safe',
-      'Flat-screen TV',
-      'Nespresso coffee machine',
-      'Luxury bathroom',
-      'Hair dryer',
-      'Organic bath amenities'
-    ],
-    image: '/assets/Stanza%202%20-%20Foto-1.jpg',
-    images: [
-      '/assets/Stanza%202%20-%20Foto-1.jpg',
-      '/assets/Stanza%202%20-%20Foto-2.jpg',
-      '/assets/Stanza%202%20-%20Foto-3.jpg',
-      '/assets/Stanza%202%20-%20Foto-7.jpg',
-      '/assets/Stanza%202%20-%20Foto-11.jpg',
-      '/assets/Stanza%202%20-%20Foto-12.jpg',
-    ]
-  }
-];
-
 export default async function EnglishHomePage() {
+  const roomsData = require("@/data/rooms.json");
+  const rooms = roomsData.map((room: any) => ({
+    id: room.id,
+    image: room.image,
+    images: room.images,
+    ...room.translations.en
+  }));
+
   const content = await ContentService.getContent("home", "en");
   const data = (content?.sections as any) || {};
 
@@ -91,7 +42,7 @@ export default async function EnglishHomePage() {
           </p>
         </div>
 
-        {rooms.map((room, index) => (
+        {rooms.map((room: any, index: number) => (
           <RoomSplitSection
             key={room.id}
             room={room}

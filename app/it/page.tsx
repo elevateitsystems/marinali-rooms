@@ -12,62 +12,14 @@ const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
 export default async function ItalianHomePage() {
   const content = await ContentService.getContent("home", "it");
   const data = (content?.sections as any) || {};
-  const rooms = [
-    {
-      id: 'junior-suite',
-      name: 'JUNIOR SUITE',
-      location: 'Bassano del Grappa',
-      description: 'Ein Refugium aus Licht und Geschichte, mit originalen Fresken und maßgeschneiderter italienischer Handwerkskunst in einem intimen Rahmen. Perfekt für alle, die ein authentisches Palazzo-Erlebnis mit modernem Komfort suchen.',
-      capacity: '2 Erwachsene',
-      amenities: [
-        'Kostenloses Highspeed-WLAN',
-        'Klimaanlage',
-        'Minibar',
-        'Zimmersafe',
-        'Flachbild-TV',
-        'Nespresso-Kaffeemaschine',
-        'Luxuriöses Badezimmer',
-        'Haartrockner',
-        'Bio-Pflegeprodukte'
-      ],
-      image: '/assets/Stanza%201%20-%20Foto-1.jpg',
-      images: [
-        '/assets/Stanza%201%20-%20Foto-1.jpg',
-        '/assets/Stanza%201%20-%20Foto-4.jpg',
-        '/assets/Stanza%201%20-%20Foto-5.jpg',
-        '/assets/Stanza%201%20-%20Foto-6.jpg',
-        '/assets/Stanza%201%20-%20Foto-7.jpg',
-        '/assets/Stanza%201%20-%20Foto-11.jpg',
-      ]
-    },
-    {
-      id: 'suite-deluxe',
-      name: 'SUITE DELUXE',
-      location: 'Bassano del Grappa',
-      description: 'Unvergleichliche Eleganz in historischen Mauern, mit venezianischen Terrazzoböden und Panoramablick auf das historische Zentrum. Unser prachtvollstes Angebot für einen unvergesslichen Aufenthalt im Herzen von Bassano.',
-      capacity: '2 Erwachsene',
-      amenities: [
-        'Kostenloses Highspeed-WLAN',
-        'Klimaanlage',
-        'Minibar',
-        'Zimmersafe',
-        'Flachbild-TV',
-        'Nespresso-Kaffeemaschine',
-        'Luxuriöses Badezimmer',
-        'Haartrockner',
-        'Bio-Pflegeprodukte'
-      ],
-      image: '/assets/Stanza%202%20-%20Foto-1.jpg',
-      images: [
-        '/assets/Stanza%202%20-%20Foto-1.jpg',
-        '/assets/Stanza%202%20-%20Foto-2.jpg',
-        '/assets/Stanza%202%20-%20Foto-3.jpg',
-        '/assets/Stanza%202%20-%20Foto-7.jpg',
-        '/assets/Stanza%202%20-%20Foto-11.jpg',
-        '/assets/Stanza%202%20-%20Foto-12.jpg',
-      ]
-    }
-  ];
+  const roomsData = require("@/data/rooms.json");
+  const rooms = roomsData.map((room: any) => ({
+    id: room.id,
+    image: room.image,
+    images: room.images,
+    ...room.translations.it
+  }));
+
   return (
     <>
       <Hero
