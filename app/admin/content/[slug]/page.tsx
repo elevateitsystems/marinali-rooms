@@ -19,8 +19,10 @@ import {
   Star,
   History,
   Bed,
-  CheckCircle2
+  CheckCircle2,
+  Heart
 } from "lucide-react";
+
 import Link from "next/link";
 import { toast } from "sonner";
 import EditableText from "@/components/common/EditableText";
@@ -35,6 +37,8 @@ import IntroSection from "@/components/Home/IntroSection";
 import HeritageSection from "@/components/Home/HeritageSection";
 // Note: We'll add more as needed
 
+import ThankYouPreview from "./_components/ThankYouPreview";
+
 const LANGUAGES = [
   { code: "en", label: "English", flag: "🇬🇧" },
   { code: "it", label: "Italiano", flag: "🇮🇹" },
@@ -48,15 +52,11 @@ const PAGE_SECTIONS: Record<string, any[]> = {
     { id: "welcome", label: "Welcome Section", component: IntroSection, icon: Type },
     { id: "heritage", label: "Heritage Blocks", component: HeritageSection, icon: History },
   ],
-  about: [
-    { id: "hero", label: "About Hero", component: null, icon: ImageIcon },
-    { id: "content", label: "Our Story", component: null, icon: Type },
-  ],
   "thank-you": [
-    { id: "hero", label: "Thank You Hero", component: null, icon: ImageIcon },
-    { id: "message", label: "Success Message", component: null, icon: CheckCircle2 },
+    { id: "content", label: "Page Content", component: ThankYouPreview, icon: Heart },
   ],
 };
+
 
 export default function VisualPageEditor() {
   const params = useParams();
