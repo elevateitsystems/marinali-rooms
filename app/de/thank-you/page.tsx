@@ -1,10 +1,14 @@
 import Link from 'next/link';
 import { Yellowtail } from "next/font/google";
 import { CheckCircle2, Calendar, MapPin, Phone } from 'lucide-react';
+import { ContentService } from "@/lib/services/contentService";
 
 const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 
-export default function ThankYouPage() {
+export default async function ThankYouPage() {
+  const content = await ContentService.getContent("thank-you", "de");
+  const data = (content?.sections as any) || {};
+
   return (
     <div className="min-h-screen bg-[var(--background)] flex flex-col items-center justify-center px-5 py-20 text-center">
       <div className="max-w-2xl w-full space-y-8 animate-fade-in">
@@ -16,31 +20,43 @@ export default function ThankYouPage() {
 
         <div className="space-y-4">
           <h1 className={`${yellowtail.className} text-6xl md:text-7xl text-primary`}>
-            Danke
+            {data.title || "Danke"}
           </h1>
           <h2 className="text-2xl md:text-3xl font-primary tracking-tight uppercase">
-            Buchung Bestätigt
+            {data.subtitle || "Buchung Bestätigt"}
           </h2>
           <p className="text-lg opacity-70 font-light leading-relaxed max-w-lg mx-auto">
-            Ihre Anfrage wurde erfolgreich bearbeitet. Wir haben Ihnen eine Bestätigungs-E-Mail mit allen Details Ihres Aufenthalts im Marinali Rooms gesendet.
+            {data.description || "Ihre Anfrage wurde erfolgreich bearbeitet. Wir haben Ihnen eine Bestätigungs-E-Mail mit allen Details Ihres Aufenthalts im Marinali Rooms gesendet."}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 border-t border-[var(--foreground)]/10">
           <div className="flex flex-col items-center gap-2">
             <Calendar className="text-primary opacity-60" size={20} />
-            <span className="text-[10px] uppercase tracking-widest font-mono opacity-50">Aufenthalt</span>
-            <span className="text-sm font-medium">E-Mail prüfen</span>
+            <span className="text-[10px] uppercase tracking-widest font-mono opacity-50">
+              {data.labelStay || "Aufenthalt"}
+            </span>
+            <span className="text-sm font-medium">
+              {data.valueStay || "E-Mail prüfen"}
+            </span>
           </div>
           <div className="flex flex-col items-center gap-2">
             <MapPin className="text-primary opacity-60" size={20} />
-            <span className="text-[10px] uppercase tracking-widest font-mono opacity-50">Adresse</span>
-            <span className="text-sm font-medium">Bassano del Grappa</span>
+            <span className="text-[10px] uppercase tracking-widest font-mono opacity-50">
+              {data.labelAddress || "Adresse"}
+            </span>
+            <span className="text-sm font-medium">
+              {data.valueAddress || "Bassano del Grappa"}
+            </span>
           </div>
           <div className="flex flex-col items-center gap-2">
             <Phone className="text-primary opacity-60" size={20} />
-            <span className="text-[10px] uppercase tracking-widest font-mono opacity-50">Support</span>
-            <span className="text-sm font-medium">+39 347 1234567</span>
+            <span className="text-[10px] uppercase tracking-widest font-mono opacity-50">
+              {data.labelSupport || "Support"}
+            </span>
+            <span className="text-sm font-medium">
+              {data.valueSupport || "+39 347 1234567"}
+            </span>
           </div>
         </div>
 
@@ -49,7 +65,7 @@ export default function ThankYouPage() {
             href="/de"
             className="inline-block px-12 py-5 bg-primary text-white text-xs font-bold tracking-[0.3em] uppercase hover:bg-primary/90 transition-all active:scale-95 shadow-lg"
           >
-            Zurück zur Startseite
+            {data.buttonLabel || "Zurück zur Startseite"}
           </Link>
         </div>
       </div>
@@ -61,3 +77,4 @@ export default function ThankYouPage() {
     </div>
   );
 }
+

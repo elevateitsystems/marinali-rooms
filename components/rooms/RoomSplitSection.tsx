@@ -65,9 +65,10 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
 
   return (
     <>
-      <section className={`w-full min-h-[80vh] flex ${reverse ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row'} items-stretch overflow-hidden bg-[var(--background)]`}>
+      <section className={`w-full flex ${reverse ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row'} items-stretch overflow-hidden bg-[var(--background)]`}>
         {/* Image Column — Swiper Carousel */}
-        <div className={`w-full lg:w-[55%] h-[500px] lg:h-[700px] relative group ${reverse ? 'lg:order-2' : ''}`}>
+        <div className={`w-full lg:w-[55%] h-[400px] lg:h-[500px] relative group ${reverse ? 'lg:order-2' : ''}`}>
+
           <Swiper
             modules={[Autoplay, Navigation, Pagination]}
             pagination={{ clickable: true }}
@@ -126,7 +127,8 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
         </div>
 
         {/* Content Column — no Book Now button here */}
-        <div className={`w-full lg:w-[45%] flex flex-col justify-center px-8 lg:px-20 py-16 lg:py-24 ${reverse ? 'lg:order-1' : ''}`}>
+        <div className={`w-full lg:w-[45%] flex flex-col justify-center px-8 lg:px-16 py-12 lg:py-16 ${reverse ? 'lg:order-1' : ''}`}>
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -257,7 +259,7 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
               </div>
 
               {/* Content Area */}
-              <div 
+              <div
                 className="w-full lg:w-[50%] flex-1 lg:h-full overflow-y-auto px-8 lg:px-12 py-12 lg:py-16 flex flex-col bg-white border-l border-gray-100 font-sans"
                 data-lenis-prevent
               >

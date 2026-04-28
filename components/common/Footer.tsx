@@ -4,53 +4,11 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { Yellowtail } from "next/font/google";
 import { Loader2 } from 'lucide-react';
+import MapSection from './MapSection';
 
 const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 
-const MapComponent = ({ url }: { url: string }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '200px' } // Load slightly before it comes into view
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={containerRef} className="w-full h-full relative flex items-center justify-center">
-      {!isVisible && (
-        <div className="flex flex-col items-center gap-2 text-primary/40">
-          <Loader2 className="animate-spin" size={24} />
-          <span className="text-[10px] font-mono tracking-widest uppercase">Loading Map...</span>
-        </div>
-      )}
-      {isVisible && (
-        <iframe
-          src={url}
-          width="100%"
-          height="100%"
-          style={{ border: 0, filter: 'grayscale(1) contrast(1.2) opacity(0.8)' }}
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          className="absolute inset-0 grayscale animate-fade-in"
-        />
-      )}
-    </div>
-  );
-};
+// MapComponent is now handled by MapSection
 
 const staticContent = {
   en: {
@@ -189,9 +147,9 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
           </div>
         </div>
 
-        {/* Right Side: Map */}
-        <div id="map" className="relative h-[400px] lg:h-full overflow-hidden bg-gray-100 flex items-center justify-center">
-          <MapComponent url={displayMapUrl} />
+        {/* Right Side: Map Section with Lightbox */}
+        <div id="map" className="relative h-[500px] lg:h-full overflow-hidden bg-gray-100">
+          <MapSection lang={lang} mapUrl={displayMapUrl} address={displayAddress} />
         </div>
       </section>
 

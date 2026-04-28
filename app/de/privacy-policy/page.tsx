@@ -5,9 +5,9 @@ import PolicyPage from '@/components/common/PolicyPage';
 export default function PrivacyPolicyDE() {
   return (
     <PolicyPage
-      lang="de"
       title="Datenschutzerklärung"
       content={
+
         <div className="space-y-6 text-left">
           <p className="text-sm opacity-60 italic">Letzte Aktualisierung: April 2026</p>
           

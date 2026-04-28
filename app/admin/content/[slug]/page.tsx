@@ -19,11 +19,16 @@ import {
   Star,
   History,
   Bed,
-  CheckCircle2
+  CheckCircle2,
+  Heart
 } from "lucide-react";
+
 import Link from "next/link";
 import { toast } from "sonner";
 import EditableText from "@/components/common/EditableText";
+import { PageEditorSkeleton } from "./_components/PageEditorSkeleton";
+import { RoomsManager } from "./_components/RoomsManager";
+
 
 // Import UI components for preview
 import Hero from "@/components/Home/Hero";
@@ -31,6 +36,8 @@ import Highlights from "@/components/Home/Highlights";
 import IntroSection from "@/components/Home/IntroSection";
 import HeritageSection from "@/components/Home/HeritageSection";
 // Note: We'll add more as needed
+
+import ThankYouPreview from "./_components/ThankYouPreview";
 
 const LANGUAGES = [
   { code: "en", label: "English", flag: "🇬🇧" },
@@ -44,17 +51,12 @@ const PAGE_SECTIONS: Record<string, any[]> = {
     { id: "le-suite", label: "Le Suite Section", component: null, icon: Bed },
     { id: "welcome", label: "Welcome Section", component: IntroSection, icon: Type },
     { id: "heritage", label: "Heritage Blocks", component: HeritageSection, icon: History },
-    { id: "highlights", label: "Highlights", component: Highlights, icon: Star },
-  ],
-  about: [
-    { id: "hero", label: "About Hero", component: null, icon: ImageIcon },
-    { id: "content", label: "Our Story", component: null, icon: Type },
   ],
   "thank-you": [
-    { id: "hero", label: "Thank You Hero", component: null, icon: ImageIcon },
-    { id: "message", label: "Success Message", component: null, icon: CheckCircle2 },
+    { id: "content", label: "Page Content", component: ThankYouPreview, icon: Heart },
   ],
 };
+
 
 export default function VisualPageEditor() {
   const params = useParams();
@@ -105,11 +107,7 @@ export default function VisualPageEditor() {
   });
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="animate-spin text-blue-900" size={40} />
-      </div>
-    );
+    return <PageEditorSkeleton />;
   }
 
   if (isError || !PAGE_SECTIONS[slug]) {
@@ -143,7 +141,7 @@ export default function VisualPageEditor() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-100 overflow-hidden">
+    <div className="flex flex-col  h-full bg-slate-100 overflow-hidden">
       {/* Top Header */}
       <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between z-20">
         <div className="flex items-center gap-4">
@@ -240,35 +238,44 @@ export default function VisualPageEditor() {
         </aside>
 
         {/* Preview / Edit Stage */}
-        <main className="flex-1 overflow-y-auto bg-slate-200/50 relative">
+        <main className="flex-1 overflow-y-auto bg-slate-200/50 relative flex flex-col">
           {/* Controls Bar */}
           <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-2 flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{activeSection} Editor</span>
           </div>
 
-          <div className="p-4 flex justify-center">
-            <div className="w-full bg-white shadow-2xl rounded overflow-hidden max-w-6xl">
+          <div className="p-4 flex-1 flex justify-center">
+            <div className="w-full bg-white shadow-2xl rounded overflow-hidden min-h-full mb-4">
+
               {/* This is where we render the actual site components */}
               {activeSection === "le-suite" ? (
-                <div className="bg-primary text-white py-24 px-5 text-center">
-                  <h2 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">
-                    <EditableText
-                      lang={activeLang}
-                      page={slug}
-                      path="leSuiteTitle"
-                      initialValue={content?.sections?.leSuiteTitle || "Le Suite"}
-                    />
-                  </h2>
-                  <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">
-                    <EditableText
-                      lang={activeLang}
-                      page={slug}
-                      path="leSuiteSubtitle"
-                      initialValue={content?.sections?.leSuiteSubtitle || "Bassano del Grappa, Italy"}
-                    />
-                  </p>
+                <div className="space-y-0">
+
+                  <div className="bg-primary text-white py-12 px-5 text-center">
+
+                    <h2 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">
+                      <EditableText
+                        lang={activeLang}
+                        page={slug}
+                        path="leSuiteTitle"
+                        initialValue={content?.sections?.leSuiteTitle || "Le Suite"}
+                      />
+                    </h2>
+                    <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">
+                      <EditableText
+                        lang={activeLang}
+                        page={slug}
+                        path="leSuiteSubtitle"
+                        initialValue={content?.sections?.leSuiteSubtitle || "Bassano del Grappa, Italy"}
+                      />
+                    </p>
+                  </div>
+                  <div className="bg-slate-50 border-t border-slate-200">
+                    <RoomsManager lang={activeLang} />
+                  </div>
                 </div>
               ) : (
+
                 PreviewComponent && content ? (
                   <div>
                     <PreviewComponent

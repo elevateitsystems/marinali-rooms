@@ -5,7 +5,6 @@ import PolicyPage from '@/components/common/PolicyPage';
 export default function CookiePolicyDE() {
   return (
     <PolicyPage
-      lang="de"
       title="Cookie-Richtlinie"
       content={
         <div className="space-y-6 text-left">

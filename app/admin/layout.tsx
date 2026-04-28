@@ -10,8 +10,9 @@ import {
   ChevronRight,
   Globe,
   Home,
-  Info,
+  Heart,
   CheckCircle2,
+
   Menu,
   X
 } from "lucide-react";
@@ -28,10 +29,8 @@ export default function AdminLayout({
 
   const pages = [
     { name: "Home", href: "/admin/content/home", icon: Home },
-    { name: "About", href: "/admin/content/about", icon: Info },
-    { name: "Thank You", href: "/admin/content/thank-you", icon: CheckCircle2 },
+    { name: "Thank You", href: "/admin/content/thank-you", icon: Heart },
   ];
-
   const NavLink = ({ href, icon: Icon, children, exact = false }: any) => {
     const isActive = exact ? pathname === href : pathname.startsWith(href);
     return (
@@ -134,11 +133,12 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
-        <main className="flex-1 overflow-auto">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        <main className="flex-1 overflow-hidden">
           {children}
         </main>
       </div>
+
     </div>
   );
 }

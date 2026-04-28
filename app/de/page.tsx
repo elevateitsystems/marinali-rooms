@@ -1,4 +1,6 @@
 import { ContentService } from "@/lib/services/contentService";
+import { RoomService } from "@/lib/services/roomService";
+
 import Hero from "@/components/Home/Hero";
 import IntroSection from "@/components/Home/IntroSection";
 import dynamic from "next/dynamic";
@@ -11,55 +13,34 @@ import HeritageSection from "@/components/Home/HeritageSection";
 
 const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
 
-const rooms = [
-  {
-    id: 'junior-suite',
-    name: 'JUNIOR SUITE',
-    location: 'Bassano del Grappa',
-    description: 'Ein Refugium aus Licht und Geschichte, mit originalen Fresken und maßgeschneiderter italienischer Handwerkskunst in einem intimen Rahmen. Perfekt für alle, die ein authentisches Palazzo-Erlebnis mit modernem Komfort suchen.',
-    image: '/assets/Stanza%201%20-%20Foto-1.jpg',
-    images: [
-      '/assets/Stanza%201%20-%20Foto-1.jpg',
-      '/assets/Stanza%201%20-%20Foto-4.jpg',
-      '/assets/Stanza%201%20-%20Foto-5.jpg',
-      '/assets/Stanza%201%20-%20Foto-6.jpg',
-      '/assets/Stanza%201%20-%20Foto-7.jpg',
-      '/assets/Stanza%201%20-%20Foto-11.jpg',
-    ]
-  },
-  {
-    id: 'suite-deluxe',
-    name: 'SUITE DELUXE',
-    location: 'Bassano del Grappa',
-    description: 'Unvergleichliche Eleganz in historischen Mauern, mit venezianischen Terrazzoböden und Panoramablick auf das historische Zentrum. Unser prachtvollstes Angebot für einen unvergesslichen Aufenthalt im Herzen von Bassano.',
-    image: '/assets/Stanza%202%20-%20Foto-1.jpg',
-    images: [
-      '/assets/Stanza%202%20-%20Foto-1.jpg',
-      '/assets/Stanza%202%20-%20Foto-2.jpg',
-      '/assets/Stanza%202%20-%20Foto-3.jpg',
-      '/assets/Stanza%202%20-%20Foto-7.jpg',
-      '/assets/Stanza%202%20-%20Foto-11.jpg',
-      '/assets/Stanza%202%20-%20Foto-12.jpg',
-    ]
-  }
-];
-
 export default async function GermanHomePage() {
+  const roomsData = await RoomService.getRooms();
+  const rooms = roomsData.map((room: any) => ({
+    id: room.slug,
+    image: room.image,
+    images: room.images,
+    ...room.translations.de
+  }));
+
+
+
   const content = await ContentService.getContent("home", "de");
   const data = (content?.sections as any) || {};
 
+
   return (
     <>
-      <Hero 
+      <Hero
         title={data?.heroTitle || "Marinali"}
         subtitle={data?.heroSubtitle || "ROOMS"}
-        lang="de" 
+        lang="de"
         data={data}
       />
-      
+
       {/* Le Suite Section */}
       <section id="le-suite" className="pt-20">
-        <div className="bg-primary text-white py-24 lg:py-36 px-5 text-center mb-12">
+        <div className="bg-primary text-white py-12 lg:py-20 px-5 text-center ">
+
           <h2 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">
             {data?.leSuiteTitle || "Le Suite"}
           </h2>
@@ -68,7 +49,7 @@ export default async function GermanHomePage() {
           </p>
         </div>
 
-        {rooms.map((room, index) => (
+        {rooms.map((room: any, index: number) => (
           <RoomSplitSection
             key={room.id}
             room={room}
@@ -77,7 +58,7 @@ export default async function GermanHomePage() {
             priority={index === 0}
           />
         ))}
-        
+
         <LeSuiteBookingFooter lang="de" />
       </section>
 
