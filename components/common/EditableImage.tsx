@@ -48,7 +48,10 @@ export default function EditableImage({
       });
       setIsUploading(false);
       setPendingFile(null);
-      setPreviewUrl(null);
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        setPreviewUrl(null);
+      }
     },
     onError: (err) => {
       toast.error("Failed to update image path in database.");
@@ -60,12 +63,18 @@ export default function EditableImage({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Revoke old preview URL if exists
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+
       setPendingFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
+      const newUrl = URL.createObjectURL(file);
+      setPreviewUrl(newUrl);
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!pendingFile) return;
     setIsUploading(true);
     try {
@@ -81,54 +90,73 @@ export default function EditableImage({
     }
   };
 
-  const handleCancel = () => {
+  const handleCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
     setPendingFile(null);
     setPreviewUrl(null);
   };
 
   return (
-    <div className={`relative group ${className}`}>
-      {/* Visual Preview for pending upload */}
+    <div className={cn("group relative pointer-events-none", className)}>
+      {/* Visual Preview for pending upload - Elevated z-index */}
       {previewUrl && (
-        <div className="absolute inset-0 z-10 rounded-inherit overflow-hidden border-4 border-blue-500 shadow-2xl animate-in zoom-in-95 duration-200">
-          <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
-          <div className="absolute top-2 left-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg uppercase tracking-widest animate-pulse">
-            Preview Mode
-          </div>
+        <div className="absolute inset-0 z-[100] overflow-hidden border-4 border-blue-500 shadow-2xl animate-in fade-in zoom-in-95 duration-300 pointer-events-auto">
+          <img
+            src={previewUrl}
+            alt="Preview"
+            className={cn(
+              "w-full h-full object-cover transition-all duration-500",
+              isUploading ? "opacity-50 blur-[2px] grayscale" : ""
+            )}
+          />
+
+
+
+          {/* Le Suite style loading overlay */}
+          {isUploading && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px] z-[120]">
+              <Loader2 className="animate-spin text-blue-900 mb-2" size={32} />
+              <span className="text-xs font-black text-blue-900 uppercase tracking-widest">Uploading</span>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Upload Trigger Container */}
+      {/* Upload Trigger Container - Positioned at bottom of image when previewing */}
       <div className={cn(
-        "z-20 flex items-center gap-2 bg-white/90 p-1 rounded-xl shadow-2xl border border-slate-200 backdrop-blur-md transition-all",
-        previewUrl ? "fixed bottom-10 left-1/2 -translate-x-1/2 scale-110" : "absolute top-28 right-4"
+        "z-[110] flex items-center gap-2 transition-all duration-300 pointer-events-auto",
+        previewUrl
+          ? "absolute bottom-6 left-1/2 -translate-x-1/2 scale-110 bg-white/95 p-2 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-blue-200 backdrop-blur-xl"
+          : "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100"
       )}>
         {pendingFile ? (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2 p-1">
             <button
               onClick={handleSave}
               disabled={isUploading || mutation.isPending}
-              className="flex items-center gap-2 bg-green-600 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-wider hover:bg-green-700 transition-all disabled:opacity-50"
+              className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider hover:bg-green-700 transition-all shadow-lg active:scale-95 disabled:opacity-50"
             >
               {isUploading || mutation.isPending ? (
                 <Loader2 className="animate-spin" size={14} />
               ) : (
-                <Check size={14} />
+                <Check size={16} strokeWidth={3} />
               )}
-              Apply Changes
+              {isUploading ? "Uploading..." : "Upload"}
             </button>
             <button
               onClick={handleCancel}
               disabled={isUploading || mutation.isPending}
-              className="flex items-center gap-2 bg-slate-100 text-slate-600 px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-wider hover:bg-slate-200 transition-all"
+              className="flex items-center gap-2 bg-slate-100 text-slate-600 px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider hover:bg-slate-200 transition-all active:scale-95"
             >
-              <X size={14} />
+              <X size={16} strokeWidth={3} />
               Discard
             </button>
           </div>
         ) : (
-          <label className="flex items-center gap-2 bg-blue-900 text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider hover:opacity-90 transition-all cursor-pointer">
-            <ImageIcon size={14} />
+          <label className="flex items-center gap-2 bg-white/90 hover:bg-white text-blue-900 px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest shadow-2xl backdrop-blur-md transition-all cursor-pointer border border-slate-200 active:scale-95">
+            <ImageIcon size={16} className="text-blue-600" />
             <span>{label}</span>
             <input
               type="file"
