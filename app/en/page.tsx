@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import RoomSplitSection from "@/components/rooms/RoomSplitSection";
 import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
+import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
 import HeritageSection from "@/components/Home/HeritageSection";
 
 
@@ -36,15 +37,7 @@ export default async function EnglishHomePage() {
 
       {/* Le Suite Section */}
       <section id="le-suite" className="pt-20">
-        <div className="bg-primary text-white py-12 lg:py-20 px-5 text-center">
-
-          <h2 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">
-            {data?.leSuiteTitle || "Le Suite"}
-          </h2>
-          <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">
-            {data?.leSuiteSubtitle || "Bassano del Grappa, Italy"}
-          </p>
-        </div>
+        <LeSuiteHeader lang="en" data={data} />
 
         {rooms.map((room: any, index: number) => (
           <RoomSplitSection
@@ -56,7 +49,7 @@ export default async function EnglishHomePage() {
           />
         ))}
 
-        <LeSuiteBookingFooter lang="en" />
+        <LeSuiteBookingFooter lang="en" data={data} />
       </section>
 
       <div className="container mx-auto">

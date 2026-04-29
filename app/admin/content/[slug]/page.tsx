@@ -35,6 +35,8 @@ import Hero from "@/components/Home/Hero";
 import Highlights from "@/components/Home/Highlights";
 import IntroSection from "@/components/Home/IntroSection";
 import HeritageSection from "@/components/Home/HeritageSection";
+import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
+import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
 // Note: We'll add more as needed
 
 import ThankYouPreview from "./_components/ThankYouPreview";
@@ -250,28 +252,20 @@ export default function VisualPageEditor() {
               {/* This is where we render the actual site components */}
               {activeSection === "le-suite" ? (
                 <div className="space-y-0">
-
-                  <div className="bg-primary text-white py-12 px-5 text-center">
-
-                    <h2 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">
-                      <EditableText
-                        lang={activeLang}
-                        page={slug}
-                        path="leSuiteTitle"
-                        initialValue={content?.sections?.leSuiteTitle || "Le Suite"}
-                      />
-                    </h2>
-                    <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">
-                      <EditableText
-                        lang={activeLang}
-                        page={slug}
-                        path="leSuiteSubtitle"
-                        initialValue={content?.sections?.leSuiteSubtitle || "Bassano del Grappa, Italy"}
-                      />
-                    </p>
-                  </div>
+                  <LeSuiteHeader 
+                    lang={activeLang} 
+                    data={content?.sections} 
+                    isEditable={true} 
+                  />
                   <div className="bg-slate-50 border-t border-slate-200">
                     <RoomsManager lang={activeLang} />
+                  </div>
+                  <div className="border-t border-slate-200">
+                    <LeSuiteBookingFooter 
+                      lang={activeLang} 
+                      data={content?.sections} 
+                      isEditable={true} 
+                    />
                   </div>
                 </div>
               ) : (
