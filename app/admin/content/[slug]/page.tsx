@@ -243,7 +243,13 @@ export default function VisualPageEditor() {
         </aside>
 
         {/* Preview / Edit Stage */}
-        <main className="flex-1 overflow-y-auto bg-slate-200/50 relative flex flex-col">
+        <main
+          className="flex-1 space-y-0 flex flex-col overflow-y-auto transition-colors duration-500 relative scrollbar-hide"
+          style={{
+            backgroundColor: 'var(--background)',
+            color: 'var(--foreground)',
+          }}
+        >
           {/* Controls Bar */}
           <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-2 flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{activeSection} Editor</span>

@@ -90,7 +90,11 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
   const whatsappUrl = `https://wa.me/${displayWhatsapp.replace(/[^0-9]/g, '')}`;
 
   return (
-    <footer id="main-footer" className="bg-[#F8F6F2] font-playfair w-full relative z-30 text-[#123149] border-t border-gray-200 flex flex-col">
+    <footer 
+      id="main-footer" 
+      className="font-playfair w-full relative z-30 text-[#123149] border-t border-gray-200 flex flex-col"
+      style={{ backgroundColor: 'var(--background-color)' }}
+    >
       {/* Main Content Grid */}
       <section className="grid lg:grid-cols-2">
         {/* Left Side: Centered Contact Info */}

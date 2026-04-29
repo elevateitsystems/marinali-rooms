@@ -36,7 +36,7 @@ export default async function EnglishHomePage() {
       />
 
       {/* Le Suite Section */}
-      <section id="le-suite" className="pt-20">
+      <section id="le-suite" className="">
         <LeSuiteHeader lang="en" data={data} />
 
         {rooms.map((room: any, index: number) => (

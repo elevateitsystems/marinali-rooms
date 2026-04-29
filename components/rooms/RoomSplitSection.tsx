@@ -28,9 +28,10 @@ interface RoomSplitSectionProps {
   reverse?: boolean;
   lang: string;
   priority?: boolean;
+  bgColor?: string;
 }
 
-export default function RoomSplitSection({ room, reverse = false, lang, priority = false }: RoomSplitSectionProps) {
+export default function RoomSplitSection({ room, reverse = false, lang, priority = false, bgColor }: RoomSplitSectionProps) {
   const rawImages = room.images && room.images.length > 0 ? room.images : [];
   const allImages = rawImages.map((img: any) => typeof img === 'string' ? img : img?.url).filter(Boolean);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -66,7 +67,10 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
 
   return (
     <>
-      <section className={`w-full flex ${reverse ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row'} items-stretch overflow-hidden bg-[var(--background)]`}>
+      <section
+        className={`w-full flex ${reverse ? 'flex-col-reverse lg:flex-row' : 'flex-col lg:flex-row'} items-stretch overflow-hidden`}
+        style={{ backgroundColor: bgColor || 'var(--background)' }}
+      >
         {/* Image Column — Swiper Carousel */}
         <div className={`w-full lg:w-[55%] h-[400px] lg:h-[500px] relative group ${reverse ? 'lg:order-2' : ''}`}>
 
@@ -128,7 +132,10 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
         </div>
 
         {/* Content Column — no Book Now button here */}
-        <div className={`w-full lg:w-[45%] flex flex-col justify-center px-8 lg:px-16 py-12 lg:py-16 ${reverse ? 'lg:order-1' : ''}`}>
+        <div
+          className={`w-full lg:w-[45%] flex flex-col justify-center px-8 lg:px-16 py-12 lg:py-16 ${reverse ? 'lg:order-1' : ''}`}
+          style={{ backgroundColor: bgColor || 'var(--background)' }}
+        >
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -173,7 +180,7 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-white w-full max-w-7xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row relative"
+              className="bg-background w-full max-w-7xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row relative"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
@@ -185,7 +192,10 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
               </button>
 
               {/* Image Area */}
-              <div className="w-full lg:w-[50%] h-[450px] sm:h-[550px] lg:h-full flex flex-col bg-[#F8F6F2] shrink-0">
+              <div 
+                className="w-full lg:w-[50%] h-[450px] sm:h-[550px] lg:h-full flex flex-col shrink-0"
+                style={{ backgroundColor: 'var(--background)' }}
+              >
                 <div className="flex-1 relative min-h-0">
                   <Swiper
                     modules={[Navigation, Thumbs, FreeMode]}
@@ -261,8 +271,9 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
 
               {/* Content Area */}
               <div
-                className="w-full lg:w-[50%] flex-1 lg:h-full overflow-y-auto px-8 lg:px-12 py-12 lg:py-16 flex flex-col bg-white border-l border-gray-100 font-sans"
+                className="w-full lg:w-[50%] flex-1 lg:h-full overflow-y-auto px-8 lg:px-12 py-12 lg:py-16 flex flex-col border-l border-gray-100 font-sans"
                 data-lenis-prevent
+                style={{ backgroundColor: 'var(--background)' }}
               >
                 <div className="max-w-md mx-auto lg:mx-0 w-full">
                   <h2 className="text-2xl lg:text-3xl font-primary mb-6 leading-tight tracking-tight text-primary uppercase">

@@ -64,7 +64,7 @@ export default function MapSection({ lang, mapUrl, address }: MapSectionProps) {
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
           <div className="absolute inset-0 bg-[#123149]/5 group-hover:bg-[#123149]/15 transition-colors duration-500 flex items-center justify-center">
-            <div className="bg-white/95 backdrop-blur-md px-6 py-3 rounded-full flex items-center gap-2 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
+            <div className="bg-background backdrop-blur-md px-6 py-3 rounded-full flex items-center gap-2 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
               <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
                 <Maximize2 size={12} className="text-primary" />
               </div>
@@ -76,8 +76,8 @@ export default function MapSection({ lang, mapUrl, address }: MapSectionProps) {
         </div>
       </DialogTrigger>
 
-      <DialogContent className="max-w-[90vw] lg:max-w-[50vw] h-[75vh] p-0 overflow-hidden border-none bg-white rounded-xl shadow-[0_30px_100px_rgba(0,0,0,0.4)] flex flex-col">
-        <DialogHeader className="px-10 py-6 border-b border-gray-100 flex flex-row items-center justify-between bg-white/80 backdrop-blur-md shrink-0 space-y-0">
+      <DialogContent className="max-w-[90vw] lg:max-w-[50vw] h-[75vh] p-0 overflow-hidden border-none bg-background rounded-xl shadow-[0_30px_100px_rgba(0,0,0,0.4)] flex flex-col">
+        <DialogHeader className="px-10 py-6 border-b border-gray-100 flex flex-row items-center justify-between backdrop-blur-md shrink-0 space-y-0">
           <div className="flex flex-col text-left">
             <span className="text-[10px] font-mono tracking-[0.4em] uppercase opacity-40 mb-1">
               {t.location}

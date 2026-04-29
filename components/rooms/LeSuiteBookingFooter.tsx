@@ -96,8 +96,8 @@ export default function LeSuiteBookingFooter({
       <button
         onClick={isEditable ? undefined : handleBookNow}
         className={cn(
-          "group flex items-center gap-4 px-10 py-5 bg-white text-primary text-xs font-bold tracking-[0.2em] uppercase transition-all shadow-xl active:scale-95",
-          !isEditable && "hover:bg-white/90 hover:gap-6"
+          "group flex items-center gap-4 px-10 py-5 bg-background text-primary text-xs font-bold tracking-[0.2em] uppercase transition-all shadow-xl active:scale-95",
+          !isEditable && "hover:opacity-90 hover:gap-6"
         )}
       >
         <span className="flex items-center gap-2">

@@ -47,10 +47,11 @@ export default function IntroSection({
       style={{
         margin: '0 auto',
         textAlign: 'left',
+        backgroundColor: 'var(--background-color)',
       }}
     >
       <motion.div
-        className="max-w-[1000px] mr-auto mt-10 lg:mt-20"
+        className="max-w-[1000px] mr-auto pt-10 lg:pt-20"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -68,11 +69,11 @@ export default function IntroSection({
           }}
         >
           {isEditable ? (
-            <EditableText 
-              lang={lang} 
-              page="home" 
-              path="aboutTitle" 
-              initialValue={displayTitle as string || currentFallbacks.title} 
+            <EditableText
+              lang={lang}
+              page="home"
+              path="aboutTitle"
+              initialValue={displayTitle as string || currentFallbacks.title}
             />
           ) : (
             displayTitle || currentFallbacks.title
@@ -91,12 +92,12 @@ export default function IntroSection({
           }}
         >
           {isEditable ? (
-            <EditableText 
-              lang={lang} 
-              page="home" 
-              path="aboutDescription" 
-              initialValue={displayDescription as string || currentFallbacks.description} 
-              multiline 
+            <EditableText
+              lang={lang}
+              page="home"
+              path="aboutDescription"
+              initialValue={displayDescription as string || currentFallbacks.description}
+              multiline
             />
           ) : (
             displayDescription || currentFallbacks.description

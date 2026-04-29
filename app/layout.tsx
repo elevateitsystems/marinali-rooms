@@ -64,7 +64,10 @@ export default async function RootLayout({
         "--primary-color": primaryColor,
         "--secondary-color": secondaryColor,
         "--background": backgroundColor,
+        "--background-color": backgroundColor,
         "--foreground": textColor,
+        "--popover": backgroundColor,
+        "--popover-foreground": textColor,
         "--font-primary": fontFamily,
       }}
     >
