@@ -31,7 +31,8 @@ interface RoomSplitSectionProps {
 }
 
 export default function RoomSplitSection({ room, reverse = false, lang, priority = false }: RoomSplitSectionProps) {
-  const allImages = room.images && room.images.length > 0 ? room.images : [room.image];
+  const rawImages = room.images && room.images.length > 0 ? room.images : [];
+  const allImages = rawImages.map((img: any) => typeof img === 'string' ? img : img?.url).filter(Boolean);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);

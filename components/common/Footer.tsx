@@ -90,7 +90,7 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
   const whatsappUrl = `https://wa.me/${displayWhatsapp.replace(/[^0-9]/g, '')}`;
 
   return (
-    <footer id="main-footer" className="bg-[#F8F6F2] font-playfair w-full relative z-30 text-[#123149] border-t border-gray-200">
+    <footer id="main-footer" className="bg-[#F8F6F2] font-playfair w-full relative z-30 text-[#123149] border-t border-gray-200 flex flex-col">
       {/* Main Content Grid */}
       <section className="grid lg:grid-cols-2">
         {/* Left Side: Centered Contact Info */}
@@ -148,7 +148,7 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
         </div>
 
         {/* Right Side: Map Section with Lightbox */}
-        <div id="map" className="relative h-[500px] lg:h-full overflow-hidden bg-gray-100">
+        <div id="map" className="relative min-h-[500px] lg:min-h-full overflow-hidden bg-gray-100 z-10">
           <MapSection lang={lang} mapUrl={displayMapUrl} address={displayAddress} />
         </div>
       </section>

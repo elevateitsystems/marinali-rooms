@@ -91,7 +91,23 @@ export async function PUT(
         current = current[keys[i]];
       }
       
+      const oldValue = current[keys[keys.length - 1]];
       current[keys[keys.length - 1]] = value;
+
+      // Delete old image if it's replaced and is an UploadThing URL
+      if (path.toLowerCase().includes("image") && typeof oldValue === 'string' && oldValue.includes('utfs.io/f/') && oldValue !== value) {
+        try {
+          const oldKey = oldValue.split('utfs.io/f/')[1];
+          if (oldKey) {
+            const { UTApi } = await import("uploadthing/server");
+            const utapi = new UTApi();
+            await utapi.deleteFiles(oldKey);
+            console.log(`[API Content] Old image deleted from UploadThing:`, oldKey);
+          }
+        } catch (error) {
+          console.error(`[API Content] Failed to delete old image:`, error);
+        }
+      }
 
       const updatedContent = await ContentService.updateContent(page, lang, sections);
 

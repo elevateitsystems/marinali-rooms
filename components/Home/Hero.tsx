@@ -71,19 +71,22 @@ export default function Hero({
           className="object-cover object-center brightness-[0.7]"
           priority
         />
-        {isEditable && (
-          <div className="absolute top-32 right-10 z-50">
+      </motion.div>
+
+      {isEditable && (
+        <div className="absolute inset-0 z-[60] pointer-events-none">
+          <div className="w-full h-full pointer-events-auto">
             <EditableImage 
               lang={lang as string} 
               page="home" 
               path="heroImage" 
               currentValue={displayImgUrl} 
-              className="w-40 h-10"
+              className="w-full h-full"
               label="Change Background"
             />
           </div>
-        )}
-      </motion.div>
+        </div>
+      )}
 
       {/* Main Content */}
       <motion.div

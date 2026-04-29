@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton, useUploadThing } from "@/lib/uploadthing";
 import { toast } from "sonner";
-import { ImageIcon, Loader2, Edit2 } from "lucide-react";
+import { ImageIcon, Loader2, Edit2, Check, X } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 
 interface EditableImageProps {
   lang: string;
@@ -24,7 +25,10 @@ export default function EditableImage({
   label = "Change Image"
 }: EditableImageProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
+  const { startUpload } = useUploadThing("imageUploader");
 
   const mutation = useMutation({
     mutationFn: async (newUrl: string) => {
@@ -38,12 +42,13 @@ export default function EditableImage({
     },
     onSuccess: () => {
       toast.success("Image updated successfully!");
-      // Invalidate for all languages since images are global
       const LANGUAGES = ["en", "it", "de"];
       LANGUAGES.forEach(l => {
         queryClient.invalidateQueries({ queryKey: ["content", l, page] });
       });
       setIsUploading(false);
+      setPendingFile(null);
+      setPreviewUrl(null);
     },
     onError: (err) => {
       toast.error("Failed to update image path in database.");
@@ -52,44 +57,90 @@ export default function EditableImage({
     }
   });
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPendingFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSave = async () => {
+    if (!pendingFile) return;
+    setIsUploading(true);
+    try {
+      const res = await startUpload([pendingFile]);
+      if (res && res[0]) {
+        mutation.mutate(res[0].url);
+      } else {
+        setIsUploading(false);
+      }
+    } catch (error) {
+      setIsUploading(false);
+      toast.error("Upload failed");
+    }
+  };
+
+  const handleCancel = () => {
+    setPendingFile(null);
+    setPreviewUrl(null);
+  };
+
   return (
     <div className={`relative group ${className}`}>
+      {/* Visual Preview for pending upload */}
+      {previewUrl && (
+        <div className="absolute inset-0 z-10 rounded-inherit overflow-hidden border-4 border-blue-500 shadow-2xl animate-in zoom-in-95 duration-200">
+          <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+          <div className="absolute top-2 left-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg uppercase tracking-widest animate-pulse">
+            Preview Mode
+          </div>
+        </div>
+      )}
+
       {/* Upload Trigger Container */}
-      <div className="flex items-center justify-center bg-white/90 p-1 m-2 rounded-lg shadow-lg border border-slate-200 backdrop-blur-sm w-fit">
-        <UploadButton
-          endpoint="imageUploader"
-          onUploadBegin={() => setIsUploading(true)}
-          onClientUploadComplete={(res) => {
-            if (res && res[0]) {
-              mutation.mutate(res[0].url);
-            } else {
-              setIsUploading(false);
-            }
-          }}
-          onUploadError={(error: Error) => {
-            setIsUploading(false);
-            toast.error(`Upload failed: ${error.message}`);
-          }}
-          appearance={{
-            button: `bg-blue-900 text-white text-[10px] px-3 py-1.5 h-8 rounded-lg font-bold uppercase tracking-wider hover:opacity-90 transition-all flex items-center gap-2 ${isUploading || mutation.isPending ? "opacity-80 cursor-not-allowed" : ""
-              }`,
-            allowedContent: "hidden"
-          }}
-          content={{
-            button: (isUploading || mutation.isPending) ? (
-              <div className="flex items-center gap-2">
+      <div className={cn(
+        "z-20 flex items-center gap-2 bg-white/90 p-1 rounded-xl shadow-2xl border border-slate-200 backdrop-blur-md transition-all",
+        previewUrl ? "fixed bottom-10 left-1/2 -translate-x-1/2 scale-110" : "absolute top-28 right-4"
+      )}>
+        {pendingFile ? (
+          <div className="flex items-center gap-1">
+            <button
+              onClick={handleSave}
+              disabled={isUploading || mutation.isPending}
+              className="flex items-center gap-2 bg-green-600 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-wider hover:bg-green-700 transition-all disabled:opacity-50"
+            >
+              {isUploading || mutation.isPending ? (
                 <Loader2 className="animate-spin" size={14} />
-                <span>Uploading...</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <ImageIcon size={14} />
-                <span>{label}</span>
-              </div>
-            )
-          }}
-        />
+              ) : (
+                <Check size={14} />
+              )}
+              Apply Changes
+            </button>
+            <button
+              onClick={handleCancel}
+              disabled={isUploading || mutation.isPending}
+              className="flex items-center gap-2 bg-slate-100 text-slate-600 px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-wider hover:bg-slate-200 transition-all"
+            >
+              <X size={14} />
+              Discard
+            </button>
+          </div>
+        ) : (
+          <label className="flex items-center gap-2 bg-blue-900 text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider hover:opacity-90 transition-all cursor-pointer">
+            <ImageIcon size={14} />
+            <span>{label}</span>
+            <input
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </label>
+        )}
       </div>
     </div>
   );
 }
+
+// Add Check icon to the imports at top

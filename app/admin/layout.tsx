@@ -12,11 +12,13 @@ import {
   Home,
   Heart,
   CheckCircle2,
-
   Menu,
-  X
+  X,
+  ShieldCheck,
+  LogOut
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 export default function AdminLayout({
   children,
@@ -26,11 +28,17 @@ export default function AdminLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isContentExpanded, setIsContentExpanded] = useState(true);
   const pathname = usePathname();
+  const isLoginPage = pathname === '/admin/login';
 
   const pages = [
     { name: "Home", href: "/admin/content/home", icon: Home },
     { name: "Thank You", href: "/admin/content/thank-you", icon: Heart },
   ];
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: '/' });
+  };
+
   const NavLink = ({ href, icon: Icon, children, exact = false }: any) => {
     const isActive = exact ? pathname === href : pathname.startsWith(href);
     return (
@@ -49,14 +57,23 @@ export default function AdminLayout({
     );
   };
 
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row text-slate-900">
       {/* Mobile Header */}
       <header className="md:hidden p-4 bg-white border-b flex justify-between items-center z-50 sticky top-0">
         <h1 className="font-bold text-lg">Marinali Admin</h1>
-        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-slate-100 rounded-lg">
-          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={handleLogout} className="p-2 hover:bg-slate-100 rounded-lg text-slate-600">
+            <LogOut size={20} />
+          </button>
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-slate-100 rounded-lg">
+            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </header>
 
       {/* Sidebar */}
@@ -116,11 +133,15 @@ export default function AdminLayout({
             )}
           </div>
 
-          <NavLink href="/admin/settings" icon={Settings}>
+          <NavLink href="/admin/settings" icon={Settings} exact={true}>
             {isSidebarOpen && "Settings"}
           </NavLink>
 
-          <div className="mt-auto pt-4 border-t border-slate-100">
+          <NavLink href="/admin/settings/security" icon={ShieldCheck}>
+            {isSidebarOpen && "Security"}
+          </NavLink>
+
+          <div className="mt-auto pt-4 border-t border-slate-100 space-y-1">
             <Link
               href="/en"
               className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-500 hover:text-blue-900 hover:bg-blue-50 transition-all"
@@ -128,6 +149,14 @@ export default function AdminLayout({
               <Globe size={18} />
               {isSidebarOpen && "View Live Site"}
             </Link>
+            
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all"
+            >
+              <LogOut size={18} />
+              {isSidebarOpen && "Logout"}
+            </button>
           </div>
         </nav>
       </aside>

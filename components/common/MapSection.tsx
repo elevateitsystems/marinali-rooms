@@ -59,6 +59,7 @@ export default function MapSection({ lang, mapUrl, address }: MapSectionProps) {
             src="/map.webp"
             alt="Map Placeholder"
             fill
+            priority
             className="object-cover transition-transform duration-1000 group-hover:scale-105"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />

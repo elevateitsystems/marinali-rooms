@@ -40,6 +40,8 @@ export const metadata: Metadata = {
 import { SettingsService } from "@/lib/services/settingsService";
 import Providers from "./providers";
 
+import { Toaster } from "sonner";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -69,6 +71,7 @@ export default async function RootLayout({
       <body className="min-h-screen flex flex-col">
         <Providers>
           {children}
+          <Toaster position="top-center" richColors />
         </Providers>
       </body>
     </html>

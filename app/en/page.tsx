@@ -16,7 +16,6 @@ export default async function EnglishHomePage() {
   const roomsData = await RoomService.getRooms();
   const rooms = roomsData.map((room: any) => ({
     id: room.slug,
-    image: room.image,
     images: room.images,
     ...room.translations.en
   }));

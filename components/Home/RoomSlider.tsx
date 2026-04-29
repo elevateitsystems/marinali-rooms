@@ -26,10 +26,27 @@ export default function RoomSlider({ lang, data }: { lang: string; data?: any })
   const { data: rooms = defaultRooms } = useQuery<SliderItem[]>({
     queryKey: ['rooms', lang],
     queryFn: async () => {
-      const response = await fetch(`/api/rooms?lang=${lang}`);
+      const response = await fetch(`/api/rooms`);
       if (!response.ok) throw new Error('Failed to fetch rooms');
       const dbRooms = await response.json();
-      return dbRooms && dbRooms.length > 0 ? dbRooms : defaultRooms;
+      
+      if (dbRooms && dbRooms.length > 0) {
+        return dbRooms.flatMap((room: any) => {
+          const t = room.translations?.[lang] || room.translations?.['en'] || {};
+          const allImages = Array.isArray(room.images) ? room.images : [];
+          
+          if (allImages.length === 0) return []; // Skip room if no images
+
+          return allImages.map((img: any, idx: number) => ({
+            id: `${room.id}-gal-${idx}`,
+            image: typeof img === 'string' ? img : img?.url,
+            name: t.name || room.slug,
+            location: t.location || '',
+            description: t.description || '',
+          })).filter((item: any) => item.image);
+        });
+      }
+      return defaultRooms;
     },
   });
 

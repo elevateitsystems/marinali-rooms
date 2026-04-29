@@ -16,7 +16,7 @@ import {
   X
 } from "lucide-react";
 import { toast } from "sonner";
-import { UploadButton } from "@/lib/uploadthing";
+import { useUploadThing } from "@/lib/uploadthing";
 
 interface RoomsManagerProps {
   lang: string;
@@ -28,6 +28,10 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
   const [localRooms, setLocalRooms] = useState<any[]>([]);
   const [changedRoomIds, setChangedRoomIds] = useState<Set<string>>(new Set());
   const [roomTabs, setRoomTabs] = useState<Record<string, "content" | "gallery">>({});
+  const [isUploading, setIsUploading] = useState<Record<string, boolean>>({});
+  const [pendingFiles, setPendingFiles] = useState<Record<string, { main?: File, gallery?: File[] }>>({});
+
+  const { startUpload } = useUploadThing("imageUploader");
 
   const { data: rooms, isLoading } = useQuery({
     queryKey: ["rooms"],
@@ -40,10 +44,11 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
 
   // Sync local state with query data when it loads or changes
   useEffect(() => {
-    if (rooms && changedRoomIds.size === 0) {
+    const isAnyUploading = Object.values(isUploading).some(v => v);
+    if (rooms && changedRoomIds.size === 0 && !isAnyUploading) {
       setLocalRooms(rooms);
     }
-  }, [rooms, changedRoomIds.size]);
+  }, [rooms, changedRoomIds.size, isUploading]);
 
 
 
@@ -64,7 +69,6 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
         next.delete(data.id);
         return next;
       });
-      toast.success(`Room ${data.slug} saved!`);
     },
     onError: (err) => {
       toast.error("Failed to save room changes.");
@@ -88,10 +92,60 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
     setChangedRoomIds(prev => new Set(prev).add(roomId));
   };
 
-  const saveRoom = (roomId: string) => {
+  const saveRoom = async (roomId: string) => {
     const room = localRooms.find(r => r.id === roomId);
-    if (room) {
-      updateMutation.mutate(room);
+    if (!room) return;
+
+    setIsUploading(prev => ({ ...prev, [roomId]: true }));
+
+    try {
+      // 1. Prepare initial images (filter out pending blob URLs)
+      let finalGalleryImages = [...(room.images || [])].filter((img: any) => {
+        const url = typeof img === 'string' ? img : img.url;
+        return url && !url.startsWith('blob:');
+      });
+
+      // 2. Initial API Call (save text changes immediately)
+      console.log("[RoomsManager] Saving text changes to database...");
+      await updateMutation.mutateAsync({
+        ...room,
+        images: finalGalleryImages,
+      });
+
+      // 3. Upload pending gallery images AFTER successful API call
+      if (pendingFiles[roomId]?.gallery && pendingFiles[roomId].gallery!.length > 0) {
+        console.log(`[RoomsManager] Uploading ${pendingFiles[roomId].gallery!.length} gallery images...`);
+        const res = await startUpload(pendingFiles[roomId].gallery!);
+        
+        if (res && res.length > 0) {
+          const newImageObjects = res.map(file => ({ url: file.url, key: file.key }));
+          finalGalleryImages = [...finalGalleryImages, ...newImageObjects];
+          console.log("[RoomsManager] Gallery images uploaded, saving to database again...");
+          
+          // 4. Second API Call to save the new image URLs
+          await updateMutation.mutateAsync({
+            ...room,
+            images: finalGalleryImages,
+          });
+        } else {
+          throw new Error("Failed to upload gallery images");
+        }
+      }
+
+      // 5. Clear pending files
+      setPendingFiles(prev => {
+        const next = { ...prev };
+        delete next[roomId];
+        return next;
+      });
+
+      toast.success(`Room ${room.slug} saved successfully!`);
+
+    } catch (error) {
+      console.error("Failed to save room:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to upload images or save changes.");
+    } finally {
+      setIsUploading(prev => ({ ...prev, [roomId]: false }));
     }
   };
 
@@ -131,7 +185,7 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
               >
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-100">
-                    <img src={room.image} alt={t.name} className="w-full h-full object-cover" />
+                    <img src={room.images?.[0] ? (typeof room.images[0] === 'string' ? room.images[0] : room.images[0].url) : ''} alt={t.name} className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h3 className="font-bold text-lg text-slate-900 uppercase">{t.name || "Unnamed Room"}</h3>
@@ -178,10 +232,10 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
                           e.stopPropagation();
                           saveRoom(room.id);
                         }}
-                        disabled={updateMutation.isPending}
+                        disabled={isUploading[room.id] || updateMutation.isPending}
                         className="flex items-center gap-2 bg-blue-900 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md hover:opcaity-90 transition-all active:scale-95 disabled:opacity-50 animate-in fade-in slide-in-from-right-4 cursor-pointer"
                       >
-                        {updateMutation.isPending && expandedRoom === room.id ? (
+                        {(isUploading[room.id] || updateMutation.isPending) && expandedRoom === room.id ? (
                           <Loader2 className="animate-spin" size={14} />
                         ) : (
                           <Save size={14} />
@@ -285,75 +339,72 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
                       {/* Media Section */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-                        {/* Main Image */}
-                        <div>
-                          <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 block flex items-center gap-2">
-                            <ImageIcon size={14} /> Main Image
-                          </label>
-                          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-200 group border border-slate-200 shadow-inner">
-                            <img src={room.image} alt="Main" className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                              <UploadButton
-                                endpoint="imageUploader"
-                                onClientUploadComplete={(res) => {
-                                  if (res && res[0]) handleFieldChange(room.id, 'image', res[0].url);
-                                }}
-                                appearance={{
-                                  button: "bg-white !text-slate-900 px-4 py-2 rounded-lg font-bold text-xs uppercase shadow-xl hover:bg-blue-50 transition-all",
-                                  allowedContent: "hidden"
-                                }}
-                                content={{
-                                  button: "Change Photo"
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-
                         {/* Gallery Images */}
-                        <div className="md:col-span-2">
+                        <div className="md:col-span-3">
                           <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 block flex items-center gap-2">
                             <Layers size={14} /> Gallery Images
                           </label>
                           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {room.images?.map((img: string, idx: number) => (
-                              <div key={idx} className="relative aspect-square rounded-xl overflow-hidden bg-slate-200 group border border-slate-200 shadow-sm">
-                                <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
-                                <button
-                                  onClick={() => {
-                                    const newImages = [...room.images];
-                                    newImages.splice(idx, 1);
-                                    handleFieldChange(room.id, 'images', newImages);
+                            {room.images?.map((img: any, idx: number) => {
+                              const url = typeof img === 'string' ? img : img.url;
+                              const isBlob = url && url.startsWith('blob:');
+                              const isCurrentlyUploading = isBlob && isUploading[room.id];
+
+                              return (
+                                <div key={idx} className="relative aspect-square rounded-xl overflow-hidden bg-slate-200 group border border-slate-200 shadow-sm">
+                                  <img src={url} alt={`Gallery ${idx}`} className={`w-full h-full object-cover transition-all ${isCurrentlyUploading ? 'opacity-50 blur-[2px] grayscale' : ''}`} />
+                                  
+                                  {isCurrentlyUploading && (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[1px] z-10">
+                                      <Loader2 className="animate-spin text-blue-900 mb-2" size={24} />
+                                      <span className="text-[10px] font-bold text-blue-900 uppercase tracking-tighter">Uploading</span>
+                                    </div>
+                                  )}
+
+                                  {!isCurrentlyUploading && (
+                                    <button
+                                      onClick={() => {
+                                        const newImages = [...room.images];
+                                        newImages.splice(idx, 1);
+                                        handleFieldChange(room.id, 'images', newImages);
+                                      }}
+                                      className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110 z-20"
+                                    >
+                                      <X size={14} />
+                                    </button>
+                                  )}
+                                </div>
+                              );
+                            })}
+                            <div className="aspect-square rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center bg-slate-50/50 hover:bg-slate-100 transition-all group relative overflow-hidden cursor-pointer">
+                              <label className="w-full h-full flex flex-col items-center justify-center gap-2 text-slate-400 font-bold text-xs uppercase cursor-pointer">
+                                <Plus size={24} />
+                                <span>Add Photo</span>
+                                <input
+                                  type="file"
+                                  className="hidden"
+                                  multiple
+                                  accept="image/*"
+                                  onChange={(e) => {
+                                    const files = Array.from(e.target.files || []);
+                                    if (files.length > 0) {
+                                      const blobObjects = files.map(file => ({ 
+                                        url: URL.createObjectURL(file), 
+                                        key: 'pending-' + Date.now() 
+                                      }));
+                                      const newImages = [...(room.images || []), ...blobObjects];
+                                      handleFieldChange(room.id, 'images', newImages);
+                                      setPendingFiles(prev => ({
+                                        ...prev,
+                                        [room.id]: {
+                                          ...prev[room.id],
+                                          gallery: [...(prev[room.id]?.gallery || []), ...files]
+                                        }
+                                      }));
+                                    }
                                   }}
-                                  className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
-                                >
-                                  <X size={14} />
-                                </button>
-                              </div>
-                            ))}
-                            <div className="aspect-square rounded-xl border-2 border-dashed border-slate-300 flex items-center justify-center bg-slate-50/50 hover:bg-slate-100 transition-all group overflow-hidden">
-                              <UploadButton
-                                endpoint="imageUploader"
-                                onClientUploadComplete={(res) => {
-                                  if (res && res[0]) {
-                                    const newImages = [...(room.images || [])];
-                                    newImages.push(res[0].url);
-                                    handleFieldChange(room.id, 'images', newImages);
-                                  }
-                                }}
-                                appearance={{
-                                  button: "w-full h-full bg-transparent !text-slate-400 font-bold text-xs uppercase flex flex-col items-center justify-center gap-2",
-                                  allowedContent: "hidden"
-                                }}
-                                content={{
-                                  button: (
-                                    <>
-                                      <Plus size={24} />
-                                      <span>Add Photo</span>
-                                    </>
-                                  )
-                                }}
-                              />
+                                />
+                              </label>
                             </div>
                           </div>
                         </div>
