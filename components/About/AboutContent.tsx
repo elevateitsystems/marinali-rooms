@@ -168,7 +168,7 @@ export default function AboutContent({ lang, initialData }: AboutContentProps) {
 
       {/* Hospitality Section */}
       <section className="grid md:grid-cols-2 items-center">
-        <div className="bg-[#123149] text-white h-full flex flex-col justify-center px-8 md:px-24 py-20 order-2 md:order-1" style={{ backgroundColor: primaryColor }}>
+        <div className="bg-[#123149] text-background h-full flex flex-col justify-center px-8 md:px-24 py-20 order-2 md:order-1" style={{ backgroundColor: primaryColor }}>
           <div className="text-4xl md:text-6xl font-bold mb-8 uppercase tracking-tighter">
             {data?.hospitalityTitle}
           </div>
@@ -194,7 +194,7 @@ export default function AboutContent({ lang, initialData }: AboutContentProps) {
           fill
           className="object-cover brightness-75 scale-110"
         />
-        <div className="relative z-10 max-w-2xl bg-white/10 backdrop-blur-md p-12 text-white border border-white/20">
+        <div className="relative z-10 max-w-2xl bg-white/10 backdrop-blur-md p-12 text-background border border-white/20">
           <div className="text-5xl font-bold mb-6 tracking-tight">
             {data?.ctaTitle}
           </div>
@@ -203,7 +203,7 @@ export default function AboutContent({ lang, initialData }: AboutContentProps) {
           </div>
           {/* <Link
             href={`/${lang}/rooms`}
-            className="inline-block px-10 py-5 bg-white text-black text-[10px] tracking-[0.3em] font-bold uppercase hover:bg-black hover:text-white transition-all duration-300"
+            className="inline-block px-10 py-5 bg-white text-black text-[10px] tracking-[0.3em] font-bold uppercase hover:bg-black hover:text-background transition-all duration-300"
           >
             {lang === 'en' ? 'EXPLORE ROOMS' : lang === 'it' ? 'ESPLORA CAMERE' : 'ZIMMER ENTDECKEN'}
           </Link> */}

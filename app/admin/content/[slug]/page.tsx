@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import EditableText from "@/components/common/EditableText";
 import { PageEditorSkeleton } from "./_components/PageEditorSkeleton";
 import { RoomsManager } from "./_components/RoomsManager";
+import ReviewsManager from "./_components/ReviewsManager";
 
 
 // Import UI components for preview
@@ -35,6 +36,9 @@ import Hero from "@/components/Home/Hero";
 import Highlights from "@/components/Home/Highlights";
 import IntroSection from "@/components/Home/IntroSection";
 import HeritageSection from "@/components/Home/HeritageSection";
+import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
+import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
+import ReviewSlider from "@/components/Home/ReviewSlider";
 // Note: We'll add more as needed
 
 import ThankYouPreview from "./_components/ThankYouPreview";
@@ -51,6 +55,7 @@ const PAGE_SECTIONS: Record<string, any[]> = {
     { id: "le-suite", label: "Le Suite Section", component: null, icon: Bed },
     { id: "welcome", label: "Welcome Section", component: IntroSection, icon: Type },
     { id: "heritage", label: "Heritage Blocks", component: HeritageSection, icon: History },
+    { id: "reviews", label: "Review Section", component: ReviewSlider, icon: Star },
   ],
   "thank-you": [
     { id: "content", label: "Page Content", component: ThankYouPreview, icon: Heart },
@@ -177,7 +182,7 @@ export default function VisualPageEditor() {
           {/* <button
             onClick={() => mutation.mutate({ sections: formValues })}
             disabled={mutation.isPending}
-            className="flex items-center gap-2 bg-blue-900 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-900 transition-all disabled:opacity-50"
+            className="flex items-center gap-2 bg-blue-900 text-background px-5 py-2 rounded-lg font-semibold hover:bg-blue-900 transition-all disabled:opacity-50"
           >
             {mutation.isPending ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
             Save Changes
@@ -206,8 +211,8 @@ export default function VisualPageEditor() {
                 <button
                   key={section.id}
                   onClick={() => setActiveSection(section.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeSection === section.id
-                    ? "bg-blue-50 text-blue-900 shadow-sm shadow-blue-100"
+                  className={`w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activeSection === section.id
+                    ? "bg-blue-50  text-blue-900 shadow-sm shadow-blue-100"
                     : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                     }`}
                 >
@@ -226,7 +231,7 @@ export default function VisualPageEditor() {
                   onClick={() => setActiveSection(section.id)}
                   title={section.label}
                   className={`p-2 rounded-lg transition-all ${activeSection === section.id
-                    ? "bg-blue-900 text-white shadow-md shadow-blue-200 scale-110"
+                    ? "bg-blue-900 text-background shadow-md shadow-blue-200 scale-110"
                     : "text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                     }`}
                 >
@@ -238,41 +243,46 @@ export default function VisualPageEditor() {
         </aside>
 
         {/* Preview / Edit Stage */}
-        <main className="flex-1 overflow-y-auto bg-slate-200/50 relative flex flex-col">
+        <main
+          className="flex-1 space-y-0 flex flex-col overflow-y-auto transition-colors duration-500 relative scrollbar-hide"
+          style={{
+            backgroundColor: 'var(--background)',
+            color: 'var(--foreground)',
+          }}
+        >
           {/* Controls Bar */}
           <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-2 flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{activeSection} Editor</span>
           </div>
 
-          <div className="p-4 flex-1 flex justify-center">
-            <div className="w-full bg-white shadow-2xl rounded overflow-hidden min-h-full mb-4">
+          <div className="flex-1 flex justify-center">
+            <div className="w-full min-h-full">
 
               {/* This is where we render the actual site components */}
               {activeSection === "le-suite" ? (
                 <div className="space-y-0">
-
-                  <div className="bg-primary text-white py-12 px-5 text-center">
-
-                    <h2 className="text-5xl md:text-7xl font-primary mb-6 tracking-tight">
-                      <EditableText
-                        lang={activeLang}
-                        page={slug}
-                        path="leSuiteTitle"
-                        initialValue={content?.sections?.leSuiteTitle || "Le Suite"}
-                      />
-                    </h2>
-                    <p className="font-mono text-xs tracking-[0.3em] uppercase opacity-60">
-                      <EditableText
-                        lang={activeLang}
-                        page={slug}
-                        path="leSuiteSubtitle"
-                        initialValue={content?.sections?.leSuiteSubtitle || "Bassano del Grappa, Italy"}
-                      />
-                    </p>
-                  </div>
+                  <LeSuiteHeader
+                    lang={activeLang}
+                    data={content?.sections}
+                    isEditable={true}
+                  />
                   <div className="bg-slate-50 border-t border-slate-200">
                     <RoomsManager lang={activeLang} />
                   </div>
+                  <div className="border-t border-slate-200">
+                    <LeSuiteBookingFooter
+                      lang={activeLang}
+                      data={content?.sections}
+                      isEditable={true}
+                    />
+                  </div>
+                </div>
+              ) : activeSection === "reviews" ? (
+                <div className="space-y-0">
+                  <div className="bg-slate-50 pb-12 border-b border-slate-200">
+                    <ReviewsManager lang={activeLang} />
+                  </div>
+
                 </div>
               ) : (
 

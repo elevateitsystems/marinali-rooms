@@ -57,7 +57,7 @@ export default function Hero({
   };
 
   return (
-    <section id="hero" className="-mt-24 relative w-full h-[85vh] flex flex-col items-center justify-center overflow-hidden">
+    <section id="hero" className="-mt-24 relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
       {/* Background Image Overlay */}
       <motion.div
         className="absolute inset-0 z-0"
@@ -71,23 +71,26 @@ export default function Hero({
           className="object-cover object-center brightness-[0.7]"
           priority
         />
-        {isEditable && (
-          <div className="absolute top-32 right-10 z-50">
-            <EditableImage 
-              lang={lang as string} 
-              page="home" 
-              path="heroImage" 
-              currentValue={displayImgUrl} 
-              className="w-40 h-10"
+      </motion.div>
+
+      {isEditable && (
+        <div className="absolute inset-0 z-[60] pointer-events-none">
+          <div className="w-full h-full pointer-events-auto">
+            <EditableImage
+              lang={lang as string}
+              page="home"
+              path="heroImage"
+              currentValue={displayImgUrl}
+              className="w-full h-full"
               label="Change Background"
             />
           </div>
-        )}
-      </motion.div>
+        </div>
+      )}
 
       {/* Main Content */}
       <motion.div
-        className="relative z-10 text-white mt-8 will-change-transform"
+        className="relative z-10 text-background mt-8 will-change-transform"
         style={{
           y: translateY,
           scale,
@@ -96,10 +99,10 @@ export default function Hero({
         }}
       >
         <ContentWrapper>
-          <BrandLogo 
-            lang={lang} 
-            size="xl" 
-            variant="light" 
+          <BrandLogo
+            lang={lang}
+            size="xl"
+            variant="light"
           />
         </ContentWrapper>
       </motion.div>

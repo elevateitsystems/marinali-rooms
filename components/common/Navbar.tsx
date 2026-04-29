@@ -80,7 +80,7 @@ export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
     return `/${newLang}${currentRoute}`;
   };
 
-  const textColor = (scrolled || isLeSuite || isPolicyPage) ? 'text-black' : 'text-white';
+  const textColor = (scrolled || isLeSuite || isPolicyPage) ? 'text-black' : 'text-background';
   const logoLineColor = (scrolled || isLeSuite || isPolicyPage) ? 'bg-black' : 'bg-white';
 
   const logoContent = <BrandLogo lang={lang} variant={(scrolled || isLeSuite || isPolicyPage) ? 'dark' : 'light'} size="md" />;

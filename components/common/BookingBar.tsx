@@ -89,7 +89,11 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
     >
       {/* 1. Arrival Date Picker */}
       <Popover open={arrivalPopoverOpen} onOpenChange={setArrivalPopoverOpen}>
-        <PopoverTrigger type="button" className="bg-white rounded-sm flex items-center px-4 py-3 lg:py-0 flex-1 gap-3 text-gray-700 cursor-pointer hover:bg-gray-50 transition-colors text-left outline-none focus:ring-2 focus:ring-primary min-h-[52px]">
+        <PopoverTrigger
+          type="button"
+          className="rounded-sm flex items-center px-4 py-3 lg:py-0 flex-1 gap-3 text-gray-700 cursor-pointer hover:bg-black/5 transition-colors text-left outline-none focus:ring-2 focus:ring-primary min-h-[52px]"
+          style={{ backgroundColor: 'var(--background)' }}
+        >
           <CalendarIcon className="w-6 h-6 text-gray-500 shrink-0" strokeWidth={1.5} />
           <div className="flex flex-col">
             <span className="text-xs opacity-60 font-medium">{lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Check-in'}</span>
@@ -99,28 +103,32 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={10}>
-            <Calendar
-              mode="single"
-              selected={date?.from}
-              locale={currentLocale}
-              onSelect={(selectedDate) => {
-                if (selectedDate) {
-                  const newFrom = selectedDate;
-                  const newTo = (date?.to && date.to > newFrom) ? date.to : addDays(newFrom, 1);
-                  setDate({ from: newFrom, to: newTo });
-                  setArrivalPopoverOpen(false);
-                  setDeparturePopoverOpen(true);
-                }
-              }}
-              disabled={{ before: new Date() }}
-              initialFocus
-            />
+          <Calendar
+            mode="single"
+            selected={date?.from}
+            locale={currentLocale}
+            onSelect={(selectedDate) => {
+              if (selectedDate) {
+                const newFrom = selectedDate;
+                const newTo = (date?.to && date.to > newFrom) ? date.to : addDays(newFrom, 1);
+                setDate({ from: newFrom, to: newTo });
+                setArrivalPopoverOpen(false);
+                setDeparturePopoverOpen(true);
+              }
+            }}
+            disabled={{ before: new Date() }}
+            initialFocus
+          />
         </PopoverContent>
       </Popover>
 
       {/* 2. Departure Date Picker */}
       <Popover open={departurePopoverOpen} onOpenChange={setDeparturePopoverOpen}>
-        <PopoverTrigger type="button" className="bg-white rounded-sm flex items-center px-4 py-3 lg:py-0 flex-1 gap-3 text-gray-700 hover:bg-gray-50 transition-colors text-left outline-none focus:ring-2 cursor-pointer focus:ring-primary min-h-[52px]">
+        <PopoverTrigger
+          type="button"
+          className="rounded-sm flex items-center px-4 py-3 lg:py-0 flex-1 gap-3 text-gray-700 hover:bg-black/5 transition-colors text-left outline-none focus:ring-2 cursor-pointer focus:ring-primary min-h-[52px]"
+          style={{ backgroundColor: 'var(--background)' }}
+        >
           <CalendarIcon className="w-6 h-6 text-gray-500 shrink-0" strokeWidth={1.5} />
           <div className="flex flex-col">
             <span className="text-xs opacity-60 font-medium">{lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Check-out'}</span>
@@ -130,27 +138,31 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={10}>
-            <Calendar
-              mode="single"
-              selected={date?.to}
-              locale={currentLocale}
-              onSelect={(selectedDate) => {
-                if (selectedDate) {
-                  const newTo = selectedDate;
-                  const newFrom = (date?.from && date.from < newTo) ? date.from : addDays(newTo, -1);
-                  setDate({ from: newFrom, to: newTo });
-                  setDeparturePopoverOpen(false);
-                }
-              }}
-              disabled={{ before: date?.from || new Date() }}
-              initialFocus
-            />
+          <Calendar
+            mode="single"
+            selected={date?.to}
+            locale={currentLocale}
+            onSelect={(selectedDate) => {
+              if (selectedDate) {
+                const newTo = selectedDate;
+                const newFrom = (date?.from && date.from < newTo) ? date.from : addDays(newTo, -1);
+                setDate({ from: newFrom, to: newTo });
+                setDeparturePopoverOpen(false);
+              }
+            }}
+            disabled={{ before: date?.from || new Date() }}
+            initialFocus
+          />
         </PopoverContent>
       </Popover>
 
       {/* 3. Guests & Rooms */}
       <Popover>
-        <PopoverTrigger type="button" className="bg-white rounded-sm flex items-center px-4 py-3 lg:py-0 flex-[1.2] gap-3 text-gray-700 hover:bg-gray-50 transition-colors text-left outline-none focus:ring-2 focus:ring-primary min-h-[52px]">
+        <PopoverTrigger
+          type="button"
+          className="rounded-sm flex items-center px-4 py-3 lg:py-0 flex-[1.2] gap-3 text-gray-700 hover:bg-black/5 transition-colors text-left outline-none focus:ring-2 focus:ring-primary min-h-[52px]"
+          style={{ backgroundColor: 'var(--background)' }}
+        >
           <User className="w-6 h-6 text-gray-500 shrink-0" strokeWidth={1.5} />
           <span className="text-sm md:text-base font-medium flex-1 whitespace-nowrap overflow-hidden text-ellipsis">
             {guests} {Number(guests) === 1 ? (lang === 'it' ? 'ospite' : lang === 'de' ? 'Gast' : 'guest') : (lang === 'it' ? 'ospiti' : lang === 'de' ? 'Gäste' : 'guests')} · {rooms} {Number(rooms) === 1 ? (lang === 'it' ? 'camera' : lang === 'de' ? 'Zimmer' : 'room') : (lang === 'it' ? 'camere' : lang === 'de' ? 'Zimmer' : 'rooms')}
@@ -213,6 +225,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
               onChange={e => setCoupon(e.target.value)}
               placeholder={lang === 'it' ? 'Inserisci codice' : lang === 'de' ? 'Code eingeben' : 'Enter code'}
               className="border border-gray-300 p-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-primary"
+              style={{ backgroundColor: 'var(--background)' }}
             />
           </div>
 
@@ -222,7 +235,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
       {/* 4. Search Button */}
       <button
         type="submit"
-        className="bg-primary hover:bg-primary/90 text-white font-bold text-lg md:text-xl px-8 py-3 lg:py-0 rounded-sm transition-colors cursor-pointer outline-none min-h-[52px]"
+        className="bg-primary hover:bg-primary/90 text-background font-bold text-lg md:text-xl px-8 py-3 lg:py-0 rounded-sm transition-colors cursor-pointer outline-none min-h-[52px]"
       >
         {mobileButtonText}
       </button>
@@ -243,7 +256,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="w-full py-3 bg-primary hover:bg-primary/90 rounded-sm text-white font-bold text-base transition-colors shadow-md cursor-pointer"
+          className="w-full py-3 bg-primary hover:bg-primary/90 rounded-sm text-background font-bold text-base transition-colors shadow-md cursor-pointer"
         >
           {mobileButtonText}
         </button>
@@ -281,7 +294,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
               style={{ maxHeight: '92vh' }}
             >
               {/* Handle */}
-              <div 
+              <div
                 className="flex items-center justify-center pt-4 pb-2 cursor-grab active:cursor-grabbing touch-none"
                 onPointerDown={(e) => dragControls.start(e)}
               >

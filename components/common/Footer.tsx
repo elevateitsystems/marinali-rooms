@@ -90,11 +90,18 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
   const whatsappUrl = `https://wa.me/${displayWhatsapp.replace(/[^0-9]/g, '')}`;
 
   return (
-    <footer id="main-footer" className="bg-[#F8F6F2] font-playfair w-full relative z-30 text-[#123149] border-t border-gray-200">
+    <footer
+      id="main-footer"
+      className="font-playfair w-full relative z-30 flex flex-col text-white"
+      style={{ backgroundColor: 'var(--primary-color)' }}
+    >
       {/* Main Content Grid */}
       <section className="grid lg:grid-cols-2">
         {/* Left Side: Centered Contact Info */}
-        <div id="contact" className="p-8 md:p-16 flex flex-col items-center justify-center text-center">
+        <div id="contact" 
+          className="p-8 md:p-16 flex flex-col items-center justify-center text-center text-primary"
+          style={{ backgroundColor: 'var(--background)' }}
+        >
           <div className="max-w-xl w-full">
             <span className="text-xl lg:text-2xl tracking-[0.3em] font-bold text-primary mb-8 block uppercase">
               {t.infoTitle}
@@ -148,14 +155,14 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
         </div>
 
         {/* Right Side: Map Section with Lightbox */}
-        <div id="map" className="relative h-[500px] lg:h-full overflow-hidden bg-gray-100">
+        <div id="map" className="relative min-h-[500px] lg:min-h-full overflow-hidden bg-gray-100 z-10">
           <MapSection lang={lang} mapUrl={displayMapUrl} address={displayAddress} />
         </div>
       </section>
 
       {/* Navigation Footer for Contact */}
-      <div className="pt-10 pb-36 px-4 text-center bg-[#123149] text-white mt-auto">
-        <Link href={`/${lang}`} className="relative z-10 flex flex-col items-center justify-center text-white my-8 group cursor-pointer hover:opacity-80 transition-opacity">
+      <div className="pt-10 pb-36 px-4 text-center mt-auto" style={{ backgroundColor: 'var(--primary-color)' }}>
+        <Link href={`/${lang}`} className="relative z-10 flex flex-col items-center justify-center text-background my-8 group cursor-pointer hover:opacity-80 transition-opacity">
           <h1 className={`${yellowtail.className} text-4xl md:text-5xl tracking-wide mb-1 group-hover:scale-105 transition-transform duration-500`}>
             Marinali
           </h1>

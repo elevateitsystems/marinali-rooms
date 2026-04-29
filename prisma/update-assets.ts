@@ -29,7 +29,7 @@ async function main() {
     await prisma.room.update({
       where: { id: room.id },
       data: { 
-        image: newImage,
+        images: [{ url: newImage }],
       },
 
     });
