@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import EditableText from "@/components/common/EditableText";
 import { PageEditorSkeleton } from "./_components/PageEditorSkeleton";
 import { RoomsManager } from "./_components/RoomsManager";
+import ReviewsManager from "./_components/ReviewsManager";
 
 
 // Import UI components for preview
@@ -37,6 +38,7 @@ import IntroSection from "@/components/Home/IntroSection";
 import HeritageSection from "@/components/Home/HeritageSection";
 import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
 import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
+import ReviewSlider from "@/components/Home/ReviewSlider";
 // Note: We'll add more as needed
 
 import ThankYouPreview from "./_components/ThankYouPreview";
@@ -53,6 +55,7 @@ const PAGE_SECTIONS: Record<string, any[]> = {
     { id: "le-suite", label: "Le Suite Section", component: null, icon: Bed },
     { id: "welcome", label: "Welcome Section", component: IntroSection, icon: Type },
     { id: "heritage", label: "Heritage Blocks", component: HeritageSection, icon: History },
+    { id: "reviews", label: "Review Section", component: ReviewSlider, icon: Star },
   ],
   "thank-you": [
     { id: "content", label: "Page Content", component: ThankYouPreview, icon: Heart },
@@ -265,6 +268,18 @@ export default function VisualPageEditor() {
                       lang={activeLang} 
                       data={content?.sections} 
                       isEditable={true} 
+                    />
+                  </div>
+                </div>
+              ) : activeSection === "reviews" ? (
+                <div className="space-y-0">
+                  <div className="bg-slate-50 pb-12 border-b border-slate-200">
+                    <ReviewsManager lang={activeLang} />
+                  </div>
+                  <div className="py-20 bg-primary">
+                    <ReviewSlider 
+                      lang={activeLang} 
+                      data={content?.sections} 
                     />
                   </div>
                 </div>

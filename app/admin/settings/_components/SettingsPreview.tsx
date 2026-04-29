@@ -37,13 +37,79 @@ export function SettingsPreview({
             <span className="text-xl md:text-2xl font-serif tracking-tight leading-none">Marinali</span>
             <div className="flex items-center gap-3 -mt-1">
               <div className="w-6 h-[0.5px] bg-white opacity-50"></div>
-              <span className="text-[10px] font-serif tracking-wide">Rooms</span>
+              <span className="text-[10px] font-serif tracking-wide" >Rooms</span>
               <div className="w-6 h-[0.5px] bg-white opacity-50"></div>
             </div>
-            <span className="text-[4px] uppercase tracking-[0.4em] opacity-80 mt-1.5">Bassano del Grappa</span>
+            <span className="text-[4px] uppercase tracking-[0.4em] mt-1.5" >Bassano del Grappa</span>
           </div>
         </div>
 
+
+
+        {/* Le Suite Section Preview */}
+        <div className="border-b border-current/5">
+          <div className="py-8 text-center" style={{ backgroundColor: formData.primaryColor, color: '#fff' }}>
+            <h2 className="text-xl font-serif tracking-tight mb-1">Le Suite</h2>
+            <p className="text-[4px] tracking-[0.3em] uppercase font-mono" style={{ color: formData.secondaryColor }}>Bassano del Grappa, Italy</p>
+          </div>
+
+          <div className="space-y-0">
+            {/* Split Section 1 */}
+            <div className="flex items-stretch border-b border-current/5">
+              <div className="w-1/2 aspect-video bg-gray-100 relative">
+                <div className="absolute inset-0 bg-black/5"></div>
+              </div>
+              <div className="w-1/2 p-4 flex flex-col justify-center items-center text-center">
+                <h3 className="text-[7px] font-serif uppercase tracking-widest mb-1.5">Junior Suite</h3>
+                <div className="space-y-[1.5px] w-3/4">
+                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
+                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
+                  <div className="h-[2px] w-[60%] bg-current/10 rounded-full mx-auto"></div>
+                </div>
+                <div className="mt-3 px-3 py-1 border border-current opacity-40 text-[3px] tracking-widest uppercase">Discover</div>
+              </div>
+            </div>
+            {/* Split Section 2 */}
+            <div className="flex flex-row-reverse items-stretch border-b border-current/5">
+              <div className="w-1/2 py-16 aspect-vedio bg-gray-100 relative">
+                <div className="absolute inset-0 bg-black/5"></div>
+              </div>
+              <div className="w-1/2 p-4 flex flex-col justify-center items-center text-center">
+                <h3 className="text-[7px] font-serif uppercase tracking-widest mb-1.5">Suite Deluxe</h3>
+                <div className="space-y-[1.5px] w-3/4">
+                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
+                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
+                  <div className="h-[2px] w-[60%] bg-current/10 rounded-full mx-auto"></div>
+                </div>
+                <div className="mt-3 px-3 py-1 border border-current opacity-40 text-[3px] tracking-widest uppercase">Discover</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+
+        {/* Review Section Preview */}
+        <div className="px-3 py-4 border-b border-current/5 text-center flex-shrink-0" style={{ backgroundColor: formData.primaryColor, color: '#fff' }}>
+          <div className="max-w-[80%] mx-auto">
+            <div className="text-[5px] font-bold leading-relaxed tracking-wide mb-1.5 opacity-90 italic">
+              &ldquo;An unforgettable experience. The attention to detail and the serene atmosphere made our stay perfect.&rdquo;
+            </div>
+            <div className="text-[3.5px] tracking-[0.1em] font-mono" style={{ color: formData.secondaryColor }}>
+              Marinali Rooms – Elena
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <div className="flex gap-1.5">
+              <div className="w-1 h-1 rounded-full bg-white/20"></div>
+              <div className="w-1 h-1 rounded-full bg-white"></div>
+              <div className="w-1 h-1 rounded-full bg-white/20"></div>
+            </div>
+          </div>
+        </div>
         {/* Intro Section Preview */}
         <div className="px-3 py-3 border-b border-current/5">
           <div className="max-w-[85%]">
@@ -59,76 +125,12 @@ export function SettingsPreview({
           </div>
           <div className="mt-2.5 h-[1px] w-full" style={{ backgroundColor: formData.primaryColor, opacity: 0.1 }}></div>
         </div>
-
-        {/* Le Suite Section Preview */}
-        <div className="border-b border-current/5">
-          <div className="py-8 text-center" style={{ backgroundColor: formData.primaryColor, color: '#fff' }}>
-            <h2 className="text-xl font-serif tracking-tight mb-1">Le Suite</h2>
-            <p className="text-[4px] tracking-[0.3em] uppercase opacity-60 font-mono">Bassano del Grappa, Italy</p>
-          </div>
-
-          <div className="space-y-0">
-            {/* Split Section 1 */}
-            <div className="flex items-stretch border-b border-current/5">
-              <div className="w-1/2 aspect-square bg-gray-100 relative">
-                <div className="absolute inset-0 bg-black/5"></div>
-              </div>
-              <div className="w-1/2 p-4 flex flex-col justify-center items-center text-center">
-                <h3 className="text-[7px] font-serif uppercase tracking-widest mb-1.5">Junior Suite</h3>
-                <div className="space-y-[1.5px] w-3/4">
-                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
-                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
-                  <div className="h-[2px] w-[60%] bg-current/10 rounded-full mx-auto"></div>
-                </div>
-                <div className="mt-3 px-3 py-1 border border-current opacity-40 text-[3px] tracking-widest uppercase">Discover</div>
-              </div>
-            </div>
-            {/* Split Section 2 */}
-            <div className="flex flex-row-reverse items-stretch border-b border-current/5">
-              <div className="w-1/2 aspect-square bg-gray-100 relative">
-                <div className="absolute inset-0 bg-black/5"></div>
-              </div>
-              <div className="w-1/2 p-4 flex flex-col justify-center items-center text-center">
-                <h3 className="text-[7px] font-serif uppercase tracking-widest mb-1.5">Suite Deluxe</h3>
-                <div className="space-y-[1.5px] w-3/4">
-                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
-                  <div className="h-[2px] w-full bg-current/10 rounded-full"></div>
-                  <div className="h-[2px] w-[60%] bg-current/10 rounded-full mx-auto"></div>
-                </div>
-                <div className="mt-3 px-3 py-1 border border-current opacity-40 text-[3px] tracking-widest uppercase">Discover</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-
-
-        {/* Review Section Preview */}
-        <div className="px-3 py-4 border-b border-current/5 text-center flex-shrink-0" style={{ backgroundColor: formData.primaryColor, color: '#fff' }}>
-          <div className="max-w-[80%] mx-auto">
-            <div className="text-[5px] font-bold leading-relaxed tracking-wide mb-1.5 opacity-90 italic">
-              &ldquo;An unforgettable experience. The attention to detail and the serene atmosphere made our stay perfect.&rdquo;
-            </div>
-            <div className="text-[3.5px] tracking-[0.1em] opacity-60 font-mono">
-              Marinali Rooms – Elena
-            </div>
-          </div>
-          <div className="flex items-center justify-center gap-2 mt-2">
-            <div className="flex gap-1.5">
-              <div className="w-1 h-1 rounded-full bg-white/20"></div>
-              <div className="w-1 h-1 rounded-full bg-white"></div>
-              <div className="w-1 h-1 rounded-full bg-white/20"></div>
-            </div>
-          </div>
-        </div>
-
         {/* Footer */}
         <div className="px-4 py-3 border-t border-white/10" style={{ backgroundColor: formData.primaryColor, color: '#fff' }}>
           <div className="flex justify-between items-center mb-2.5">
             <div className="flex flex-col items-start">
               <span className="text-[8px] font-serif tracking-tight">Marinali</span>
-              <span className="text-[4px] tracking-[0.2em] uppercase opacity-60 -mt-0.5">Rooms</span>
+              <span className="text-[4px] tracking-[0.2em] uppercase -mt-0.5" style={{ color: formData.secondaryColor }}>Rooms</span>
             </div>
             <div className="flex gap-1.5 items-center">
               {fc.socialLinks.slice(0, 3).map((s, i) => (
