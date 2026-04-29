@@ -22,6 +22,24 @@ export default function IntroSection({
 }) {
   const displayTitle = data?.aboutTitle || data?.title || title;
   const displayDescription = data?.aboutDescription || data?.welcomeText || description;
+
+  const fallbacks: Record<string, any> = {
+    en: {
+      title: "Our Heritage",
+      description: "Experience unforgettable hospitality at Marinali Rooms..."
+    },
+    it: {
+      title: "La Nostra Storia",
+      description: "Vivi un'ospitalità indimenticabile presso Marinali Rooms..."
+    },
+    de: {
+      title: "Unser Erbe",
+      description: "Erleben Sie unvergessliche Gastfreundschaft in den Marinali Rooms..."
+    }
+  };
+
+  const currentFallbacks = fallbacks[lang] || fallbacks.en;
+
   return (
     <section
       id="heritage"
@@ -50,9 +68,14 @@ export default function IntroSection({
           }}
         >
           {isEditable ? (
-            <EditableText lang={lang} page="home" path="aboutTitle" initialValue={displayTitle as string} />
+            <EditableText 
+              lang={lang} 
+              page="home" 
+              path="aboutTitle" 
+              initialValue={displayTitle as string || currentFallbacks.title} 
+            />
           ) : (
-            displayTitle || 'Welcome'
+            displayTitle || currentFallbacks.title
           )}
         </h2>
 
@@ -68,9 +91,15 @@ export default function IntroSection({
           }}
         >
           {isEditable ? (
-            <EditableText lang={lang} page="home" path="aboutDescription" initialValue={displayDescription as string} multiline />
+            <EditableText 
+              lang={lang} 
+              page="home" 
+              path="aboutDescription" 
+              initialValue={displayDescription as string || currentFallbacks.description} 
+              multiline 
+            />
           ) : (
-            displayDescription || 'Experience unforgettable hospitality at Marinali Rooms...'
+            displayDescription || currentFallbacks.description
           )}
         </div>
       </motion.div>
