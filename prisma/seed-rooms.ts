@@ -25,13 +25,11 @@ async function main() {
     await prisma.room.upsert({
       where: { slug: room.id },
       update: {
-        image: room.image,
         images: room.images,
         translations: room.translations,
       },
       create: {
         slug: room.id,
-        image: room.image,
         images: room.images,
         translations: room.translations,
       },
