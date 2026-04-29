@@ -61,15 +61,15 @@ export default async function ThankYouPage() {
         </div>
 
         <div className="pt-12">
-          <Link 
+          <Link
             href="/de"
-            className="inline-block px-12 py-5 bg-primary text-white text-xs font-bold tracking-[0.3em] uppercase hover:bg-primary/90 transition-all active:scale-95 shadow-lg"
+            className="inline-block px-12 py-5 bg-primary text-background text-xs font-bold tracking-[0.3em] uppercase hover:bg-primary/90 transition-all active:scale-95 shadow-lg"
           >
             {data.buttonLabel || "Zurück zur Startseite"}
           </Link>
         </div>
       </div>
-      
+
       {/* Visual background element */}
       <div className="fixed top-0 right-0 -z-10 opacity-[0.03] pointer-events-none">
         <h1 className={`${yellowtail.className} text-[30rem] leading-none`}>M</h1>

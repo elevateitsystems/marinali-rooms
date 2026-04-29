@@ -126,7 +126,7 @@ export default function SecurityPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-[#123149] text-white px-8 py-3 rounded-xl font-medium hover:bg-[#1a4567] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+              className="bg-[#123149] text-background px-8 py-3 rounded-xl font-medium hover:bg-[#1a4567] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
             >
               {isLoading ? (
                 <>

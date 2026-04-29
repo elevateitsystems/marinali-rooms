@@ -79,15 +79,15 @@ export function FileUploader({
   return (
     <div className={cn("space-y-4", className)}>
       <Label className="text-base font-bold">{label}</Label>
-      
+
       {displayValue ? (
         <div className={cn("relative group rounded-xl overflow-hidden border bg-gray-50 flex items-center justify-center", aspectRatios[aspectRatio])}>
-          <img 
-            src={displayValue} 
-            alt="Upload preview" 
+          <img
+            src={displayValue}
+            alt="Upload preview"
             className={cn("w-full h-full object-cover", pendingFile && "opacity-80 blur-[1px]")}
           />
-          
+
           {isUploading && (
             <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex flex-col items-center justify-center z-20">
               <Loader2 className="animate-spin text-blue-900 mb-2" size={32} />
@@ -98,15 +98,15 @@ export function FileUploader({
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
             {pendingFile ? (
               <div className="flex flex-col gap-2 w-full max-w-[200px] px-4">
-                <Button 
+                <Button
                   type="button"
                   onClick={handleUpload}
                   disabled={isUploading}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-10"
+                  className="w-full bg-green-600 hover:bg-green-700 text-background font-bold h-10"
                 >
                   Confirm & Upload
                 </Button>
-                <Button 
+                <Button
                   type="button"
                   variant="secondary"
                   onClick={handleCancel}
@@ -123,12 +123,12 @@ export function FileUploader({
                 <input type="file" className="hidden" accept="image/*" onChange={handleFileSelect} />
               </label>
             )}
-            
+
             {!pendingFile && value && (
-              <Button 
+              <Button
                 type="button"
-                variant="destructive" 
-                size="sm" 
+                variant="destructive"
+                size="sm"
                 onClick={() => onChange("", null)}
                 className="h-9 flex items-center gap-2"
               >
@@ -137,9 +137,9 @@ export function FileUploader({
               </Button>
             )}
           </div>
-          
+
           {pendingFile && (
-            <div className="absolute top-2 left-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-md shadow-lg z-10 animate-pulse">
+            <div className="absolute top-2 left-2 bg-blue-600 text-background text-[10px] font-bold px-2 py-1 rounded-md shadow-lg z-10 animate-pulse">
               PENDING UPLOAD
             </div>
           )}
@@ -153,7 +153,7 @@ export function FileUploader({
             <p className="text-sm font-bold">Select a file or drag and drop</p>
             <p className="text-xs text-muted-foreground mt-1">PNG, JPG or WebP up to 10MB</p>
           </div>
-          <label className="bg-[#123149] text-white text-sm h-10 px-6 rounded-md font-bold flex items-center justify-center cursor-pointer hover:opacity-90 transition-all">
+          <label className="bg-[#123149] text-background text-sm h-10 px-6 rounded-md font-bold flex items-center justify-center cursor-pointer hover:opacity-90 transition-all">
             Choose File
             <input type="file" className="hidden" accept="image/*" onChange={handleFileSelect} />
           </label>

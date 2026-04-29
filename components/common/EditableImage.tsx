@@ -136,7 +136,7 @@ export default function EditableImage({
             <button
               onClick={handleSave}
               disabled={isUploading || mutation.isPending}
-              className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider hover:bg-green-700 transition-all shadow-lg active:scale-95 disabled:opacity-50"
+              className="flex items-center gap-2 bg-green-600 text-background px-6 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider hover:bg-green-700 transition-all shadow-lg active:scale-95 disabled:opacity-50"
             >
               {isUploading || mutation.isPending ? (
                 <Loader2 className="animate-spin" size={14} />

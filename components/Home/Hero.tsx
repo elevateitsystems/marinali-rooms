@@ -90,7 +90,7 @@ export default function Hero({
 
       {/* Main Content */}
       <motion.div
-        className="relative z-10 text-white mt-8 will-change-transform"
+        className="relative z-10 text-background mt-8 will-change-transform"
         style={{
           y: translateY,
           scale,

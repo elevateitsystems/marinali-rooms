@@ -170,7 +170,7 @@ export default function SettingsPage() {
               <Button
                 onClick={() => handleSubmit({ preventDefault: () => { } } as any)}
                 disabled={mutation.isPending}
-                className="bg-primary text-white shadow-lg px-8 py-6 rounded-xl flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="bg-primary text-background shadow-lg px-8 py-6 rounded-xl flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 {mutation.isPending ? (
                   <>

@@ -14,7 +14,7 @@ export default function BrandLogo({ lang, size = 'md', variant = 'light' }: Bran
   const subtitle = "Rooms";
   const location = "Bassano del Grappa";
 
-  const textColor = variant === 'light' ? 'text-white' : 'text-[#123149]';
+  const textColor = variant === 'light' ? 'text-background' : 'text-[#123149]';
   const lineColor = variant === 'light' ? 'bg-white' : 'bg-[#123149]';
 
   // Scale based on size prop

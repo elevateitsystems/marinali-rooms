@@ -112,10 +112,10 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
           </Swiper>
 
           {/* Main Gallery Navigation Buttons */}
-          <button className={`prev-${room.id} absolute left-6 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/90 backdrop-blur-md rounded-full text-white hover:text-black transition-all opacity-0 group-hover:opacity-100 hidden md:flex active:scale-90 border border-white/20`}>
+          <button className={`prev-${room.id} absolute left-6 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/90 backdrop-blur-md rounded-full text-background hover:text-black transition-all opacity-0 group-hover:opacity-100 hidden md:flex active:scale-90 border border-white/20`}>
             <ChevronLeft size={20} />
           </button>
-          <button className={`next-${room.id} absolute right-6 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/90 backdrop-blur-md rounded-full text-white hover:text-black transition-all opacity-0 group-hover:opacity-100 hidden md:flex active:scale-90 border border-white/20`}>
+          <button className={`next-${room.id} absolute right-6 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/90 backdrop-blur-md rounded-full text-background hover:text-black transition-all opacity-0 group-hover:opacity-100 hidden md:flex active:scale-90 border border-white/20`}>
             <ChevronRight size={20} />
           </button>
 
@@ -192,7 +192,7 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
               </button>
 
               {/* Image Area */}
-              <div 
+              <div
                 className="w-full lg:w-[50%] h-[450px] sm:h-[550px] lg:h-full flex flex-col shrink-0"
                 style={{ backgroundColor: 'var(--background)' }}
               >

@@ -116,12 +116,12 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
       if (pendingFiles[roomId]?.gallery && pendingFiles[roomId].gallery!.length > 0) {
         console.log(`[RoomsManager] Uploading ${pendingFiles[roomId].gallery!.length} gallery images...`);
         const res = await startUpload(pendingFiles[roomId].gallery!);
-        
+
         if (res && res.length > 0) {
           const newImageObjects = res.map(file => ({ url: file.url, key: file.key }));
           finalGalleryImages = [...finalGalleryImages, ...newImageObjects];
           console.log("[RoomsManager] Gallery images uploaded, saving to database again...");
-          
+
           // 4. Second API Call to save the new image URLs
           await updateMutation.mutateAsync({
             ...room,
@@ -233,7 +233,7 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
                           saveRoom(room.id);
                         }}
                         disabled={isUploading[room.id] || updateMutation.isPending}
-                        className="flex items-center gap-2 bg-blue-900 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md hover:opcaity-90 transition-all active:scale-95 disabled:opacity-50 animate-in fade-in slide-in-from-right-4 cursor-pointer"
+                        className="flex items-center gap-2 bg-blue-900 text-background px-4 py-2 rounded-lg text-xs font-bold shadow-md hover:opcaity-90 transition-all active:scale-95 disabled:opacity-50 animate-in fade-in slide-in-from-right-4 cursor-pointer"
                       >
                         {(isUploading[room.id] || updateMutation.isPending) && expandedRoom === room.id ? (
                           <Loader2 className="animate-spin" size={14} />
@@ -353,7 +353,7 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
                               return (
                                 <div key={idx} className="relative aspect-square rounded-xl overflow-hidden bg-slate-200 group border border-slate-200 shadow-sm">
                                   <img src={url} alt={`Gallery ${idx}`} className={`w-full h-full object-cover transition-all ${isCurrentlyUploading ? 'opacity-50 blur-[2px] grayscale' : ''}`} />
-                                  
+
                                   {isCurrentlyUploading && (
                                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[1px] z-10">
                                       <Loader2 className="animate-spin text-blue-900 mb-2" size={24} />
@@ -368,7 +368,7 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
                                         newImages.splice(idx, 1);
                                         handleFieldChange(room.id, 'images', newImages);
                                       }}
-                                      className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110 z-20"
+                                      className="absolute top-2 right-2 bg-red-500 text-background p-1.5 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110 z-20"
                                     >
                                       <X size={14} />
                                     </button>
@@ -388,9 +388,9 @@ export function RoomsManager({ lang }: RoomsManagerProps) {
                                   onChange={(e) => {
                                     const files = Array.from(e.target.files || []);
                                     if (files.length > 0) {
-                                      const blobObjects = files.map(file => ({ 
-                                        url: URL.createObjectURL(file), 
-                                        key: 'pending-' + Date.now() 
+                                      const blobObjects = files.map(file => ({
+                                        url: URL.createObjectURL(file),
+                                        key: 'pending-' + Date.now()
                                       }));
                                       const newImages = [...(room.images || []), ...blobObjects];
                                       handleFieldChange(room.id, 'images', newImages);

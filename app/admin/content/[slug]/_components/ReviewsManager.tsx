@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
-  MessageSquare, 
-  Plus, 
-  Trash2, 
-  GripVertical, 
-  Quote, 
-  User, 
+import {
+  MessageSquare,
+  Plus,
+  Trash2,
+  GripVertical,
+  Quote,
+  User,
   Link as LinkIcon,
   Save,
   Loader2
@@ -52,9 +52,9 @@ export default function ReviewsManager({ lang }: ReviewsManagerProps) {
       const res = await fetch(`/api/content/${lang}/home`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          path: 'reviews', 
-          value: newReviews 
+        body: JSON.stringify({
+          path: 'reviews',
+          value: newReviews
         })
       });
       if (!res.ok) throw new Error('Failed to update reviews');
@@ -111,7 +111,7 @@ export default function ReviewsManager({ lang }: ReviewsManagerProps) {
         <button
           onClick={handleSave}
           disabled={mutation.isPending}
-          className="flex items-center gap-2 bg-blue-900 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-800 transition-all shadow-lg active:scale-95 disabled:opacity-50"
+          className="flex items-center gap-2 bg-blue-900 text-background px-6 py-2.5 rounded-xl font-bold hover:bg-blue-800 transition-all shadow-lg active:scale-95 disabled:opacity-50"
         >
           {mutation.isPending ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
           Save Changes
@@ -120,8 +120,8 @@ export default function ReviewsManager({ lang }: ReviewsManagerProps) {
 
       <div className="space-y-4 mb-8">
         {reviews.map((review, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group relative"
           >
             <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">

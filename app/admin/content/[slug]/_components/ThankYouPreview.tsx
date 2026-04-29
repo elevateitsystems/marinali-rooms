@@ -112,7 +112,7 @@ export default function ThankYouPreview({ data, lang, slug }: ThankYouPreviewPro
         </div>
 
         <div className="pt-12">
-          <div className="inline-block px-12 py-5 bg-primary text-white text-xs font-bold tracking-[0.3em] uppercase opacity-80 cursor-default">
+          <div className="inline-block px-12 py-5 bg-primary text-background text-xs font-bold tracking-[0.3em] uppercase opacity-80 cursor-default">
             <EditableText
               lang={lang}
               page={slug}
@@ -122,7 +122,7 @@ export default function ThankYouPreview({ data, lang, slug }: ThankYouPreviewPro
           </div>
         </div>
       </div>
-      
+
       {/* Visual background element */}
       <div className="absolute top-0 right-0 -z-0 opacity-[0.03] pointer-events-none">
         <h1 className={`${yellowtail.className} text-[30rem] leading-none`}>M</h1>

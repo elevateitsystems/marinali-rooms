@@ -90,8 +90,8 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
   const whatsappUrl = `https://wa.me/${displayWhatsapp.replace(/[^0-9]/g, '')}`;
 
   return (
-    <footer 
-      id="main-footer" 
+    <footer
+      id="main-footer"
       className="font-playfair w-full relative z-30 text-[#123149] border-t border-gray-200 flex flex-col"
       style={{ backgroundColor: 'var(--background-color)' }}
     >
@@ -158,8 +158,8 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
       </section>
 
       {/* Navigation Footer for Contact */}
-      <div className="pt-10 pb-36 px-4 text-center bg-[#123149] text-white mt-auto">
-        <Link href={`/${lang}`} className="relative z-10 flex flex-col items-center justify-center text-white my-8 group cursor-pointer hover:opacity-80 transition-opacity">
+      <div className="pt-10 pb-36 px-4 text-center bg-[#123149] text-background mt-auto">
+        <Link href={`/${lang}`} className="relative z-10 flex flex-col items-center justify-center text-background my-8 group cursor-pointer hover:opacity-80 transition-opacity">
           <h1 className={`${yellowtail.className} text-4xl md:text-5xl tracking-wide mb-1 group-hover:scale-105 transition-transform duration-500`}>
             Marinali
           </h1>

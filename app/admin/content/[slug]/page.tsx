@@ -182,7 +182,7 @@ export default function VisualPageEditor() {
           {/* <button
             onClick={() => mutation.mutate({ sections: formValues })}
             disabled={mutation.isPending}
-            className="flex items-center gap-2 bg-blue-900 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-900 transition-all disabled:opacity-50"
+            className="flex items-center gap-2 bg-blue-900 text-background px-5 py-2 rounded-lg font-semibold hover:bg-blue-900 transition-all disabled:opacity-50"
           >
             {mutation.isPending ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
             Save Changes
@@ -231,7 +231,7 @@ export default function VisualPageEditor() {
                   onClick={() => setActiveSection(section.id)}
                   title={section.label}
                   className={`p-2 rounded-lg transition-all ${activeSection === section.id
-                    ? "bg-blue-900 text-white shadow-md shadow-blue-200 scale-110"
+                    ? "bg-blue-900 text-background shadow-md shadow-blue-200 scale-110"
                     : "text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                     }`}
                 >
@@ -255,25 +255,25 @@ export default function VisualPageEditor() {
             <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{activeSection} Editor</span>
           </div>
 
-          <div className="p-4 flex-1 flex justify-center">
-            <div className="w-full bg-white shadow-2xl rounded overflow-hidden min-h-full mb-4">
+          <div className="flex-1 flex justify-center">
+            <div className="w-full min-h-full">
 
               {/* This is where we render the actual site components */}
               {activeSection === "le-suite" ? (
                 <div className="space-y-0">
-                  <LeSuiteHeader 
-                    lang={activeLang} 
-                    data={content?.sections} 
-                    isEditable={true} 
+                  <LeSuiteHeader
+                    lang={activeLang}
+                    data={content?.sections}
+                    isEditable={true}
                   />
                   <div className="bg-slate-50 border-t border-slate-200">
                     <RoomsManager lang={activeLang} />
                   </div>
                   <div className="border-t border-slate-200">
-                    <LeSuiteBookingFooter 
-                      lang={activeLang} 
-                      data={content?.sections} 
-                      isEditable={true} 
+                    <LeSuiteBookingFooter
+                      lang={activeLang}
+                      data={content?.sections}
+                      isEditable={true}
                     />
                   </div>
                 </div>
@@ -282,12 +282,7 @@ export default function VisualPageEditor() {
                   <div className="bg-slate-50 pb-12 border-b border-slate-200">
                     <ReviewsManager lang={activeLang} />
                   </div>
-                  <div className="py-20 bg-primary">
-                    <ReviewSlider 
-                      lang={activeLang} 
-                      data={content?.sections} 
-                    />
-                  </div>
+
                 </div>
               ) : (
 

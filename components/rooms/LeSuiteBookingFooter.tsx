@@ -52,7 +52,7 @@ export default function LeSuiteBookingFooter({
   const currentFallbacks = fallbacks[lang] || fallbacks.en;
 
   return (
-    <section className="w-full bg-primary text-white py-20 px-5 flex flex-col items-center text-center">
+    <section className="w-full bg-primary text-background py-20 px-5 flex flex-col items-center text-center">
       <p className="font-mono text-xs tracking-[0.3em] uppercase text-secondary mb-4">
         {isEditable ? (
           <EditableText
