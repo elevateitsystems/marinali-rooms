@@ -92,13 +92,16 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
   return (
     <footer
       id="main-footer"
-      className="font-playfair w-full relative z-30 text-[#123149] border-t border-gray-200 flex flex-col"
-      style={{ backgroundColor: 'var(--background-color)' }}
+      className="font-playfair w-full relative z-30 flex flex-col text-white"
+      style={{ backgroundColor: 'var(--primary-color)' }}
     >
       {/* Main Content Grid */}
       <section className="grid lg:grid-cols-2">
         {/* Left Side: Centered Contact Info */}
-        <div id="contact" className="p-8 md:p-16 flex flex-col items-center justify-center text-center">
+        <div id="contact" 
+          className="p-8 md:p-16 flex flex-col items-center justify-center text-center text-primary"
+          style={{ backgroundColor: 'var(--background)' }}
+        >
           <div className="max-w-xl w-full">
             <span className="text-xl lg:text-2xl tracking-[0.3em] font-bold text-primary mb-8 block uppercase">
               {t.infoTitle}
@@ -158,7 +161,7 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
       </section>
 
       {/* Navigation Footer for Contact */}
-      <div className="pt-10 pb-36 px-4 text-center bg-[#123149] text-background mt-auto">
+      <div className="pt-10 pb-36 px-4 text-center mt-auto" style={{ backgroundColor: 'var(--primary-color)' }}>
         <Link href={`/${lang}`} className="relative z-10 flex flex-col items-center justify-center text-background my-8 group cursor-pointer hover:opacity-80 transition-opacity">
           <h1 className={`${yellowtail.className} text-4xl md:text-5xl tracking-wide mb-1 group-hover:scale-105 transition-transform duration-500`}>
             Marinali

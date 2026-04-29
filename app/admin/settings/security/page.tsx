@@ -1,13 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Lock, ShieldCheck } from 'lucide-react';
+import { Loader2, Lock, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function SecurityPage() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,13 +73,20 @@ export default function SecurityPage() {
                 <Lock className="h-4 w-4 text-gray-400" />
               </div>
               <input
-                type="password"
+                type={showOld ? "text" : "password"}
                 required
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
-                className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50"
+                className="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50"
                 placeholder="Enter current password"
               />
+              <button
+                type="button"
+                onClick={() => setShowOld(!showOld)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+              >
+                {showOld ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
           </div>
 
@@ -92,13 +102,20 @@ export default function SecurityPage() {
                   <Lock className="h-4 w-4 text-gray-400" />
                 </div>
                 <input
-                  type="password"
+                  type={showNew ? "text" : "password"}
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50"
+                  className="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50"
                   placeholder="New password"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowNew(!showNew)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                >
+                  {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
               </div>
             </div>
 
@@ -111,13 +128,20 @@ export default function SecurityPage() {
                   <Lock className="h-4 w-4 text-gray-400" />
                 </div>
                 <input
-                  type="password"
+                  type={showConfirm ? "text" : "password"}
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50"
+                  className="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50"
                   placeholder="Confirm new password"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                >
+                  {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
               </div>
             </div>
           </div>
