@@ -70,6 +70,7 @@ const staticContent = {
 
 interface FooterProps {
   lang: 'en' | 'it' | 'de';
+  infoTitle?: string;
   address?: string;
   phone?: string;
   email?: string;
@@ -80,9 +81,10 @@ interface FooterProps {
   bottomLinks?: any[];
 }
 
-export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, copyright, columns, bottomLinks }: FooterProps) {
+export default function Footer({ lang, infoTitle, address, phone, email, whatsapp, mapUrl, copyright, columns, bottomLinks }: FooterProps) {
   const t = staticContent[lang] || staticContent.en;
 
+  const displayInfoTitle = infoTitle || t.infoTitle;
   const displayAddress = address || t.address;
   const displayPhone = phone || t.phone;
   const displayEmail = email || t.email;
@@ -108,7 +110,7 @@ export default function Footer({ lang, address, phone, email, whatsapp, mapUrl, 
         >
           <div className="max-w-xl w-full">
             <span className="text-xl lg:text-2xl tracking-[0.3em] font-bold text-primary mb-8 block uppercase">
-              {t.infoTitle}
+              {displayInfoTitle}
             </span>
 
             <div className="space-y-6 text-base font-medium">
