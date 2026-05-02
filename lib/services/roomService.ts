@@ -14,8 +14,12 @@ export class RoomService {
           console.log(`[RoomService] Cache hit for ${this.CACHE_KEY}`);
           return typeof cached === 'string' ? JSON.parse(cached) : cached;
         }
-      } catch (error) {
-        console.error("[RoomService] Redis error:", error);
+      } catch (error: any) {
+        if (error.message?.includes('Dynamic server usage')) {
+          console.log("[RoomService] Redis skipped during build");
+        } else {
+          console.error("[RoomService] Redis error:", error);
+        }
       }
     }
 
@@ -28,8 +32,12 @@ export class RoomService {
     if (redis && rooms.length > 0) {
       try {
         await redis.set(this.CACHE_KEY, JSON.stringify(rooms), { ex: this.CACHE_TTL });
-      } catch (error) {
-        console.error("[RoomService] Redis set error:", error);
+      } catch (error: any) {
+        if (error.message?.includes('Dynamic server usage')) {
+          // Ignore
+        } else {
+          console.error("[RoomService] Redis set error:", error);
+        }
       }
     }
 

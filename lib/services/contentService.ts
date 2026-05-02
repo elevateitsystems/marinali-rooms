@@ -19,8 +19,12 @@ export class ContentService {
           console.log(`[ContentService] Cache hit for ${cacheKey}`);
           return typeof cached === 'string' ? JSON.parse(cached) : cached;
         }
-      } catch (error) {
-        console.error("[ContentService] Redis error:", error);
+      } catch (error: any) {
+        if (error.message?.includes('Dynamic server usage')) {
+          console.log("[ContentService] Redis skipped during build");
+        } else {
+          console.error("[ContentService] Redis error:", error);
+        }
       }
     }
 
@@ -64,8 +68,12 @@ export class ContentService {
     if (redis) {
       try {
         await redis.set(cacheKey, JSON.stringify(result), { ex: this.CACHE_TTL });
-      } catch (error) {
-        console.error("[ContentService] Redis set error:", error);
+      } catch (error: any) {
+        if (error.message?.includes('Dynamic server usage')) {
+          // Ignore
+        } else {
+          console.error("[ContentService] Redis set error:", error);
+        }
       }
     }
 

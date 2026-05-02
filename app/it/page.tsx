@@ -15,22 +15,21 @@ import HeritageSection from "@/components/Home/HeritageSection";
 const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
 
 export default async function ItalianHomePage() {
-  const content = await ContentService.getContent("home", "it");
-  const data = (content?.sections as any) || {};
-  const settings = await SettingsService.getSettings();
+  const [content, roomsData, settings] = await Promise.all([
+    ContentService.getContent("home", "it"),
+    RoomService.getRooms(),
+    SettingsService.getSettings()
+  ]);
 
-  const heroImageUrl = data?.heroImage || settings?.heroImage || "/assets/Stanza%203%20-%20Foto-13.jpg";
-  
-  // Preload the Hero image for LCP optimization
-  ReactDOM.preload(heroImageUrl, { as: "image", fetchPriority: "high" });
-  const roomsData = await RoomService.getRooms();
+  const data = (content?.sections as any) || {};
   const rooms = roomsData.map((room: any) => ({
     id: room.slug,
     images: room.images,
     ...room.translations.it
-  }));
-
-
+  }));  const heroImageUrl = data?.heroImage || settings?.heroImage || "/assets/Stanza%203%20-%20Foto-13.jpg";
+  
+  // Preload the Hero image for LCP optimization
+  ReactDOM.preload(heroImageUrl, { as: "image", fetchPriority: "high" });
 
   return (
     <>

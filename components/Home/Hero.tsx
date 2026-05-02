@@ -60,6 +60,7 @@ export default function Hero({
       {/* Background Image Overlay */}
       <motion.div
         className="absolute inset-0 z-0"
+        initial={{ y: 0 }}
         style={{ y: bgTranslateY }}
       >
         <Image
@@ -69,6 +70,7 @@ export default function Hero({
           sizes="100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
+          loading="eager"
           // @ts-ignore
           fetchPriority="high"
         />
@@ -92,6 +94,7 @@ export default function Hero({
       {/* Main Content */}
       <motion.div
         className="relative z-10 text-background mt-8 will-change-transform"
+        initial={{ y: 0, scale: 1, opacity: 1 }}
         style={{
           y: translateY,
           scale,

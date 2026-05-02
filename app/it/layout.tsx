@@ -5,7 +5,7 @@ import { getContent } from "@/lib/content";
 import { SettingsService } from "@/lib/services/settingsService";
 import SmoothScrolling from "@/components/common/SmoothScrolling";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 
 export default async function ItalianLayout({ children }: { children: React.ReactNode }) {

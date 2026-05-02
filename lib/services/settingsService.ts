@@ -62,8 +62,13 @@ export class SettingsService {
           console.log("[SettingsService] Cache hit");
           return cached;
         }
-      } catch (error) {
-        console.error("[SettingsService] Redis read error:", error);
+      } catch (error: any) {
+        // If we hit dynamic usage error during build, it's fine, we'll fallback to DB
+        if (error.message?.includes('Dynamic server usage')) {
+          console.log("[SettingsService] Redis skipped due to dynamic usage (build phase)");
+        } else {
+          console.error("[SettingsService] Redis read error:", error);
+        }
       }
     }
 
@@ -94,8 +99,12 @@ export class SettingsService {
         if (redis) {
           try {
             await redis.set(this.CACHE_KEY, JSON.stringify(settings), { ex: this.CACHE_TTL });
-          } catch (error) {
-            console.error("[SettingsService] Redis set error:", error);
+          } catch (error: any) {
+            if (error.message?.includes('Dynamic server usage')) {
+               // Ignore during static generation
+            } else {
+              console.error("[SettingsService] Redis set error:", error);
+            }
           }
         }
 
