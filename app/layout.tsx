@@ -30,33 +30,20 @@ export const metadata: Metadata = {
   description: "Experience the heart of Bassano del Grappa",
 };
 
-import { SettingsService } from "@/lib/services/settingsService";
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const settings = await SettingsService.getSettings();
-
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${playfair.variable} ${yellowtail.variable} antialiased`}
     >
       <head>
-        <style dangerouslySetInnerHTML={{ __html: `
-          :root {
-            --primary-color: ${settings.primaryColor};
-            --secondary-color: ${settings.secondaryColor};
-            --background: ${settings.backgroundColor};
-            --background-color: ${settings.backgroundColor};
-            --foreground: ${settings.textColor};
-            --popover: ${settings.backgroundColor};
-            --popover-foreground: ${settings.textColor};
-            --font-primary: ${settings.fontFamily};
-          }
-        `}} />
+        <Suspense fallback={null}>
+          <ThemeInjector />
+        </Suspense>
       </head>
       <body className="min-h-screen flex flex-col">
         <Providers>
