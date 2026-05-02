@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Playfair_Display, Montserrat, Yellowtail } from "next/font/google";
+import { Geist, Playfair_Display, Yellowtail } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -8,26 +8,8 @@ const geistSans = Geist({
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 const playfair = Playfair_Display({
   variable: "--font-playfair",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
   subsets: ["latin"],
   display: "swap",
 });
@@ -65,7 +47,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${playfair.variable} ${montserrat.variable} ${yellowtail.variable} antialiased`}
+      className={`${geistSans.variable} ${playfair.variable} ${yellowtail.variable} antialiased`}
       style={{
         // @ts-ignore
         "--primary-color": primaryColor,

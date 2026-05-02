@@ -17,18 +17,19 @@ import HeritageSection from "@/components/Home/HeritageSection";
 const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
 
 export default async function GermanHomePage() {
-  const roomsData = await RoomService.getRooms();
+  const [roomsData, content, settings] = await Promise.all([
+    RoomService.getRooms(),
+    ContentService.getContent("home", "de"),
+    SettingsService.getSettings()
+  ]);
+
   const rooms = roomsData.map((room: any) => ({
     id: room.slug,
     images: room.images,
     ...room.translations.de
   }));
 
-
-
-  const content = await ContentService.getContent("home", "de");
   const data = (content?.sections as any) || {};
-  const settings = await SettingsService.getSettings();
 
   const heroImageUrl = data?.heroImage || settings?.heroImage || "/assets/Stanza%203%20-%20Foto-13.jpg";
   
