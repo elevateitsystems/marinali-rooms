@@ -9,31 +9,13 @@ export class ContentService {
   }
 
   /**
-   * High-Performance fetching: Redis -> DB fallback
-   * Wrapped in Next.js Data Cache (unstable_cache) for ISR/SSG support
+   * Internal DB fetch wrapped in Next.js unstable_cache
    */
-  private static fetchContentCached = unstable_cache(
+  private static fetchFromDbCached = unstable_cache(
     async (page: string, lang: string) => {
-      const cacheKey = this.getCacheKey(page, lang);
-      const redis = (await import("@/lib/redis")).default;
-
-      // 1. Try Redis
-      if (redis) {
-        try {
-          const cached = await redis.get(cacheKey);
-          if (cached) {
-            console.log(`[ContentService] Redis hit for ${cacheKey}`);
-            return typeof cached === 'string' ? JSON.parse(cached) : cached;
-          }
-        } catch (error: any) {
-          if (!error.message?.includes('Dynamic server usage')) {
-            console.error("[ContentService] Redis error:", error);
-          }
-        }
-      }
-
-      // 2. Fallback to DB
-      console.log(`[ContentService] Cache miss. Fetching DB for ${page}:${lang}`);
+      console.log(
+        `[ContentService] Cache miss (Redis & Next.js). Fetching DB for ${page}:${lang}`,
+      );
       const prisma = (await import("@/lib/prisma")).default;
       const content = await prisma.pageContent.findUnique({
         where: {
@@ -45,38 +27,82 @@ export class ContentService {
       });
 
       if (!content) {
-        console.log(`[ContentService] DB miss for ${page}:${lang}. Using local JSON...`);
+        console.log(
+          `[ContentService] DB miss for ${page}:${lang}. Using local JSON...`,
+        );
         const contentData = require("@/data/content.json");
-        const fallbackSections = contentData.content[lang]?.[page] || contentData.content.en?.[page];
-        
+        const fallbackSections =
+          contentData.content[lang]?.[page] || contentData.content.en?.[page];
+
         return {
-          _id: 'fallback',
+          _id: "fallback",
           page,
           lang,
           sections: fallbackSections || {},
         };
       }
 
-      const result = {
+      return {
         _id: content.id,
         page: content.page,
         lang: content.lang,
         sections: content.sections,
       };
-
-      // 3. Backfill Redis
-      if (redis) {
-        redis.set(cacheKey, JSON.stringify(result), { ex: 3600 }).catch(() => {});
-      }
-
-      return result;
     },
     ["page-content"],
-    { revalidate: 3600, tags: ["content"] }
+    { revalidate: 60, tags: ["content"] },
   );
 
   static getContent = cache(async (page: string, lang: string) => {
-    return this.fetchContentCached(page, lang);
+    // 5. Disable during build phase
+    if (process.env.IS_BUILD === "true") {
+      const contentData = require("@/data/content.json");
+      const fallbackSections =
+        contentData.content[lang]?.[page] || contentData.content.en?.[page];
+      return {
+        _id: "static",
+        page,
+        lang,
+        sections: fallbackSections || {},
+      };
+    }
+
+    const cacheKey = this.getCacheKey(page, lang);
+    const redis = (await import("@/lib/redis")).default;
+
+    // 1. Try Redis
+    if (redis) {
+      try {
+        const cached = await redis.get(cacheKey);
+        if (cached) {
+          console.log(`[ContentService] Redis hit for ${cacheKey}`);
+          return typeof cached === "string" ? JSON.parse(cached) : cached;
+        }
+      } catch (error: any) {
+        if (!error.message?.includes("Dynamic server usage")) {
+          console.error("[ContentService] Redis error:", error);
+        }
+      }
+    }
+
+    // 4. Wrap with Next.js unstable_cache
+    try {
+      const result = await this.fetchFromDbCached(page, lang);
+
+      if (result) {
+        // 3. Cache result in Redis
+        if (redis) {
+          redis
+            .set(cacheKey, JSON.stringify(result), { ex: this.CACHE_TTL })
+            .catch(() => {});
+        }
+        return result;
+      }
+    } catch (error) {
+      console.error("[ContentService] Cache layer error:", error);
+    }
+
+    return null;
   });
 
   static async updateContent(page: string, lang: string, sections: any) {

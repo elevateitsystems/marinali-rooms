@@ -13,7 +13,7 @@ export default function Hero({
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
   imgUrl?: string;
-  lang?: 'en' | 'it' | 'de';
+  lang?: "en" | "it" | "de";
   data?: any;
   isEditable?: boolean;
   settings?: any;
@@ -21,7 +21,10 @@ export default function Hero({
   const displayImgUrl = data?.heroImage || settings?.heroImage || imgUrl;
 
   return (
-    <section id="hero" className="-mt-24 relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section
+      id="hero"
+      className="-mt-24 relative w-full h-screen flex flex-col items-center justify-center overflow-hidden"
+    >
       {/* 
         CRITICAL: LCP Image (Pure Server Rendered) 
         This is the most important element for performance. 
@@ -35,7 +38,9 @@ export default function Hero({
           sizes="100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
-          quality={90}
+          loading="eager"
+          // @ts-ignore
+          fetchPriority="high"
         />
       </div>
 
@@ -44,10 +49,10 @@ export default function Hero({
         Handles animations, parallax, and brand logo.
         This loads after the main image has started painting.
       */}
-      <HeroClient 
-        lang={lang} 
-        data={data} 
-        isEditable={isEditable} 
+      <HeroClient
+        lang={lang}
+        data={data}
+        isEditable={isEditable}
         settings={settings}
         title={title}
         subtitle={subtitle}
