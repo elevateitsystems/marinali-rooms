@@ -1,42 +1,22 @@
 import { ContentService } from "@/lib/services/contentService";
-import { RoomService } from "@/lib/services/roomService";
 import { SettingsService } from "@/lib/services/settingsService";
-import ReactDOM from "react-dom";
-
+import { Suspense } from "react";
 import Hero from "@/components/Home/Hero";
-import IntroSection from "@/components/Home/IntroSection";
-import dynamic from "next/dynamic";
-import Image from "next/image";
-const RoomSplitSection = dynamic(() => import("@/components/rooms/RoomSplitSection"));
-import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
-import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
-import HeritageSection from "@/components/Home/HeritageSection";
-
-
-const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
+import HomeBTF from "./_components/HomeBTF";
 
 export default async function EnglishHomePage() {
-  const [roomsData, content, settings] = await Promise.all([
-    RoomService.getRooms(),
+  // ATF Data: Only fetch what's absolutely necessary for the Hero
+  // These are cached and fast (Redis/Next Cache)
+  const [content, settings] = await Promise.all([
     ContentService.getContent("home", "en"),
     SettingsService.getSettings()
   ]);
 
-  const rooms = roomsData.map((room: any) => ({
-    id: room.slug,
-    images: room.images,
-    ...room.translations.en
-  }));
-
   const data = (content?.sections as any) || {};
-
-  const heroImageUrl = data?.heroImage || settings?.heroImage || "/assets/Stanza%203%20-%20Foto-13.jpg";
-  
-  // Preload the Hero image for LCP optimization
-  ReactDOM.preload(heroImageUrl, { as: "image", fetchPriority: "high" });
 
   return (
     <>
+      {/* ABOVE THE FOLD: Rendered immediately */}
       <Hero
         title={data?.heroTitle || "Marinali"}
         subtitle={data?.heroSubtitle || "ROOMS"}
@@ -45,32 +25,14 @@ export default async function EnglishHomePage() {
         settings={settings}
       />
 
-      {/* Le Suite Section */}
-      <section id="le-suite" className="">
-        <LeSuiteHeader lang="en" data={data} />
-
-        {rooms.map((room: any, index: number) => (
-          <RoomSplitSection
-            key={room.id}
-            room={room}
-            reverse={index % 2 !== 0}
-            lang="en"
-            priority={index === 0}
-          />
-        ))}
-
-        <LeSuiteBookingFooter lang="en" data={data} />
-      </section>
-
-      <div className="container mx-auto">
-        <IntroSection
-          title={data?.aboutTitle || data?.title || "Welcome"}
-          description={data?.aboutDescription || data?.welcomeText || "Experience unforgettable hospitality..."}
-        >
-          <HeritageSection data={data} lang="en" />
-        </IntroSection>
-      </div>
-      <ReviewSlider lang="en" data={data} />
+      {/* BELOW THE FOLD: Lazy loaded via Streaming/Suspense */}
+      <Suspense fallback={
+        <div className="h-screen flex items-center justify-center">
+          <div className="animate-pulse text-slate-300">Loading experience...</div>
+        </div>
+      }>
+        <HomeBTF lang="en" data={data} />
+      </Suspense>
     </>
   );
 }
