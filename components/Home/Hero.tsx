@@ -1,5 +1,7 @@
 import Image from "next/image";
-import HeroClient from "./HeroClient";
+import BrandLogo from "../common/BrandLogo";
+import Link from "next/link";
+import DynamicHeroClient from "./DynamicHeroClient";
 
 export default function Hero({
   title = "Marinali",
@@ -23,12 +25,10 @@ export default function Hero({
   return (
     <section
       id="hero"
-      className="-mt-24 relative w-full h-screen flex flex-col items-center justify-center overflow-hidden"
+      className="-mt-24 relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-hidden"
     >
       {/* 
         CRITICAL: LCP Image (Pure Server Rendered) 
-        This is the most important element for performance. 
-        It has NO client-side dependencies.
       */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -45,19 +45,30 @@ export default function Hero({
       </div>
 
       {/* 
-        Interactive Layer (Client Component)
-        Handles animations, parallax, and brand logo.
-        This loads after the main image has started painting.
+        ABOVE THE FOLD BRANDING: Rendered immediately in HTML
+        No hydration needed for initial paint.
       */}
-      <HeroClient
-        lang={lang}
-        data={data}
-        isEditable={isEditable}
-        settings={settings}
-        title={title}
-        subtitle={subtitle}
-        imgUrl={imgUrl}
-      />
+      <div className="relative z-10 flex flex-col items-center justify-center">
+        <Link href={`/${lang}`} className="flex flex-col items-center justify-center group cursor-pointer">
+          <BrandLogo
+            lang={lang}
+            size="xl"
+            variant="light"
+          />
+        </Link>
+
+        {/* 
+          Interactive Layer (Client Component)
+          Handles only non-critical animations and parallax.
+          Deferred to client-side only (ssr: false)
+        */}
+        <DynamicHeroClient
+          lang={lang}
+          data={data}
+          isEditable={isEditable}
+          settings={settings}
+        />
+      </div>
     </section>
   );
 }
