@@ -6,59 +6,48 @@ export class RoomService {
   private static CACHE_KEY = "rooms:all";
 
   /**
-   * Internal DB fetch wrapped in Next.js unstable_cache
+   * High-Performance fetching: Redis -> DB fallback
+   * Wrapped in Next.js Data Cache (unstable_cache) for ISR/SSG support
    */
-  private static fetchFromDbCached = unstable_cache(
+  private static fetchRoomsCached = unstable_cache(
     async () => {
-      console.log("[RoomService] Cache miss (Redis & Next.js). Fetching DB for rooms.");
+      const redis = (await import("@/lib/redis")).default;
+
+      // 1. Try Redis
+      if (redis) {
+        try {
+          const cached = await redis.get(this.CACHE_KEY);
+          if (cached) {
+            console.log(`[RoomService] Redis hit for ${this.CACHE_KEY}`);
+            return typeof cached === 'string' ? JSON.parse(cached) : cached;
+          }
+        } catch (error: any) {
+          if (!error.message?.includes('Dynamic server usage')) {
+            console.error("[RoomService] Redis error:", error);
+          }
+        }
+      }
+
+      // 2. Fallback to DB
+      console.log("[RoomService] Cache miss. Fetching DB for rooms.");
       const prisma = (await import("@/lib/prisma")).default;
-      return await prisma.room.findMany({
+      const rooms = await prisma.room.findMany({
         orderBy: { order: 'asc' },
       });
+
+      // 3. Backfill Redis
+      if (rooms && rooms.length > 0 && redis) {
+        redis.set(this.CACHE_KEY, JSON.stringify(rooms), { ex: 3600 }).catch(() => {});
+      }
+
+      return rooms;
     },
     ["rooms-list"],
-    { revalidate: 60, tags: ["rooms"] }
+    { revalidate: 3600, tags: ["rooms"] }
   );
 
   static getRooms = cache(async () => {
-    // 5. Disable during build phase
-    if (process.env.IS_BUILD === 'true') {
-      return [];
-    }
-
-    const redis = (await import("@/lib/redis")).default;
-
-    // 1. Try Redis
-    if (redis) {
-      try {
-        const cached = await redis.get(this.CACHE_KEY);
-        if (cached) {
-          console.log(`[RoomService] Redis hit for ${this.CACHE_KEY}`);
-          return typeof cached === 'string' ? JSON.parse(cached) : cached;
-        }
-      } catch (error: any) {
-        if (!error.message?.includes('Dynamic server usage')) {
-          console.error("[RoomService] Redis error:", error);
-        }
-      }
-    }
-
-    // 4. Wrap with Next.js unstable_cache
-    try {
-      const rooms = await this.fetchFromDbCached();
-
-      if (rooms && rooms.length > 0) {
-        // 3. Cache result in Redis (async)
-        if (redis) {
-          redis.set(this.CACHE_KEY, JSON.stringify(rooms), { ex: this.CACHE_TTL }).catch(() => {});
-        }
-        return rooms;
-      }
-    } catch (error) {
-      console.error("[RoomService] Cache layer error:", error);
-    }
-
-    return [];
+    return this.fetchRoomsCached();
   });
 
   static async updateRoom(id: string, data: any) {

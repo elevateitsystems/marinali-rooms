@@ -9,7 +9,14 @@ const redisClientSingleton = () => {
     return null;
   }
 
-  return new Redis({ url, token });
+  return new Redis({ 
+    url, 
+    token,
+    // Fix: Prevent Redis from forcing dynamic rendering using a custom fetch wrapper.
+    // This ensures Next.js caches the request while bypassing strict type checks.
+    fetch: (input: RequestInfo | URL, init?: RequestInit) => 
+      fetch(input, { ...init, next: { revalidate: 3600 } } as RequestInit)
+  } as any);
 };
 
 type RedisClientSingleton = ReturnType<typeof redisClientSingleton>;

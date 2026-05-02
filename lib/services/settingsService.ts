@@ -50,80 +50,71 @@ export class SettingsService {
   private static CACHE_TTL = 60; // 60 seconds
 
   /**
-   * Internal DB fetch wrapped in Next.js unstable_cache
+   * High-Performance fetching: Redis -> DB fallback
+   * Wrapped in Next.js Data Cache (unstable_cache) for ISR/SSG support
    */
-  private static fetchFromDbCached = unstable_cache(
+  private static fetchSettingsCached = unstable_cache(
     async () => {
-      console.log("[SettingsService] Cache miss (Redis & Next.js). Fetching from DB.");
+      const redis = (await import("@/lib/redis")).default;
+
+      // 1. Try Redis
+      if (redis) {
+        try {
+          const cached = await redis.get<ThemeSettings>(this.CACHE_KEY);
+          if (cached) {
+            console.log("[SettingsService] Redis hit");
+            return cached;
+          }
+        } catch (error: any) {
+          if (!error.message?.includes('Dynamic server usage')) {
+            console.error("[SettingsService] Redis read error:", error);
+          }
+        }
+      }
+
+      // 2. Fallback to DB
+      console.log("[SettingsService] Cache miss. Fetching from DB.");
       const prisma = (await import("@/lib/prisma")).default;
       const dbSettings = await prisma.siteSettings.findUnique({
         where: { id: "default" },
       });
 
-      if (!dbSettings) return null;
+      let settings: ThemeSettings;
+      if (!dbSettings) {
+        settings = getDefaultSettings();
+      } else {
+        settings = {
+          primaryColor: dbSettings.primaryColor,
+          secondaryColor: dbSettings.secondaryColor,
+          backgroundColor: dbSettings.backgroundColor,
+          textColor: dbSettings.textColor,
+          fontFamily: dbSettings.fontFamily,
+          logo: dbSettings.logo,
+          logoKey: dbSettings.logoKey,
+          heroImage: dbSettings.heroImage,
+          heroImageKey: dbSettings.heroImageKey,
+          retreatImage: dbSettings.retreatImage,
+          retreatImageKey: dbSettings.retreatImageKey,
+          footerConfig: dbSettings.footerConfig as Record<string, FooterConfig> | null,
+        };
+      }
 
-      return {
-        primaryColor: dbSettings.primaryColor,
-        secondaryColor: dbSettings.secondaryColor,
-        backgroundColor: dbSettings.backgroundColor,
-        textColor: dbSettings.textColor,
-        fontFamily: dbSettings.fontFamily,
-        logo: dbSettings.logo,
-        logoKey: dbSettings.logoKey,
-        heroImage: dbSettings.heroImage,
-        heroImageKey: dbSettings.heroImageKey,
-        retreatImage: dbSettings.retreatImage,
-        retreatImageKey: dbSettings.retreatImageKey,
-        footerConfig: dbSettings.footerConfig as Record<string, FooterConfig> | null,
-      };
+      // 3. Backfill Redis
+      if (redis) {
+        redis.set(this.CACHE_KEY, JSON.stringify(settings), { ex: 3600 }).catch(() => {});
+      }
+
+      return settings;
     },
     ["site-settings"],
-    { revalidate: 60, tags: ["settings"] }
+    { revalidate: 3600, tags: ["settings"] }
   );
 
   /**
    * Get site theme settings.
-   * Pattern: Build Bypass -> Redis -> unstable_cache -> DB
    */
   static getSettings = cache(async (): Promise<ThemeSettings> => {
-    // 5. Disable during build phase
-    if (process.env.IS_BUILD === 'true') {
-      return getDefaultSettings();
-    }
-
-    const redis = (await import("@/lib/redis")).default;
-
-    // 1. Try Redis
-    if (redis) {
-      try {
-        const cached = await redis.get<ThemeSettings>(this.CACHE_KEY);
-        if (cached) {
-          console.log("[SettingsService] Redis hit");
-          return cached;
-        }
-      } catch (error: any) {
-        if (!error.message?.includes('Dynamic server usage')) {
-          console.error("[SettingsService] Redis read error:", error);
-        }
-      }
-    }
-
-    // 4. Wrap with Next.js unstable_cache (Step 2 & 3 are inside fetchFromDbCached)
-    try {
-      const settings = await this.fetchFromDbCached();
-
-      if (settings) {
-        // 3. Cache result in Redis (async)
-        if (redis) {
-          redis.set(this.CACHE_KEY, JSON.stringify(settings), { ex: this.CACHE_TTL }).catch(() => {});
-        }
-        return settings;
-      }
-    } catch (error) {
-      console.error("[SettingsService] Cache layer error:", error);
-    }
-
-    return getDefaultSettings();
+    return this.fetchSettingsCached();
   });
 
   /**

@@ -4,6 +4,7 @@ import { PHASE_PRODUCTION_BUILD } from "next/constants";
 const nextConfig = (phase: string): NextConfig => ({
   images: {
     formats: ['image/avif', 'image/webp'],
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: "https",
