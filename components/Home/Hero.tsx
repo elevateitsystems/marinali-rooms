@@ -2,15 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Yellowtail } from "next/font/google";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import EditableText from "../common/EditableText";
 import EditableImage from "../common/EditableImage";
 import BrandLogo from "../common/BrandLogo";
-
-const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
-
 export default function Hero({
   title = "Marinali",
   subtitle = "Rooms",
@@ -18,6 +14,7 @@ export default function Hero({
   lang = "en",
   data,
   isEditable = false,
+  settings: initialSettings,
 }: {
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
@@ -25,6 +22,7 @@ export default function Hero({
   lang?: 'en' | 'it' | 'de';
   data?: any;
   isEditable?: boolean;
+  settings?: any;
 }) {
   const { data: settings } = useQuery({
     queryKey: ['settings'],
@@ -32,7 +30,8 @@ export default function Hero({
       const res = await fetch('/api/settings');
       if (!res.ok) throw new Error('Failed to fetch settings');
       return res.json();
-    }
+    },
+    initialData: initialSettings
   });
 
   const { scrollY } = useScroll();
@@ -70,6 +69,8 @@ export default function Hero({
           sizes="100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
+          // @ts-ignore
+          fetchPriority="high"
         />
       </motion.div>
 

@@ -1,57 +1,42 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Playfair_Display, Montserrat, Lora, Outfit, Poppins, Roboto, Open_Sans } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Playfair_Display, Montserrat, Yellowtail } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const lora = Lora({
-  variable: "--font-lora",
+const yellowtail = Yellowtail({
+  variable: "--font-yellowtail",
+  weight: "400",
   subsets: ["latin"],
-});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-});
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  weight: ["300", "400", "500", "600", "700"],
-  subsets: ["latin"],
-});
-
-const roboto = Roboto({
-  variable: "--font-roboto",
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-});
-
-const openSans = Open_Sans({
-  variable: "--font-opensans",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -80,7 +65,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${playfair.variable} ${montserrat.variable} ${lora.variable} ${outfit.variable} ${poppins.variable} ${roboto.variable} ${openSans.variable} antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${playfair.variable} ${montserrat.variable} ${yellowtail.variable} antialiased`}
       style={{
         // @ts-ignore
         "--primary-color": primaryColor,

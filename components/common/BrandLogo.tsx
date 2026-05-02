@@ -1,7 +1,5 @@
 'use client';
 
-import { Yellowtail } from "next/font/google";
-const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 
 interface BrandLogoProps {
   lang: string;
@@ -57,12 +55,12 @@ export default function BrandLogo({ lang, size = 'md', variant = 'light' }: Bran
 
   return (
     <div className={`flex flex-col items-center justify-center ${textColor} text-center`}>
-      <span className={`${yellowtail.className} ${s.title} tracking-wide ${s.margin}`}>
+      <span className={`font-[family-name:var(--font-yellowtail)] ${s.title} tracking-wide ${s.margin}`}>
         {title}
       </span>
       <div className={`flex items-center ${s.gap} mt-0`}>
         <div className={`${s.lineWidth} h-px ${lineColor} opacity-70`}></div>
-        <span className={`${yellowtail.className} ${s.subtitle} tracking-wide`}>
+        <span className={`font-[family-name:var(--font-yellowtail)] ${s.subtitle} tracking-wide`}>
           {subtitle}
         </span>
         <div className={`${s.lineWidth} h-px ${lineColor} opacity-70`}></div>

@@ -1,11 +1,13 @@
 import { ContentService } from "@/lib/services/contentService";
 import { RoomService } from "@/lib/services/roomService";
+import { SettingsService } from "@/lib/services/settingsService";
+import ReactDOM from "react-dom";
 
 import Hero from "@/components/Home/Hero";
 import IntroSection from "@/components/Home/IntroSection";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import RoomSplitSection from "@/components/rooms/RoomSplitSection";
+const RoomSplitSection = dynamic(() => import("@/components/rooms/RoomSplitSection"));
 import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
 import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
 import HeritageSection from "@/components/Home/HeritageSection";
@@ -25,6 +27,12 @@ export default async function EnglishHomePage() {
 
   const content = await ContentService.getContent("home", "en");
   const data = (content?.sections as any) || {};
+  const settings = await SettingsService.getSettings();
+
+  const heroImageUrl = data?.heroImage || settings?.heroImage || "/assets/Stanza%203%20-%20Foto-13.jpg";
+  
+  // Preload the Hero image for LCP optimization
+  ReactDOM.preload(heroImageUrl, { as: "image", fetchPriority: "high" });
 
   return (
     <>
@@ -33,6 +41,7 @@ export default async function EnglishHomePage() {
         subtitle={data?.heroSubtitle || "ROOMS"}
         lang="en"
         data={data}
+        settings={settings}
       />
 
       {/* Le Suite Section */}
