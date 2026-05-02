@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { ReactLenis, useLenis } from 'lenis/react';
 import { usePathname } from 'next/navigation';
 
@@ -10,10 +10,8 @@ function ScrollResizeHandler() {
   useEffect(() => {
     if (!lenis) return;
 
-    // Trigger resize on every pathname change to ensure Lenis updates scroll height
     lenis.resize();
 
-    // Also watch for body height changes (dynamic content, images, etc.)
     const resizeObserver = new ResizeObserver(() => {
       lenis.resize();
     });
@@ -29,6 +27,17 @@ function ScrollResizeHandler() {
 }
 
 export default function SmoothScrolling({ children }: { children: ReactNode }) {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    // Only enable smooth scrolling on desktop and after initial hydration
+    if (window.innerWidth > 1024) {
+      setEnabled(true);
+    }
+  }, []);
+
+  if (!enabled) return <>{children}</>;
+
   return (
     <ReactLenis root options={{
       lerp: 0.1,

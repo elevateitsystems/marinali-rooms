@@ -41,21 +41,12 @@ const navData = {
 
 const languages = ['it', 'en', 'de'] as const;
 
-export default function Navbar({ lang }: { lang: 'en' | 'it' | 'de' }) {
+export default function Navbar({ lang, settings }: { lang: 'en' | 'it' | 'de', settings?: any }) {
   const [scrolled, setScrolled] = useState(false);
   const [showLogo, setShowLogo] = useState(false);
   const t = navData[lang];
   const pathname = usePathname();
   const isLeSuite = pathname.includes('/le-suite');
-
-  const { data: settings } = useQuery({
-    queryKey: ['settings'],
-    queryFn: async () => {
-      const res = await fetch('/api/settings');
-      if (!res.ok) throw new Error('Failed to fetch settings');
-      return res.json();
-    }
-  });
 
   useEffect(() => {
     const handleScroll = () => {
