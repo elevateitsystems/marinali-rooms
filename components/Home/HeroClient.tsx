@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import EditableImage from "../common/EditableImage";
 import BrandLogo from "../common/BrandLogo";
 
@@ -20,6 +21,14 @@ export default function HeroClient({
   subtitle?: React.ReactNode;
   imgUrl?: string;
 }) {
+  const [mounted, setMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    setIsDesktop(window.innerWidth > 1024);
+  }, []);
+
   const { data: settings } = useQuery({
     queryKey: ['settings'],
     queryFn: async () => {
@@ -32,7 +41,7 @@ export default function HeroClient({
 
   const { scrollY } = useScroll();
 
-  // Smooth scroll transformations for the content only
+  // Scroll effects deferred to desktop
   const scale = useTransform(scrollY, [0, 500], [1, 0.2]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
   const translateY = useTransform(scrollY, [0, 1000], [0, -300]);
@@ -69,14 +78,14 @@ export default function HeroClient({
 
       {/* Main Content (Animated Logo) */}
       <motion.div
-        className="relative z-10 text-background mt-8 will-change-transform"
-        initial={{ y: 0, scale: 1, opacity: 1 }}
-        style={{
+        className="relative z-10 text-background mt-8"
+        initial={false}
+        style={mounted && isDesktop ? {
           y: translateY,
           scale,
           opacity,
           transformOrigin: "center center"
-        }}
+        } : {}}
       >
         <ContentWrapper>
           <BrandLogo

@@ -4,12 +4,16 @@ import { Suspense } from "react";
 import BookingBarServer from "@/components/common/BookingBarServer";
 import FooterServer from "@/components/common/FooterServer";
 
+import { SettingsService } from "@/lib/services/settingsService";
+
 export const revalidate = 60;
 
-export default function EnglishLayout({ children }: { children: React.ReactNode }) {
+export default async function EnglishLayout({ children }: { children: React.ReactNode }) {
+  const settings = await SettingsService.getSettings();
+
   return (
     <SmoothScrolling>
-      <Navbar lang="en" />
+      <Navbar lang="en" settings={settings} />
       <div className="pt-24 min-h-screen">
         {children}
       </div>
