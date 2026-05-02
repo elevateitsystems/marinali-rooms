@@ -1,19 +1,22 @@
 import { ContentService } from "@/lib/services/contentService";
 import { RoomService } from "@/lib/services/roomService";
 import { SettingsService } from "@/lib/services/settingsService";
-import ReactDOM from "react-dom";
 
 import HeritageSection from "@/components/Home/HeritageSection";
 import Hero from "@/components/Home/Hero";
 import IntroSection from "@/components/Home/IntroSection";
 import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
 import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
-import dynamic from "next/dynamic";
-const RoomSplitSection = dynamic(
+import nextDynamic from "next/dynamic";
+const RoomSplitSection = nextDynamic(
   () => import("@/components/rooms/RoomSplitSection"),
 );
 
-const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
+const ReviewSlider = nextDynamic(() => import("@/components/Home/ReviewSlider"));
+
+// Force ISR for the homepage (Revalidate every hour)
+export const revalidate = 3600;
+export const dynamic = 'force-static';
 
 export default async function ItalianHomePage() {
   const [content, roomsData, settings] = await Promise.all([
@@ -28,13 +31,6 @@ export default async function ItalianHomePage() {
     images: room.images,
     ...room.translations.it,
   }));
-  const heroImageUrl =
-    data?.heroImage ||
-    settings?.heroImage ||
-    "/assets/Stanza%203%20-%20Foto-13.jpg";
-
-  // Preload the Hero image for LCP optimization
-  ReactDOM.preload(heroImageUrl, { as: "image", fetchPriority: "high" });
 
   return (
     <>
