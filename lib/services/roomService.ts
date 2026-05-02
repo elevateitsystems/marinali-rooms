@@ -1,50 +1,70 @@
-import prisma from "@/lib/prisma";
-import redis from "@/lib/redis";
+import { cache } from "react";
+import { unstable_cache, revalidateTag } from "next/cache";
 
 export class RoomService {
-  private static CACHE_TTL = 3600; // 1 hour
+  private static CACHE_TTL = 60; // 60 seconds
   private static CACHE_KEY = "rooms:all";
 
-  static async getRooms() {
+  /**
+   * Internal DB fetch wrapped in Next.js unstable_cache
+   */
+  private static fetchFromDbCached = unstable_cache(
+    async () => {
+      console.log("[RoomService] Cache miss (Redis & Next.js). Fetching DB for rooms.");
+      const prisma = (await import("@/lib/prisma")).default;
+      return await prisma.room.findMany({
+        orderBy: { order: 'asc' },
+      });
+    },
+    ["rooms-list"],
+    { revalidate: 60, tags: ["rooms"] }
+  );
+
+  static getRooms = cache(async () => {
+    // 5. Disable during build phase
+    if (process.env.IS_BUILD === 'true') {
+      return [];
+    }
+
+    const redis = (await import("@/lib/redis")).default;
+
     // 1. Try Redis
     if (redis) {
       try {
         const cached = await redis.get(this.CACHE_KEY);
         if (cached) {
-          console.log(`[RoomService] Cache hit for ${this.CACHE_KEY}`);
+          console.log(`[RoomService] Redis hit for ${this.CACHE_KEY}`);
           return typeof cached === 'string' ? JSON.parse(cached) : cached;
         }
       } catch (error: any) {
-        if (error.message?.includes('Dynamic server usage')) {
-          console.log("[RoomService] Redis skipped during build");
-        } else {
+        if (!error.message?.includes('Dynamic server usage')) {
           console.error("[RoomService] Redis error:", error);
         }
       }
     }
 
-    // 2. Fetch from DB
-    const rooms = await prisma.room.findMany({
-      orderBy: { order: 'asc' },
-    });
+    // 4. Wrap with Next.js unstable_cache
+    try {
+      const rooms = await this.fetchFromDbCached();
 
-    // 3. Set Redis
-    if (redis && rooms.length > 0) {
-      try {
-        await redis.set(this.CACHE_KEY, JSON.stringify(rooms), { ex: this.CACHE_TTL });
-      } catch (error: any) {
-        if (error.message?.includes('Dynamic server usage')) {
-          // Ignore
-        } else {
-          console.error("[RoomService] Redis set error:", error);
+      if (rooms && rooms.length > 0) {
+        // 3. Cache result in Redis (async)
+        if (redis) {
+          redis.set(this.CACHE_KEY, JSON.stringify(rooms), { ex: this.CACHE_TTL }).catch(() => {});
         }
+        return rooms;
       }
+    } catch (error) {
+      console.error("[RoomService] Cache layer error:", error);
     }
 
-    return rooms;
-  }
+    return [];
+  });
 
   static async updateRoom(id: string, data: any) {
+    const prisma = (await import("@/lib/prisma")).default;
+    const redis = (await import("@/lib/redis")).default;
+
     const current = await prisma.room.findUnique({ where: { id } });
 
     // Clean up old gallery images if they were replaced or removed
@@ -86,15 +106,19 @@ export class RoomService {
       },
     });
 
-    // Invalidate Cache
+    // Invalidate caches
     if (redis) {
-      await redis.del(this.CACHE_KEY);
+      await redis.del(this.CACHE_KEY).catch(() => {});
     }
+    revalidateTag("rooms", "max");
 
     return room;
   }
 
   static async createRoom(data: any) {
+    const prisma = (await import("@/lib/prisma")).default;
+    const redis = (await import("@/lib/redis")).default;
+
     const room = await prisma.room.create({
       data: {
         slug: data.slug,
@@ -104,15 +128,19 @@ export class RoomService {
       },
     });
 
-    // Invalidate Cache
+    // Invalidate caches
     if (redis) {
-      await redis.del(this.CACHE_KEY);
+      await redis.del(this.CACHE_KEY).catch(() => {});
     }
+    revalidateTag("rooms", "max");
 
     return room;
   }
 
   static async deleteRoom(id: string) {
+    const prisma = (await import("@/lib/prisma")).default;
+    const redis = (await import("@/lib/redis")).default;
+
     const current = await prisma.room.findUnique({ where: { id } });
 
     // Handle array of images if they exist
@@ -135,9 +163,10 @@ export class RoomService {
       where: { id },
     });
 
-    // Invalidate Cache
+    // Invalidate caches
     if (redis) {
-      await redis.del(this.CACHE_KEY);
+      await redis.del(this.CACHE_KEY).catch(() => {});
     }
+    revalidateTag("rooms", "max");
   }
 }
