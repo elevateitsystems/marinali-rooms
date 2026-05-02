@@ -5,33 +5,35 @@ import ReactDOM from "react-dom";
 
 import Hero from "@/components/Home/Hero";
 import IntroSection from "@/components/Home/IntroSection";
-import nextDynamic from "next/dynamic";
+import dynamic from "next/dynamic";
 import Image from "next/image";
-const RoomSplitSection = nextDynamic(() => import("@/components/rooms/RoomSplitSection"));
+const RoomSplitSection = dynamic(
+  () => import("@/components/rooms/RoomSplitSection"),
+);
 import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
 import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
 import HeritageSection from "@/components/Home/HeritageSection";
 
-const ReviewSlider = nextDynamic(() => import("@/components/Home/ReviewSlider"));
-
-// Force ISR for the homepage (Revalidate every hour)
-export const revalidate = 3600;
-export const dynamic = 'force-static';
+const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
 
 export default async function ItalianHomePage() {
   const [content, roomsData, settings] = await Promise.all([
     ContentService.getContent("home", "it"),
     RoomService.getRooms(),
-    SettingsService.getSettings()
+    SettingsService.getSettings(),
   ]);
 
   const data = (content?.sections as any) || {};
   const rooms = roomsData.map((room: any) => ({
     id: room.slug,
     images: room.images,
-    ...room.translations.it
-  }));  const heroImageUrl = data?.heroImage || settings?.heroImage || "/assets/Stanza%203%20-%20Foto-13.jpg";
-  
+    ...room.translations.it,
+  }));
+  const heroImageUrl =
+    data?.heroImage ||
+    settings?.heroImage ||
+    "/assets/Stanza%203%20-%20Foto-13.jpg";
+
   // Preload the Hero image for LCP optimization
   ReactDOM.preload(heroImageUrl, { as: "image", fetchPriority: "high" });
 
@@ -65,7 +67,11 @@ export default async function ItalianHomePage() {
       <div className="container mx-auto">
         <IntroSection
           title={data?.aboutTitle || data?.title || "Benvenuto"}
-          description={data?.aboutDescription || data?.welcomeText || "Vivi un'ospitalità indimenticabile..."}
+          description={
+            data?.aboutDescription ||
+            data?.welcomeText ||
+            "Vivi un'ospitalità indimenticabile..."
+          }
         >
           <HeritageSection data={data} lang="it" />
         </IntroSection>
