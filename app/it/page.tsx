@@ -3,16 +3,15 @@ import { RoomService } from "@/lib/services/roomService";
 import { SettingsService } from "@/lib/services/settingsService";
 import ReactDOM from "react-dom";
 
+import HeritageSection from "@/components/Home/HeritageSection";
 import Hero from "@/components/Home/Hero";
 import IntroSection from "@/components/Home/IntroSection";
+import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
+import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 const RoomSplitSection = dynamic(
   () => import("@/components/rooms/RoomSplitSection"),
 );
-import LeSuiteBookingFooter from "@/components/rooms/LeSuiteBookingFooter";
-import LeSuiteHeader from "@/components/rooms/LeSuiteHeader";
-import HeritageSection from "@/components/Home/HeritageSection";
 
 const ReviewSlider = dynamic(() => import("@/components/Home/ReviewSlider"));
 
