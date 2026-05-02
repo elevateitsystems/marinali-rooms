@@ -4,6 +4,10 @@ import { Suspense } from "react";
 import Hero from "@/components/Home/Hero";
 import HomeBTF from "./_components/HomeBTF";
 
+// Force ISR for the homepage (Revalidate every hour)
+export const revalidate = 3600;
+export const dynamic = 'force-static';
+
 export default async function EnglishHomePage() {
   // ATF Data: Only fetch what's absolutely necessary for the Hero
   // These are cached and fast (Redis/Next Cache)

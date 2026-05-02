@@ -41,9 +41,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${playfair.variable} ${yellowtail.variable} antialiased`}
     >
       <head>
-        <Suspense fallback={null}>
-          <ThemeInjector />
-        </Suspense>
+        <ThemeInjector />
       </head>
       <body className="min-h-screen flex flex-col">
         <Providers>
