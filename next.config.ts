@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
 
-const nextConfig: NextConfig = {
+const nextConfig = (phase: string): NextConfig => ({
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
@@ -9,6 +10,9 @@ const nextConfig: NextConfig = {
         hostname: "utfs.io",
       },
     ],
+  },
+  env: {
+    IS_BUILD: (phase === PHASE_PRODUCTION_BUILD).toString(),
   },
   async redirects() {
     return [
@@ -29,6 +33,6 @@ const nextConfig: NextConfig = {
       },
     ]
   },
-};
+});
 
 export default nextConfig;

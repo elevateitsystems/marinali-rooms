@@ -1,6 +1,6 @@
-import prisma from "@/lib/prisma";
-import redis from "@/lib/redis";
 import { getDefaultSettings } from "@/lib/content";
+import { cache } from "react";
+import { unstable_cache, revalidateTag } from "next/cache";
 
 export interface FooterLink {
   label: string;
@@ -47,85 +47,93 @@ export interface ThemeSettings {
 
 export class SettingsService {
   private static CACHE_KEY = "site:settings";
-  private static CACHE_TTL = 3600; // 1 hour
+  private static CACHE_TTL = 60; // 60 seconds
+
+  /**
+   * Internal DB fetch wrapped in Next.js unstable_cache
+   */
+  private static fetchFromDbCached = unstable_cache(
+    async () => {
+      console.log("[SettingsService] Cache miss (Redis & Next.js). Fetching from DB.");
+      const prisma = (await import("@/lib/prisma")).default;
+      const dbSettings = await prisma.siteSettings.findUnique({
+        where: { id: "default" },
+      });
+
+      if (!dbSettings) return null;
+
+      return {
+        primaryColor: dbSettings.primaryColor,
+        secondaryColor: dbSettings.secondaryColor,
+        backgroundColor: dbSettings.backgroundColor,
+        textColor: dbSettings.textColor,
+        fontFamily: dbSettings.fontFamily,
+        logo: dbSettings.logo,
+        logoKey: dbSettings.logoKey,
+        heroImage: dbSettings.heroImage,
+        heroImageKey: dbSettings.heroImageKey,
+        retreatImage: dbSettings.retreatImage,
+        retreatImageKey: dbSettings.retreatImageKey,
+        footerConfig: dbSettings.footerConfig as Record<string, FooterConfig> | null,
+      };
+    },
+    ["site-settings"],
+    { revalidate: 60, tags: ["settings"] }
+  );
 
   /**
    * Get site theme settings.
-   * Priority: Redis cache → PostgreSQL → content.json defaults
+   * Pattern: Build Bypass -> Redis -> unstable_cache -> DB
    */
-  static async getSettings(): Promise<ThemeSettings> {
-    // 1. Try Redis cache
+  static getSettings = cache(async (): Promise<ThemeSettings> => {
+    // 5. Disable during build phase
+    if (process.env.IS_BUILD === 'true') {
+      return getDefaultSettings();
+    }
+
+    const redis = (await import("@/lib/redis")).default;
+
+    // 1. Try Redis
     if (redis) {
       try {
         const cached = await redis.get<ThemeSettings>(this.CACHE_KEY);
         if (cached) {
-          console.log("[SettingsService] Cache hit");
+          console.log("[SettingsService] Redis hit");
           return cached;
         }
       } catch (error: any) {
-        // If we hit dynamic usage error during build, it's fine, we'll fallback to DB
-        if (error.message?.includes('Dynamic server usage')) {
-          console.log("[SettingsService] Redis skipped due to dynamic usage (build phase)");
-        } else {
+        if (!error.message?.includes('Dynamic server usage')) {
           console.error("[SettingsService] Redis read error:", error);
         }
       }
     }
 
-    // 2. Try PostgreSQL
+    // 4. Wrap with Next.js unstable_cache (Step 2 & 3 are inside fetchFromDbCached)
     try {
-      console.log("[SettingsService] Cache miss. Fetching from DB.");
-      const dbSettings = await prisma.siteSettings.findUnique({
-        where: { id: "default" },
-      });
+      const settings = await this.fetchFromDbCached();
 
-      if (dbSettings) {
-        const settings: ThemeSettings = {
-          primaryColor: dbSettings.primaryColor,
-          secondaryColor: dbSettings.secondaryColor,
-          backgroundColor: dbSettings.backgroundColor,
-          textColor: dbSettings.textColor,
-          fontFamily: dbSettings.fontFamily,
-          logo: dbSettings.logo,
-          logoKey: dbSettings.logoKey,
-          heroImage: dbSettings.heroImage,
-          heroImageKey: dbSettings.heroImageKey,
-          retreatImage: dbSettings.retreatImage,
-          retreatImageKey: dbSettings.retreatImageKey,
-          footerConfig: dbSettings.footerConfig as Record<string, FooterConfig> | null,
-        };
-
-        // Cache in Redis
+      if (settings) {
+        // 3. Cache result in Redis (async)
         if (redis) {
-          try {
-            await redis.set(this.CACHE_KEY, JSON.stringify(settings), { ex: this.CACHE_TTL });
-          } catch (error: any) {
-            if (error.message?.includes('Dynamic server usage')) {
-               // Ignore during static generation
-            } else {
-              console.error("[SettingsService] Redis set error:", error);
-            }
-          }
+          redis.set(this.CACHE_KEY, JSON.stringify(settings), { ex: this.CACHE_TTL }).catch(() => {});
         }
-
         return settings;
       }
     } catch (error) {
-      console.error("[SettingsService] DB error:", error);
+      console.error("[SettingsService] Cache layer error:", error);
     }
 
-    // 3. Fallback to content.json defaults
-    console.log("[SettingsService] Using content.json defaults.");
     return getDefaultSettings();
-  }
+  });
 
   /**
    * Update site theme settings.
-   * Upserts to DB and invalidates Redis cache.
    */
   static async updateSettings(data: Partial<ThemeSettings>): Promise<ThemeSettings> {
     const defaults = getDefaultSettings();
     const current = await this.getSettings();
+    const prisma = (await import("@/lib/prisma")).default;
+    const redis = (await import("@/lib/redis")).default;
 
     // Handle old image cleanup if logoKey is changing
     const imageFieldsToCleanup = [
@@ -186,15 +194,11 @@ export class SettingsService {
       footerConfig: updated.footerConfig as Record<string, FooterConfig> | null,
     };
 
-    // Invalidate Redis cache
+    // Invalidate caches
     if (redis) {
-      try {
-        await redis.del(this.CACHE_KEY);
-        console.log("[SettingsService] Cache invalidated.");
-      } catch (error) {
-        console.error("[SettingsService] Redis del error:", error);
-      }
+      await redis.del(this.CACHE_KEY).catch(() => {});
     }
+    revalidateTag("settings", "max");
 
     return settings;
   }

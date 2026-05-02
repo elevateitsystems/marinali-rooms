@@ -1,16 +1,16 @@
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import BookingBar from "@/components/common/BookingBar";
-import { getContent } from "@/lib/content";
+import { ContentService } from "@/lib/services/contentService";
 import { SettingsService } from "@/lib/services/settingsService";
 import SmoothScrolling from "@/components/common/SmoothScrolling";
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 60; // Revalidate every 60 seconds
 
 
 export default async function EnglishLayout({ children }: { children: React.ReactNode }) {
-  const { home } = getContent("en");
-  const data = home.booking;
+  const content = await ContentService.getContent("home", "en");
+  const data = content?.sections?.booking || {};
   const settings = await SettingsService.getSettings();
   const footerConfig = settings.footerConfig?.en;
 
