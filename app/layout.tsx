@@ -38,6 +38,7 @@ export default async function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${playfair.variable} ${yellowtail.variable} antialiased`}
+      data-scroll-behavior="smooth"
     >
       <head>
         <ThemeInjector />

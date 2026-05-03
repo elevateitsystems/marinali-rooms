@@ -57,7 +57,7 @@ export default function ReviewSlider({ lang, data }: ReviewSliderProps) {
             setCurrentIndex(swiper.realIndex);
           }}
           slidesPerView={1}
-          loop={true}
+          loop={reviews.length > 1}
           speed={800}
           style={{ width: '100%' }}
         >
