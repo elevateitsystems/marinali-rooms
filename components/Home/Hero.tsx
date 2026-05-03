@@ -1,5 +1,6 @@
 import Image from "next/image";
 import HeroClient from "./HeroClient";
+import BrandLogo from "../common/BrandLogo";
 
 export default function Hero({
   title = "Marinali",
@@ -35,9 +36,11 @@ export default function Hero({
           src={displayImgUrl}
           alt="Hero Banner"
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+          // PERFORMANCE: Use slightly more aggressive sizes for mobile to reduce byte size
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
+          quality={80}
           loading="eager"
           // @ts-ignore
           fetchPriority="high"
@@ -57,7 +60,9 @@ export default function Hero({
         title={title}
         subtitle={subtitle}
         imgUrl={imgUrl}
-      />
+      >
+        <BrandLogo lang={lang} size="xl" variant="light" />
+      </HeroClient>
     </section>
   );
 }
