@@ -1,5 +1,6 @@
 import Image from "next/image";
 import HeroClient from "./HeroClient";
+import BrandLogo from "../common/BrandLogo";
 
 export default function Hero({
   title = "Marinali",
@@ -28,16 +29,17 @@ export default function Hero({
       {/* 
         CRITICAL: LCP Image (Pure Server Rendered) 
         This is the most important element for performance. 
-        It has NO client-side dependencies.
       */}
       <div className="absolute inset-0 z-0">
         <Image
           src={displayImgUrl}
           alt="Hero Banner"
           fill
-          sizes="100vw"
+          // PERFORMANCE: Force granular scaling on mobile
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
+          quality={85}
           loading="eager"
           // @ts-ignore
           fetchPriority="high"
@@ -46,8 +48,8 @@ export default function Hero({
 
       {/* 
         Interactive Layer (Client Component)
-        Handles animations, parallax, and brand logo.
-        This loads after the main image has started painting.
+        Handles animations and parallax.
+        We pass the BrandLogo as a child to keep it server-rendered.
       */}
       <HeroClient
         lang={lang}
@@ -55,12 +57,6 @@ export default function Hero({
         isEditable={isEditable}
         settings={settings}
         title={title}
-        subtitle={subtitle}
-        imgUrl={imgUrl}
-      />
-    </section>
-  );
-}
         subtitle={subtitle}
         imgUrl={imgUrl}
       >

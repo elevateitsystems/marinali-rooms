@@ -5,13 +5,13 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import EditableImage from "../common/EditableImage";
-import BrandLogo from "../common/BrandLogo";
 
 export default function HeroClient({
   lang = "en",
   data,
   isEditable = false,
   settings: initialSettings,
+  children,
 }: {
   lang?: "en" | "it" | "de";
   data?: any;
@@ -20,6 +20,7 @@ export default function HeroClient({
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
   imgUrl?: string;
+  children?: React.ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -37,6 +38,7 @@ export default function HeroClient({
       return res.json();
     },
     initialData: initialSettings,
+    enabled: isEditable, // Performance: Only fetch settings in editable mode
   });
 
   const { scrollY } = useScroll();
@@ -102,11 +104,9 @@ export default function HeroClient({
         }
       >
         <ContentWrapper>
-          <BrandLogo lang={lang} size="xl" variant="light" />
+          {children}
         </ContentWrapper>
       </motion.div>
     </>
-  );
-}
   );
 }

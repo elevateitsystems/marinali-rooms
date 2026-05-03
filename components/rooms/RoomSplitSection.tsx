@@ -119,10 +119,11 @@ export default function RoomSplitSection({
                     src={img}
                     alt={`${room.name} — photo ${idx + 1}`}
                     fill
-                    sizes="(max-width: 1024px) 100vw, 55vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 55vw"
                     className="object-cover"
                     priority={priority && idx === 0}
                     loading={priority && idx === 0 ? undefined : "lazy"}
+                    quality={75}
                   />
                 </div>
               </SwiperSlide>

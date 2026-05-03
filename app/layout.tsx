@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Playfair_Display, Yellowtail } from "next/font/google";
 import "./globals.css";
-import { Suspense } from "react";
 import ThemeInjector from "@/components/common/ThemeInjector";
 import Providers from "./providers";
 import { Toaster } from "sonner";
@@ -30,7 +29,7 @@ export const metadata: Metadata = {
   description: "Experience the heart of Bassano del Grappa",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -41,9 +40,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${playfair.variable} ${yellowtail.variable} antialiased`}
     >
       <head>
-        <Suspense fallback={null}>
-          <ThemeInjector />
-        </Suspense>
+        <ThemeInjector />
+        <link rel="dns-prefetch" href="https://utfs.io" />
+        <link rel="preconnect" href="https://utfs.io" crossOrigin="anonymous" />
       </head>
       <body className="min-h-screen flex flex-col">
         <Providers>
@@ -52,7 +51,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  );
-}
   );
 }
