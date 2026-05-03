@@ -12,6 +12,7 @@ export default function HeroClient({
   data,
   isEditable = false,
   settings: initialSettings,
+  children,
 }: {
   lang?: "en" | "it" | "de";
   data?: any;
@@ -20,6 +21,7 @@ export default function HeroClient({
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
   imgUrl?: string;
+  children?: React.ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -107,7 +109,7 @@ export default function HeroClient({
         }
       >
         <ContentWrapper>
-          <BrandLogo lang={lang} size="xl" variant="light" />
+          {children}
         </ContentWrapper>
       </motion.div>
     </>

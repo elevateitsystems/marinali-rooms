@@ -9,7 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useLenis } from "lenis/react";
 import BrandLogo from "./BrandLogo";
 
-const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
+// Remove re-initialization of font to reduce bundle size and prevent conflicts
+// const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 
 // Dictionary for 3 languages
 const navData = {
