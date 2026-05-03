@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 
 import { Yellowtail } from "next/font/google";
 import { useQuery } from "@tanstack/react-query";
-import { useLenis } from "lenis/react";
+// import { useLenis } from "lenis/react"; // Remove to reduce initial bundle size
 import BrandLogo from "./BrandLogo";
 
 // Remove re-initialization of font to reduce bundle size and prevent conflicts
@@ -64,7 +64,7 @@ export default function Navbar({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const lenis = useLenis();
+  // const lenis = useLenis(); // Removed for performance optimization
 
   const getPath = (route: string) => {
     if (route === "/") return `/${lang}`;
@@ -136,8 +136,7 @@ export default function Navbar({
               href={getPath("/")}
               onClick={(e) => {
                 e.preventDefault();
-                if (lenis) lenis.scrollTo(0);
-                else window.scrollTo({ top: 0, behavior: "smooth" });
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className={`flex items-center gap-1 transition-all duration-500 ease-in-out ${
                 showLogo || isLeSuite
