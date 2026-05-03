@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Playfair_Display, Yellowtail } from "next/font/google";
 import "./globals.css";
-import { Suspense } from "react";
 import ThemeInjector from "@/components/common/ThemeInjector";
 import Providers from "./providers";
 import { Toaster } from "sonner";
@@ -48,9 +47,7 @@ export default async function RootLayout({
       <body className="min-h-screen flex flex-col">
         <Providers>
           {children}
-          <Suspense fallback={null}>
-            <Toaster position="top-center" richColors />
-          </Suspense>
+          <Toaster position="top-center" richColors />
         </Providers>
       </body>
     </html>

@@ -5,7 +5,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import EditableImage from "../common/EditableImage";
-import BrandLogo from "../common/BrandLogo";
 
 export default function HeroClient({
   lang = "en",
@@ -31,8 +30,6 @@ export default function HeroClient({
     setIsDesktop(window.innerWidth > 1024);
   }, []);
 
-  // Only fetch settings on the client if we are in editable mode
-  // This saves a network request and execution time for public users
   const { data: settings } = useQuery({
     queryKey: ["settings"],
     queryFn: async () => {
@@ -41,7 +38,7 @@ export default function HeroClient({
       return res.json();
     },
     initialData: initialSettings,
-    enabled: isEditable, // Only run if editable
+    enabled: isEditable, // Performance: Only fetch settings in editable mode
   });
 
   const { scrollY } = useScroll();
@@ -95,8 +92,6 @@ export default function HeroClient({
       <motion.div
         className="relative z-10 text-background mt-8"
         initial={false}
-        // PERFORMANCE: Completely disable motion styles on mobile/touch devices
-        // to reduce main thread work and improve Speed Index.
         style={
           mounted && isDesktop
             ? {

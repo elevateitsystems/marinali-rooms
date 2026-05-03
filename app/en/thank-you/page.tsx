@@ -1,6 +1,6 @@
-import Link from 'next/link';
+import Link from "next/link";
 import { Yellowtail } from "next/font/google";
-import { CheckCircle2, Calendar, MapPin, Phone } from 'lucide-react';
+import { CheckCircle2, Calendar, MapPin, Phone } from "lucide-react";
 import { ContentService } from "@/lib/services/contentService";
 
 const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
@@ -11,7 +11,7 @@ export default async function ThankYouPage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] flex flex-col items-center justify-center px-5 py-20 text-center">
-      <div className="max-w-2xl w-full space-y-8 animate-in fade-in duration-1000">
+      <div className="max-w-2xl w-full space-y-8 animate-fade-in">
         <div className="flex justify-center">
           <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center text-primary">
             <CheckCircle2 size={48} strokeWidth={1.5} />
@@ -19,14 +19,17 @@ export default async function ThankYouPage() {
         </div>
 
         <div className="space-y-4">
-          <h1 className={`${yellowtail.className} text-6xl md:text-7xl text-primary`}>
+          <h1
+            className={`${yellowtail.className} text-6xl md:text-7xl text-primary`}
+          >
             {data.title || "Thank You"}
           </h1>
           <h2 className="text-2xl md:text-3xl font-primary tracking-tight uppercase">
             {data.subtitle || "Booking Confirmed"}
           </h2>
           <p className="text-lg opacity-70 font-light leading-relaxed max-w-lg mx-auto">
-            {data.description || "Your request has been successfully processed. We have sent you a confirmation email with all the details of your stay at Marinali Rooms."}
+            {data.description ||
+              "Your request has been successfully processed. We have sent you a confirmation email with all the details of your stay at Marinali Rooms."}
           </p>
         </div>
 
@@ -72,9 +75,10 @@ export default async function ThankYouPage() {
 
       {/* Visual background element */}
       <div className="fixed top-0 right-0 -z-10 opacity-[0.03] pointer-events-none">
-        <h1 className={`${yellowtail.className} text-[30rem] leading-none`}>M</h1>
+        <h1 className={`${yellowtail.className} text-[30rem] leading-none`}>
+          M
+        </h1>
       </div>
     </div>
   );
 }
-

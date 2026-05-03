@@ -1,30 +1,58 @@
-'use client';
-import { ReactNode, useEffect, useState, Suspense } from 'react';
-import dynamic from 'next/dynamic';
+"use client";
+import { ReactNode, useEffect, useState } from "react";
+import { ReactLenis, useLenis } from "lenis/react";
+import { usePathname } from "next/navigation";
 
-const LenisWrapper = dynamic(() => import('./LenisWrapper'), { 
-  ssr: true,
-});
+function ScrollResizeHandler() {
+  const lenis = useLenis();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!lenis) return;
+
+    lenis.resize();
+
+    const resizeObserver = new ResizeObserver(() => {
+      lenis.resize();
+    });
+
+    resizeObserver.observe(document.body);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [lenis, pathname]);
+
+  return null;
+}
 
 export default function SmoothScrolling({ children }: { children: ReactNode }) {
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     // Only enable smooth scrolling on desktop and after initial hydration
     if (window.innerWidth > 1024) {
-      setIsDesktop(true);
+      setEnabled(true);
     }
   }, []);
 
-  if (!isDesktop) {
-    return <>{children}</>;
-  }
+  if (!enabled) return <>{children}</>;
 
   return (
-    <Suspense fallback={<>{children}</>}>
-      <LenisWrapper>
-        {children}
-      </LenisWrapper>
-    </Suspense>
+    <ReactLenis
+      root
+      options={{
+        lerp: 0.1,
+        duration: 1.2,
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 2,
+        infinite: false,
+        autoRaf: true,
+      }}
+    >
+      <ScrollResizeHandler />
+      {children}
+    </ReactLenis>
   );
 }

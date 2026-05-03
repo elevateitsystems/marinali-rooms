@@ -1,9 +1,6 @@
 import Image from "next/image";
-import dynamic from "next/dynamic";
+import HeroClient from "./HeroClient";
 import BrandLogo from "../common/BrandLogo";
-import ReactDOM from "react-dom";
-
-const HeroClient = dynamic(() => import("./HeroClient"), { ssr: true });
 
 export default function Hero({
   title = "Marinali",
@@ -24,12 +21,6 @@ export default function Hero({
 }) {
   const displayImgUrl = data?.heroImage || settings?.heroImage || imgUrl;
 
-  // CRITICAL: Preload the LCP image as early as possible
-  // @ts-ignore - preload is a valid method in modern React/Next.js
-  if (typeof ReactDOM.preload === 'function') {
-    ReactDOM.preload(displayImgUrl, { as: "image", fetchPriority: "high" });
-  }
-
   return (
     <section
       id="hero"
@@ -38,19 +29,17 @@ export default function Hero({
       {/* 
         CRITICAL: LCP Image (Pure Server Rendered) 
         This is the most important element for performance. 
-        It has NO client-side dependencies.
       */}
       <div className="absolute inset-0 z-0">
         <Image
           src={displayImgUrl}
           alt="Hero Banner"
           fill
-          // PERFORMANCE: Use slightly more aggressive sizes for mobile to reduce byte size
-          // Since the image has a dark overlay, we can get away with lower resolution on mobile
-          sizes="(max-width: 640px) 80vw, (max-width: 1024px) 100vw, 100vw"
+          // PERFORMANCE: Force granular scaling on mobile
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
-          quality={60}
+          quality={85}
           loading="eager"
           // @ts-ignore
           fetchPriority="high"
@@ -59,8 +48,8 @@ export default function Hero({
 
       {/* 
         Interactive Layer (Client Component)
-        Handles animations, parallax, and brand logo.
-        This loads after the main image has started painting.
+        Handles animations and parallax.
+        We pass the BrandLogo as a child to keep it server-rendered.
       */}
       <HeroClient
         lang={lang}
