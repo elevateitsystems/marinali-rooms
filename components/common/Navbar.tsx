@@ -72,8 +72,9 @@ export default function Navbar({
 
   const switchLangUrl = (newLang: string) => {
     const currentRoute = pathname.replace(`/${lang}`, "");
-    if (!currentRoute) return `/${newLang}`;
-    return `/${newLang}${currentRoute}`;
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
+    if (!currentRoute) return `/${newLang}${hash}`;
+    return `/${newLang}${currentRoute}${hash}`;
   };
 
   const textColor = scrolled || isLeSuite ? "text-black" : "text-background";

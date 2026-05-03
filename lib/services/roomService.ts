@@ -23,9 +23,13 @@ export class RoomService {
   );
 
   static getRooms = cache(async () => {
-    // 5. Disable during build phase
+    // 5. Use local fallback during build phase to ensure static pages have content
     if (process.env.IS_BUILD === "true") {
-      return [];
+      const roomsJson = require("@/data/rooms.json");
+      return roomsJson.map((r: any) => ({
+        ...r,
+        slug: r.id || r.slug,
+      }));
     }
 
     const redis = (await import("@/lib/redis")).default;
@@ -131,7 +135,7 @@ export class RoomService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("rooms", "max");
+    revalidateTag("rooms", { expire: 0 });
     const { revalidatePath } = await import("next/cache");
     revalidatePath("/", "layout");
 
@@ -155,7 +159,7 @@ export class RoomService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("rooms", "max");
+    revalidateTag("rooms", { expire: 0 });
     const { revalidatePath } = await import("next/cache");
     revalidatePath("/", "layout");
 
@@ -192,7 +196,7 @@ export class RoomService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("rooms", "max");
+    revalidateTag("rooms", { expire: 0 });
     const { revalidatePath } = await import("next/cache");
     revalidatePath("/", "layout");
   }
