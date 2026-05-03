@@ -244,7 +244,7 @@ export class SettingsService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("settings");
+    revalidateTag("settings", "max");
     const { revalidatePath } = await import("next/cache");
     revalidatePath("/", "layout");
 
