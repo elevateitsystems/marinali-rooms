@@ -131,7 +131,7 @@ export class RoomService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("rooms");
+    revalidateTag("rooms", "max");
     const { revalidatePath } = await import("next/cache");
     revalidatePath("/", "layout");
 
@@ -155,7 +155,7 @@ export class RoomService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("rooms");
+    revalidateTag("rooms", "max");
     const { revalidatePath } = await import("next/cache");
     revalidatePath("/", "layout");
 
@@ -192,7 +192,7 @@ export class RoomService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("rooms");
+    revalidateTag("rooms", "max");
     const { revalidatePath } = await import("next/cache");
     revalidatePath("/", "layout");
   }
