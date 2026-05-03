@@ -98,18 +98,23 @@ export class SettingsService {
 
     const redis = (await import("@/lib/redis")).default;
 
-    // 1. Try Redis
+    // 1. Try Redis with a strict timeout (Circuit Breaker)
     if (redis) {
       try {
-        const cached = await redis.get<ThemeSettings>(this.CACHE_KEY);
+        const timeout = new Promise<null>((_, reject) =>
+          setTimeout(() => reject(new Error("Redis timeout")), 1500)
+        );
+        const cached = await (Promise.race([
+          redis.get<ThemeSettings>(this.CACHE_KEY),
+          timeout,
+        ]) as Promise<ThemeSettings | null>);
+
         if (cached) {
           console.log("[SettingsService] Redis hit");
           return cached;
         }
       } catch (error: any) {
-        if (!error.message?.includes("Dynamic server usage")) {
-          console.error("[SettingsService] Redis read error:", error);
-        }
+        console.warn("[SettingsService] Redis skipped:", error.message);
       }
     }
 
@@ -239,7 +244,9 @@ export class SettingsService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("settings", "max");
+    revalidateTag("settings");
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath("/", "layout");
 
     return settings;
   }
