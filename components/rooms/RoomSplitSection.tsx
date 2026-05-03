@@ -205,7 +205,7 @@ export default function RoomSplitSection({ room, reverse = false, lang, priority
                       prevEl: lightboxPrevEl,
                       nextEl: lightboxNextEl,
                     }}
-                    loop={true}
+                    loop={allImages.length > 1}
                     className="w-full h-full"
                     speed={800}
                     onSlideChange={(swiper) => setLightboxIndex(swiper.realIndex)}

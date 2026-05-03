@@ -39,6 +39,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${playfair.variable} ${yellowtail.variable} antialiased`}
+      data-scroll-behavior="smooth"
     >
       <head>
         <Suspense fallback={null}>
