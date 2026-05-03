@@ -1,6 +1,9 @@
 import Image from "next/image";
-import HeroClient from "./HeroClient";
+import dynamic from "next/dynamic";
 import BrandLogo from "../common/BrandLogo";
+import ReactDOM from "react-dom";
+
+const HeroClient = dynamic(() => import("./HeroClient"), { ssr: true });
 
 export default function Hero({
   title = "Marinali",
@@ -21,6 +24,12 @@ export default function Hero({
 }) {
   const displayImgUrl = data?.heroImage || settings?.heroImage || imgUrl;
 
+  // CRITICAL: Preload the LCP image as early as possible
+  // @ts-ignore - preload is a valid method in modern React/Next.js
+  if (typeof ReactDOM.preload === 'function') {
+    ReactDOM.preload(displayImgUrl, { as: "image", fetchPriority: "high" });
+  }
+
   return (
     <section
       id="hero"
@@ -37,10 +46,11 @@ export default function Hero({
           alt="Hero Banner"
           fill
           // PERFORMANCE: Use slightly more aggressive sizes for mobile to reduce byte size
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
+          // Since the image has a dark overlay, we can get away with lower resolution on mobile
+          sizes="(max-width: 640px) 80vw, (max-width: 1024px) 100vw, 100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
-          quality={80}
+          quality={60}
           loading="eager"
           // @ts-ignore
           fetchPriority="high"

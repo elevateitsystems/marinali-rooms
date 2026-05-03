@@ -11,7 +11,7 @@ export default async function ThankYouPage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] flex flex-col items-center justify-center px-5 py-20 text-center">
-      <div className="max-w-2xl w-full space-y-8 animate-fade-in">
+      <div className="max-w-2xl w-full space-y-8 animate-in fade-in duration-1000">
         <div className="flex justify-center">
           <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center text-primary">
             <CheckCircle2 size={48} strokeWidth={1.5} />

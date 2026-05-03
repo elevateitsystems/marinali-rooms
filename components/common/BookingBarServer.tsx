@@ -1,5 +1,7 @@
 import { ContentService } from "@/lib/services/contentService";
-import BookingBar from "./BookingBar";
+import dynamic from "next/dynamic";
+
+const BookingBar = dynamic(() => import("./BookingBar"), { ssr: true });
 
 export default async function BookingBarServer({ lang }: { lang: "en" | "it" | "de" }) {
   const content = await ContentService.getContent("home", lang);
