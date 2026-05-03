@@ -72,9 +72,9 @@ export default function Navbar({
 
   const switchLangUrl = (newLang: string) => {
     const currentRoute = pathname.replace(`/${lang}`, "");
-    const hash = typeof window !== "undefined" ? window.location.hash : "";
-    if (!currentRoute) return `/${newLang}${hash}`;
-    return `/${newLang}${currentRoute}${hash}`;
+    // Remove hash from the URL to ensure we start at the top of the page
+    if (!currentRoute) return `/${newLang}`;
+    return `/${newLang}${currentRoute}`;
   };
 
   const textColor = scrolled || isLeSuite ? "text-black" : "text-background";
@@ -161,7 +161,9 @@ export default function Navbar({
                 >
                   <Link
                     href={switchLangUrl(l)}
-                    scroll={false}
+                    onClick={() => {
+                      if (lenis) lenis.scrollTo(0, { immediate: true });
+                    }}
                     className={`transition-all duration-300 ${lang === l ? "font-bold opacity-100 border-b border-current" : "opacity-40 hover:opacity-100"}`}
                   >
                     {l}
