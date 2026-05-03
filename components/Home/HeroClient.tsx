@@ -29,6 +29,8 @@ export default function HeroClient({
     setIsDesktop(window.innerWidth > 1024);
   }, []);
 
+  // Only fetch settings on the client if we are in editable mode
+  // This saves a network request and execution time for public users
   const { data: settings } = useQuery({
     queryKey: ["settings"],
     queryFn: async () => {
@@ -37,6 +39,7 @@ export default function HeroClient({
       return res.json();
     },
     initialData: initialSettings,
+    enabled: isEditable, // Only run if editable
   });
 
   const { scrollY } = useScroll();
@@ -90,6 +93,8 @@ export default function HeroClient({
       <motion.div
         className="relative z-10 text-background mt-8"
         initial={false}
+        // PERFORMANCE: Completely disable motion styles on mobile/touch devices
+        // to reduce main thread work and improve Speed Index.
         style={
           mounted && isDesktop
             ? {

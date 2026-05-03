@@ -35,7 +35,7 @@ export default function Hero({
           src={displayImgUrl}
           alt="Hero Banner"
           fill
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
           loading="eager"
