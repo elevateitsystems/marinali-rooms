@@ -24,7 +24,7 @@ export default function Hero({
   return (
     <section
       id="hero"
-      className="-mt-24 relative w-full h-screen flex flex-col items-center justify-center overflow-hidden"
+      className="-mt-24 relative w-full h-[100dvh] flex flex-col items-center justify-center overflow-hidden"
     >
       {/* 
         CRITICAL: LCP Image (Pure Server Rendered) 
@@ -35,12 +35,11 @@ export default function Hero({
           src={displayImgUrl}
           alt="Hero Banner"
           fill
-          // PERFORMANCE: Force granular scaling on mobile
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
+          // PERFORMANCE: Precise scaling for mobile and tablet
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
           className="object-cover object-center brightness-[0.7]"
           priority
-          quality={85}
-          loading="eager"
+          quality={75}
           // @ts-ignore
           fetchPriority="high"
         />

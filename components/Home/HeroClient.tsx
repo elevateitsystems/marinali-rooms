@@ -90,7 +90,7 @@ export default function HeroClient({
 
       {/* Main Content (Animated Logo) */}
       <motion.div
-        className="relative z-10 text-background mt-8"
+        className="relative z-10 text-background mt-8 min-h-[160px] md:min-h-[220px] flex items-center justify-center"
         initial={false}
         style={
           mounted && isDesktop

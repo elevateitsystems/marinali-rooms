@@ -123,11 +123,20 @@
 
   body {
     @apply bg-background text-foreground;
+    /* Prevent font-related layout shifts */
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
   }
 
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
   }
+}
+
+/* Fix for Yellowtail font-swap shift */
+.font-yellowtail {
+  font-display: swap;
 }
 
 /* Lenis Recommended CSS */
