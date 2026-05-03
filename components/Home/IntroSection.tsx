@@ -85,7 +85,7 @@ export default function IntroSection({
             fontSize: 'clamp(0.875rem, 1.5vw, 1.05rem)',
             lineHeight: 1.85,
             color: 'var(--foreground)',
-            opacity: 0.7,
+            opacity: 0.9,
             fontWeight: 300,
             letterSpacing: '0.01em',
             marginBottom: '20px',

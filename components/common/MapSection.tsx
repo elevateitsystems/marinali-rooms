@@ -54,7 +54,10 @@ export default function MapSection({ lang, mapUrl, address }: MapSectionProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="absolute inset-0 w-full h-full group cursor-pointer overflow-hidden">
+        <button 
+          className="absolute inset-0 w-full h-full group cursor-pointer overflow-hidden border-none p-0 bg-transparent"
+          aria-label={t.viewMap}
+        >
           <Image
             src="/map.webp"
             alt="Map Placeholder"
@@ -72,7 +75,7 @@ export default function MapSection({ lang, mapUrl, address }: MapSectionProps) {
               </span>
             </div>
           </div>
-        </div>
+        </button>
       </DialogTrigger>
 
       <DialogContent className="max-w-[90vw] lg:max-w-[50vw] h-[75vh] p-0 overflow-hidden border-none bg-background rounded-xl shadow-[0_30px_100px_rgba(0,0,0,0.4)] flex flex-col">
