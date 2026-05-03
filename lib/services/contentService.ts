@@ -131,7 +131,7 @@ export class ContentService {
       const cacheKey = this.getCacheKey(page, lang);
       await redis.del(cacheKey).catch(() => {});
     }
-    revalidateTag("content", "max");
+    revalidateTag("content", { expire: 0 });
 
     return content;
   }
