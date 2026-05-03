@@ -160,6 +160,7 @@ export default function Navbar({
                 >
                   <Link
                     href={switchLangUrl(l)}
+                    scroll={false}
                     className={`transition-all duration-300 ${lang === l ? "font-bold opacity-100 border-b border-current" : "opacity-40 hover:opacity-100"}`}
                   >
                     {l}

@@ -30,18 +30,23 @@ export class RoomService {
 
     const redis = (await import("@/lib/redis")).default;
 
-    // 1. Try Redis
+    // 1. Try Redis with a strict timeout (Circuit Breaker)
     if (redis) {
       try {
-        const cached = await redis.get(this.CACHE_KEY);
+        const timeout = new Promise<null>((_, reject) =>
+          setTimeout(() => reject(new Error("Redis timeout")), 1500)
+        );
+        const cached = await (Promise.race([
+          redis.get(this.CACHE_KEY),
+          timeout,
+        ]) as Promise<any>);
+
         if (cached) {
           console.log(`[RoomService] Redis hit for ${this.CACHE_KEY}`);
           return typeof cached === "string" ? JSON.parse(cached) : cached;
         }
       } catch (error: any) {
-        if (!error.message?.includes("Dynamic server usage")) {
-          console.error("[RoomService] Redis error:", error);
-        }
+        console.warn("[RoomService] Redis skipped:", error.message);
       }
     }
 
@@ -126,7 +131,9 @@ export class RoomService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("rooms", "max");
+    revalidateTag("rooms");
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath("/", "layout");
 
     return room;
   }
@@ -148,7 +155,9 @@ export class RoomService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("rooms", "max");
+    revalidateTag("rooms");
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath("/", "layout");
 
     return room;
   }
@@ -183,6 +192,8 @@ export class RoomService {
     if (redis) {
       await redis.del(this.CACHE_KEY).catch(() => {});
     }
-    revalidateTag("rooms", "max");
+    revalidateTag("rooms");
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath("/", "layout");
   }
 }
