@@ -133,11 +133,13 @@ export default function RoomSplitSection({
           {/* Main Gallery Navigation Buttons */}
           <button
             className={`prev-${room.id} absolute left-6 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/90 backdrop-blur-md rounded-full text-background hover:text-black transition-all opacity-0 group-hover:opacity-100 hidden md:flex active:scale-90 border border-white/20`}
+            aria-label={lang === 'it' ? "Immagine precedente" : lang === 'de' ? "Vorheriges Bild" : "Previous image"}
           >
             <ChevronLeft size={20} />
           </button>
           <button
             className={`next-${room.id} absolute right-6 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/10 hover:bg-white/90 backdrop-blur-md rounded-full text-background hover:text-black transition-all opacity-0 group-hover:opacity-100 hidden md:flex active:scale-90 border border-white/20`}
+            aria-label={lang === 'it' ? "Immagine successiva" : lang === 'de' ? "Nächstes Bild" : "Next image"}
           >
             <ChevronRight size={20} />
           </button>
@@ -220,6 +222,7 @@ export default function RoomSplitSection({
                   closeLightbox();
                 }}
                 className="absolute top-4 right-4 z-[220] p-2 text-black/50 hover:text-black transition-all hover:scale-110 active:scale-95 bg-white/80 rounded-full backdrop-blur-sm shadow-sm"
+                aria-label={lang === 'it' ? "Chiudi" : lang === 'de' ? "Schließen" : "Close"}
               >
                 <X className="w-6 h-6" strokeWidth={1.5} />
               </button>
@@ -273,6 +276,7 @@ export default function RoomSplitSection({
                   <button
                     ref={setLightboxPrevEl}
                     className="absolute left-4 top-1/2 -translate-y-1/2 z-[210] p-3 text-black/40 hover:text-black transition-all cursor-pointer hidden md:block bg-white/40 hover:bg-white/80 rounded-full backdrop-blur-sm"
+                    aria-label={lang === 'it' ? "Immagine precedente" : lang === 'de' ? "Vorheriges Bild" : "Previous image"}
                   >
                     <ChevronLeft className="w-6 h-6" strokeWidth={1.5} />
                   </button>
@@ -280,6 +284,7 @@ export default function RoomSplitSection({
                   <button
                     ref={setLightboxNextEl}
                     className="absolute right-4 top-1/2 -translate-y-1/2 z-[210] p-3 text-black/40 hover:text-black transition-all cursor-pointer hidden md:block bg-white/40 hover:bg-white/80 rounded-full backdrop-blur-sm"
+                    aria-label={lang === 'it' ? "Immagine successiva" : lang === 'de' ? "Nächstes Bild" : "Next image"}
                   >
                     <ChevronRight className="w-6 h-6" strokeWidth={1.5} />
                   </button>

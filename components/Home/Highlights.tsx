@@ -135,7 +135,7 @@ export default function Highlights({ lang, data, isEditable = false }: { lang: s
                   style={{
                     fontSize: 'clamp(0.75rem, 1.1vw, 0.85rem)',
                     lineHeight: 1.7,
-                    color: '#555',
+                    color: '#333',
                     fontWeight: 300,
                     margin: 0,
                     fontFamily: 'var(--font-mono, monospace)',

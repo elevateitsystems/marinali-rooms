@@ -26,7 +26,7 @@ export default function HeritageSection({ data, lang, isEditable = false }: Heri
               data?.frescoTitle || "The 1460 Fresco"
             )}
           </h3>
-          <div className="opacity-70 font-light leading-relaxed text-[15px] text-[#555] font-mono">
+          <div className="opacity-90 font-light leading-relaxed text-[15px] text-[#333] font-mono">
             {isEditable ? (
               <EditableText lang={lang} page="home" path="frescoDescription" initialValue={data?.frescoDescription || "Discovered during restoration..."} multiline />
             ) : (
@@ -74,7 +74,7 @@ export default function HeritageSection({ data, lang, isEditable = false }: Heri
               data?.terrazzoTitle || "Venetian Terrazzo Floors"
             )}
           </h3>
-          <div className="opacity-70 font-light leading-relaxed text-[15px] text-[#555] font-mono">
+          <div className="opacity-90 font-light leading-relaxed text-[15px] text-[#333] font-mono">
             {isEditable ? (
               <EditableText lang={lang} page="home" path="terrazzoDescription" initialValue={data?.terrazzoDescription || "Step onto history..."} multiline />
             ) : (

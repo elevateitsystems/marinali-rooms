@@ -107,7 +107,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         >
           <CalendarIcon className="w-6 h-6 text-gray-500 shrink-0" strokeWidth={1.5} />
           <div className="flex flex-col">
-            <span className="text-xs opacity-60 font-medium">{lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Check-in'}</span>
+            <span className="text-xs opacity-90 font-medium">{lang === 'it' ? 'Arrivo' : lang === 'de' ? 'Anreise' : 'Check-in'}</span>
             <span className="text-sm md:text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
               {date?.from ? format(date.from, "d MMM yyyy", { locale: currentLocale }) : "Select"}
             </span>
@@ -142,7 +142,7 @@ const BookingBar = ({ data, lang = 'en' }: BookingBarProps) => {
         >
           <CalendarIcon className="w-6 h-6 text-gray-500 shrink-0" strokeWidth={1.5} />
           <div className="flex flex-col">
-            <span className="text-xs opacity-60 font-medium">{lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Check-out'}</span>
+            <span className="text-xs opacity-90 font-medium">{lang === 'it' ? 'Partenza' : lang === 'de' ? 'Abreise' : 'Check-out'}</span>
             <span className="text-sm md:text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
               {date?.to ? format(date.to, "d MMM yyyy", { locale: currentLocale }) : "Select"}
             </span>
