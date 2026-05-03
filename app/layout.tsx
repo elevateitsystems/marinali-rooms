@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   description: "Experience the heart of Bassano del Grappa",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -41,18 +41,18 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${playfair.variable} ${yellowtail.variable} antialiased`}
     >
       <head>
-        <ThemeInjector />
-        <link rel="dns-prefetch" href="https://utfs.io" />
-        <link rel="preconnect" href="https://utfs.io" crossOrigin="anonymous" />
+        <Suspense fallback={null}>
+          <ThemeInjector />
+        </Suspense>
       </head>
       <body className="min-h-screen flex flex-col">
         <Providers>
           {children}
-          <Suspense fallback={null}>
-            <Toaster position="top-center" richColors />
-          </Suspense>
+          <Toaster position="top-center" richColors />
         </Providers>
       </body>
     </html>
+  );
+}
   );
 }

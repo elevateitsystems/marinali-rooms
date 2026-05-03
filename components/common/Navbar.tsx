@@ -6,11 +6,10 @@ import { useState, useEffect } from "react";
 
 import { Yellowtail } from "next/font/google";
 import { useQuery } from "@tanstack/react-query";
-// import { useLenis } from "lenis/react"; // Remove to reduce initial bundle size
+import { useLenis } from "lenis/react";
 import BrandLogo from "./BrandLogo";
 
-// Remove re-initialization of font to reduce bundle size and prevent conflicts
-// const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
+const yellowtail = Yellowtail({ weight: "400", subsets: ["latin"] });
 
 // Dictionary for 3 languages
 const navData = {
@@ -64,7 +63,7 @@ export default function Navbar({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // const lenis = useLenis(); // Removed for performance optimization
+  const lenis = useLenis();
 
   const getPath = (route: string) => {
     if (route === "/") return `/${lang}`;
@@ -136,7 +135,8 @@ export default function Navbar({
               href={getPath("/")}
               onClick={(e) => {
                 e.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                if (lenis) lenis.scrollTo(0);
+                else window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className={`flex items-center gap-1 transition-all duration-500 ease-in-out ${
                 showLogo || isLeSuite

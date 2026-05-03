@@ -12,7 +12,6 @@ export default function HeroClient({
   data,
   isEditable = false,
   settings: initialSettings,
-  children,
 }: {
   lang?: "en" | "it" | "de";
   data?: any;
@@ -21,7 +20,6 @@ export default function HeroClient({
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
   imgUrl?: string;
-  children?: React.ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -31,8 +29,6 @@ export default function HeroClient({
     setIsDesktop(window.innerWidth > 1024);
   }, []);
 
-  // Only fetch settings on the client if we are in editable mode
-  // This saves a network request and execution time for public users
   const { data: settings } = useQuery({
     queryKey: ["settings"],
     queryFn: async () => {
@@ -41,7 +37,6 @@ export default function HeroClient({
       return res.json();
     },
     initialData: initialSettings,
-    enabled: isEditable, // Only run if editable
   });
 
   const { scrollY } = useScroll();
@@ -95,8 +90,6 @@ export default function HeroClient({
       <motion.div
         className="relative z-10 text-background mt-8"
         initial={false}
-        // PERFORMANCE: Completely disable motion styles on mobile/touch devices
-        // to reduce main thread work and improve Speed Index.
         style={
           mounted && isDesktop
             ? {
@@ -109,9 +102,11 @@ export default function HeroClient({
         }
       >
         <ContentWrapper>
-          {children}
+          <BrandLogo lang={lang} size="xl" variant="light" />
         </ContentWrapper>
       </motion.div>
     </>
+  );
+}
   );
 }
